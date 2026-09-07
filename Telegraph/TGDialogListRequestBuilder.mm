@@ -161,7 +161,7 @@
             if (conversation.isChannel) {
                 channelItems[@(conversation.conversationId)] = conversation;
             } else {
-                [chatItems setObject:conversation forKey:[NSNumber numberWithInt:(int)conversation.conversationId]];
+                [chatItems setObject:conversation forKey:@(conversation.conversationId)];
             }
         }
     }
@@ -430,9 +430,9 @@
                 NSMutableArray *chatPhotosSmall = [[NSMutableArray alloc] init];
                 for (NSNumber *channelId in dialog.feed_other_channels)
                 {
-                    //[channelIds addObject:@(TGPeerIdFromChannelId(channelId.int32Value))];
+                    //[channelIds addObject:@(TGPeerIdFromChannelId(channelId.longLongValue))];
                     
-                    TGConversation *conversation = channelItems[@(TGPeerIdFromChannelId([channelId int32Value]))];
+                    TGConversation *conversation = channelItems[@(TGPeerIdFromChannelId([channelId longLongValue]))];
                     [chatIds addObject:@(conversation.conversationId)];
                     [chatTitles addObject:conversation.chatTitle ?: @""];
                     [chatPhotosSmall addObject:conversation.chatPhotoSmall ?: @""];

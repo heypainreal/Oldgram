@@ -49,7 +49,7 @@
 
 @implementation TGNotificationMessageViewModel
 
-static TGUser *findUserInArray(int32_t uid, NSArray *array)
+static TGUser *findUserInArray(int64_t uid, NSArray *array)
 {
     for (TGUser *user in array)
     {
@@ -73,7 +73,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
     
     NSString *authorTitle = @"";
     NSString *authorShortTitle = @"";
-    int32_t authorUid = 0;
+    int64_t authorUid = 0;
     if ([authorPeer isKindOfClass:[TGUser class]]) {
         authorTitle = ((TGUser *)authorPeer).displayName;
         authorShortTitle = ((TGUser *)authorPeer).displayFirstName;
@@ -106,7 +106,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                 NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                 NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                 additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
             }
             
             break;
@@ -119,7 +119,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
             if (actionMedia.actionData[@"uids"] != nil) {
                 NSArray *uids = actionMedia.actionData[@"uids"];
                 
-                if (uids.count == 1 && authorUid == [((NSNumber *)uids[0]) intValue]) {
+                if (uids.count == 1 && authorUid == [((NSNumber *)uids[0]) longLongValue]) {
                     NSString *formatBase = TGLocalized(@"Notification.JoinedChat");
                     if (_context.isAdminLog && !_context.adminLogIsGroup) {
                         formatBase = TGLocalized(@"Notification.JoinedChannel");
@@ -134,7 +134,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
                         
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else {
                     NSMutableString *subjectNames = [[NSMutableString alloc] init];
@@ -142,7 +142,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                     NSMutableArray *subjectRangesAndUids = [[NSMutableArray alloc] init];
                     
                     for (NSNumber *nUid in uids) {
-                        TGUser *user = findUserInArray([nUid intValue], additionalUsers);
+                        TGUser *user = findUserInArray([nUid longLongValue], additionalUsers);
                         if (user != nil) {
                             if (subjectNames.length != 0) {
                                 [subjectNames appendString:@", "];
@@ -173,7 +173,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                             
                             multipleRangesOffset = formatNameRange.location + authorName.length - formatNameRange.length;
                             
-                            [multipleTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]]];
+                            [multipleTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]]];
                         }
                         
                         NSRange nextFormatNameRange = [formatString rangeOfString:@"%@" options:0 range:NSMakeRange(formatNameRange.location + formatNameRange.length, formatString.length - formatNameRange.location - formatNameRange.length)];
@@ -189,7 +189,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                                 [multipleAdditionalAttributes addObject:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)]];
                                 [multipleAdditionalAttributes addObject:fontAttributes];
                                 
-                                [multipleTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", [nUid intValue]]]]];
+                                [multipleTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)[nUid longLongValue]]]]];
                             }
                         }
                         
@@ -198,7 +198,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                     }
                 }
             } else {
-                TGUser *user = findUserInArray([actionMedia.actionData[@"uid"] intValue], additionalUsers);
+                TGUser *user = findUserInArray([actionMedia.actionData[@"uid"] longLongValue], additionalUsers);
                 
                 if (user.uid == authorUid)
                 {
@@ -226,7 +226,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
                         
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", user.uid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)user.uid]]], nil];
                     }
                 }
                 else
@@ -245,7 +245,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSRange rangeSecond = NSMakeRange(rangeFirst.length - formatNameRangeFirst.length + formatNameRangeSecond.location, userName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&rangeFirst objCType:@encode(NSRange)], fontAttributes, [[NSValue alloc] initWithBytes:&rangeSecond objCType:@encode(NSRange)], fontAttributes, nil];
                         
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:rangeFirst URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], [NSTextCheckingResult linkCheckingResultWithRange:rangeSecond URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", user.uid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:rangeFirst URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], [NSTextCheckingResult linkCheckingResultWithRange:rangeSecond URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)user.uid]]], nil];
                     }
                 }
             }
@@ -264,7 +264,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                 NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                 additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
                 
-                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
             }
             break;
         }
@@ -281,7 +281,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                 NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                 additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
                 
-                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
             }
             
             break;
@@ -330,14 +330,14 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
             } else {
                 formatString = TGLocalized(@"Notification.ChannelInviter");
             }
-            if (authorUid == [actionMedia.actionData[@"uid"] intValue] || [actionMedia.actionData[@"uid"] intValue] == TGTelegraphInstance.clientUserId) {
+            if (authorUid == [actionMedia.actionData[@"uid"] longLongValue] || [actionMedia.actionData[@"uid"] longLongValue] == TGTelegraphInstance.clientUserId) {
                 if (_context.conversation.isChannelGroup) {
                     actionText = TGLocalized(@"Notification.GroupInviterSelf");
                 } else {
                     actionText = TGLocalized(@"Notification.ChannelInviterSelf");
                 }
             } else {
-                int32_t inviterUid = [actionMedia.actionData[@"uid"] intValue];
+                int64_t inviterUid = [actionMedia.actionData[@"uid"] longLongValue];
                 NSString *inviterName = nil;
                 for (TGUser *user in additionalUsers) {
                     if (user.uid == inviterUid) {
@@ -354,7 +354,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                     NSRange range = NSMakeRange(formatNameRange.location, inviterName.length);
                     additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
                     
-                    textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", inviterUid]]], nil];
+                    textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)inviterUid]]], nil];
                 }
             }
             
@@ -404,7 +404,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                 NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                 additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
                 
-                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
             }
             
             if (imageUrl != nil)
@@ -682,7 +682,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                     [addAttributes addObject:[[NSValue alloc] initWithBytes:&fixedRange objCType:@encode(NSRange)]];
                     [addAttributes addObject:fontAttributes];
                     
-                    [addTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:fixedRange URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]]];
+                    [addTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:fixedRange URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]]];
                 }
                 
                 if (scoreRange.location != NSNotFound) {
@@ -857,7 +857,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                 
                 NSMutableString *formatString = [[NSMutableString alloc] initWithString:TGLocalized(formatStringBase)];
                 
-                NSString *authorName = findUserInArray((int32_t)replyMessage.fromUid, additionalUsers).displayName;
+                NSString *authorName = findUserInArray(replyMessage.fromUid, additionalUsers).displayName;
                 if (authorName == nil) {
                     authorName = @"";
                 }
@@ -905,7 +905,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         [addAttributes addObject:[[NSValue alloc] initWithBytes:&fixedRange objCType:@encode(NSRange)]];
                         [addAttributes addObject:fontAttributes];
                         
-                        [addTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:fixedRange URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]]];
+                        [addTextCheckingResults addObject:[NSTextCheckingResult linkCheckingResultWithRange:fixedRange URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]]];
                     }
                     
                     if (amountRange.location != NSNotFound) {
@@ -952,7 +952,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                 if ([content isKindOfClass:[TGChannelAdminLogEntryToggleBan class]]) {
                     TGChannelAdminLogEntryToggleBan *value = (TGChannelAdminLogEntryToggleBan *)content;
                     
-                    TGUser *user = findUserInArray([actionMedia.actionData[@"uid"] intValue], additionalUsers);
+                    TGUser *user = findUserInArray([actionMedia.actionData[@"uid"] longLongValue], additionalUsers);
                     
                     NSMutableString *updates = [[NSMutableString alloc] init];
                     if (value.previousRights.banReadMessages != value.rights.banReadMessages) {
@@ -1025,12 +1025,12 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSRange rangeSecond = NSMakeRange(rangeFirst.length - formatNameRangeFirst.length + formatNameRangeSecond.location, userName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&rangeFirst objCType:@encode(NSRange)], fontAttributes, [[NSValue alloc] initWithBytes:&rangeSecond objCType:@encode(NSRange)], fontAttributes, nil];
                         
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:rangeFirst URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], [NSTextCheckingResult linkCheckingResultWithRange:rangeSecond URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", user.uid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:rangeFirst URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], [NSTextCheckingResult linkCheckingResultWithRange:rangeSecond URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)user.uid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryToggleAdmin class]]) {
                     TGChannelAdminLogEntryToggleAdmin *value = (TGChannelAdminLogEntryToggleAdmin *)content;
                     
-                    TGUser *user = findUserInArray([actionMedia.actionData[@"uid"] intValue], additionalUsers);
+                    TGUser *user = findUserInArray([actionMedia.actionData[@"uid"] longLongValue], additionalUsers);
                     
                     NSMutableString *updates = [[NSMutableString alloc] init];
                     if (value.previousRights.canChangeInfo != value.rights.canChangeInfo) {
@@ -1136,7 +1136,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSRange rangeSecond = NSMakeRange(rangeFirst.length - formatNameRangeFirst.length + formatNameRangeSecond.location, userName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&rangeFirst objCType:@encode(NSRange)], fontAttributes, [[NSValue alloc] initWithBytes:&rangeSecond objCType:@encode(NSRange)], fontAttributes, nil];
                         
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:rangeFirst URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], [NSTextCheckingResult linkCheckingResultWithRange:rangeSecond URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", user.uid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:rangeFirst URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], [NSTextCheckingResult linkCheckingResultWithRange:rangeSecond URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)user.uid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryChangeInvites class]]) {
                     TGChannelAdminLogEntryChangeInvites *value = (TGChannelAdminLogEntryChangeInvites *)content;
@@ -1158,7 +1158,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryChangeSignatures class]]) {
                     TGChannelAdminLogEntryChangeSignatures *value = (TGChannelAdminLogEntryChangeSignatures *)content;
@@ -1180,7 +1180,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryChangeUsername class]]) {
                     NSString *authorName = authorTitle;
@@ -1210,7 +1210,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryChangeAbout class]]) {
                     NSString *authorName = authorTitle;
@@ -1230,7 +1230,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryEditMessage class]]) {
                     TGChannelAdminLogEntryEditMessage *value = (TGChannelAdminLogEntryEditMessage *)content;
@@ -1286,7 +1286,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryDeleteMessage class]]) {
                     NSString *authorName = authorTitle;
@@ -1301,7 +1301,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryChangePinnedMessage class]]) {
                     NSString *authorName = authorTitle;
@@ -1321,7 +1321,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryChangeStickerPack class]]) {
                     NSString *authorName = authorTitle;
@@ -1342,7 +1342,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 } else if ([content isKindOfClass:[TGChannelAdminLogEntryTogglePreHistoryHidden class]]) {
                     NSString *authorName = authorTitle;
@@ -1362,7 +1362,7 @@ static TGUser *findUserInArray(int32_t uid, NSArray *array)
                         NSArray *fontAttributes = [[NSArray alloc] initWithObjects:(__bridge id)[[TGTelegraphConversationMessageAssetsSource instance] messageActionTitleBoldFont], (NSString *)kCTFontAttributeName, nil];
                         NSRange range = NSMakeRange(formatNameRange.location, authorName.length);
                         additionalAttributes = [[NSArray alloc] initWithObjects:[[NSValue alloc] initWithBytes:&range objCType:@encode(NSRange)], fontAttributes, nil];
-                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%d", authorUid]]], nil];
+                        textCheckingResults = [[NSArray alloc] initWithObjects:[NSTextCheckingResult linkCheckingResultWithRange:range URL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"tg-user://%lld", (long long)authorUid]]], nil];
                     }
                 }
             }

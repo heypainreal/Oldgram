@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getUnreadMentions.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x46578472;
+    return (int32_t)0xf107e790;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x2f53ea0a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -115,6 +117,17 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:(int32_t)self.offset_id];
+    [os writeInt32:(int32_t)self.add_offset];
+    [os writeInt32:(int32_t)self.limit];
+    [os writeInt32:(int32_t)self.max_id];
+    [os writeInt32:(int32_t)self.min_id];
+}
 
 @end
 

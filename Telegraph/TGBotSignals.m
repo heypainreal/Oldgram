@@ -85,7 +85,7 @@
         return nil;
 }
 
-+ (TGBotReplyMarkup *)botReplyMarkupForMarkup:(TLReplyMarkup *)markup userId:(int32_t)userId messageId:(int32_t)messageId hidePreviousMarkup:(bool *)hidePreviousMarkup forceReply:(bool *)forceReply onlyIfRelevantToUser:(bool *)onlyIfRelevantToUser
++ (TGBotReplyMarkup *)botReplyMarkupForMarkup:(TLReplyMarkup *)markup userId:(int64_t)userId messageId:(int32_t)messageId hidePreviousMarkup:(bool *)hidePreviousMarkup forceReply:(bool *)forceReply onlyIfRelevantToUser:(bool *)onlyIfRelevantToUser
 {
     if ([markup isKindOfClass:[TLReplyMarkup$replyKeyboardMarkup class]])
     {
@@ -185,7 +185,7 @@
     return nil;
 }
 
-+ (SSignal *)botInfoForUserId:(int32_t)userId
++ (SSignal *)botInfoForUserId:(int64_t)userId
 {
     SSignal *cached = [[SSignal alloc] initWithGenerator:^id<SDisposable>(SSubscriber *subscriber)
     {
@@ -224,7 +224,7 @@
     }];
 }
 
-+ (SSignal *)botStartForUserId:(int32_t)userId payload:(NSString *)payload
++ (SSignal *)botStartForUserId:(int64_t)userId payload:(NSString *)payload
 {
     TLRPCmessages_startBot$messages_startBot *startBot = [[TLRPCmessages_startBot$messages_startBot alloc] init];
     startBot.bot = [TGTelegraphInstance createInputUserForUid:userId];
@@ -242,7 +242,7 @@
     }];
 }
 
-+ (SSignal *)botInviteUserId:(int32_t)userId toPeerId:(int64_t)peerId accessHash:(int64_t)accessHash payload:(NSString *)payload {
++ (SSignal *)botInviteUserId:(int64_t)userId toPeerId:(int64_t)peerId accessHash:(int64_t)accessHash payload:(NSString *)payload {
     TLRPCmessages_startBot$messages_startBot *startBot = [[TLRPCmessages_startBot$messages_startBot alloc] init];
     startBot.bot = [TGTelegraphInstance createInputUserForUid:userId];
     startBot.peer = [TGTelegraphInstance createInputPeerForConversation:peerId accessHash:accessHash];
@@ -326,7 +326,7 @@
     }];
 }
 
-+ (SSignal *)userLocationForInlineBot:(int32_t)userId force:(bool)force {
++ (SSignal *)userLocationForInlineBot:(int64_t)userId force:(bool)force {
     return [[SSignal defer:^SSignal *{
         static NSMutableDictionary *disabledTimestamps = nil;
         static dispatch_once_t onceToken;
@@ -376,7 +376,7 @@
     }];
 }
 
-+ (SSignal *)botContextResultForUserId:(int32_t)userId peerId:(int64_t)peerId accessHash:(int64_t)accessHash query:(NSString *)query geoPoint:(SSignal *)__unused geoPoint offset:(NSString *)offset forceAllowLocation:(bool)forceAllowLocation {
++ (SSignal *)botContextResultForUserId:(int64_t)userId peerId:(int64_t)peerId accessHash:(int64_t)accessHash query:(NSString *)query geoPoint:(SSignal *)__unused geoPoint offset:(NSString *)offset forceAllowLocation:(bool)forceAllowLocation {
     return [[TGDatabaseInstance() modify:^id{
         return [TGDatabaseInstance() loadUser:userId];
     }] mapToSignal:^SSignal *(TGUser *user) {
@@ -410,7 +410,7 @@
                     NSMutableData *request = [[NSMutableData alloc] init];
                     int32_t magic = 0x751236f4;
                     [request appendBytes:&magic length:4];
-                    int32_t userId = user.uid;
+                    int64_t userId = user.uid;
                     [request appendBytes:&userId length:4];
                     int64_t localPeerId = peerId;
                     [request appendBytes:&localPeerId length:8];
@@ -634,7 +634,7 @@
 
 + (TLInputPeer *)inputPeerWithPeerId:(int64_t)peerId {
     if (TGPeerIdIsUser(peerId)) {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+        TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
         if (user != nil) {
             TLInputPeer$inputPeerUser *inputPeerUser = [[TLInputPeer$inputPeerUser alloc] init];
             inputPeerUser.user_id = user.uid;
@@ -697,7 +697,7 @@
     }];
 }
 
-+ (SSignal *)sendBotGame:(NSString *)shortName toPeerId:(int64_t)peerId botId:(int32_t)botId {
++ (SSignal *)sendBotGame:(NSString *)shortName toPeerId:(int64_t)peerId botId:(int64_t)botId {
     return [[TGDatabaseInstance() modify:^id{
         TLInputPeer *toPeer = [self inputPeerWithPeerId:peerId];
         TLInputUser *botUser = [TGTelegraphInstance createInputUserForUid:botId];

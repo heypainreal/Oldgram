@@ -232,14 +232,14 @@ const CGFloat TGShareCollectionRegularSizeClassHeight = 360.0f;
         TGConversation *updatedConversation = [conversation copy];
         if (!conversation.isChat || conversation.isEncrypted)
         {
-            int32_t userId = 0;
+            int64_t userId = 0;
             if (conversation.isEncrypted)
             {
                 if (conversation.chatParticipants.chatParticipantUids.count != 0)
                     userId = [conversation.chatParticipants.chatParticipantUids[0] intValue];
             }
             else
-                userId = (int)conversation.conversationId;
+                userId = conversation.conversationId;
             
             TGUser *user = [TGDatabaseInstance() loadUser:userId];
             if (user != nil) {

@@ -189,7 +189,7 @@
                 if (strongSelf != nil)
                 {
                     TGPasswordRecoveryController *controller = [[TGPasswordRecoveryController alloc] initWithEmailPattern:emailPattern];
-                    controller.completion = ^(bool success, int32_t userId)
+                    controller.completion = ^(bool success, int64_t userId)
                     {
                         __strong TGLoginPasswordController *strongSelf = weakSelf;
                         if (strongSelf != nil)
@@ -363,7 +363,7 @@
     }
 }
 
-- (void)_completedRestore:(int32_t)userId
+- (void)_completedRestore:(int64_t)userId
 {
     [_view clearFirstResponder];
     

@@ -72,7 +72,7 @@ static const TGTwoColors colors[] = {
 {
     if ([args[@"type"] isEqualToString:@"user-avatar"])
     {
-        int uid = [args[@"uid"] intValue];
+        int64_t uid = [args[@"uid"] longLongValue];
         int colorIndex = [[TGInterfaceAssets instance] userColorIndex:uid];
         
         return [[NSString alloc] initWithFormat:@"%@:%d:%@x%@", args[@"type"], uid == 0 ? -1 : colorIndex, args[@"w"], args[@"h"]];
@@ -106,7 +106,7 @@ static const TGTwoColors colors[] = {
     return [self _createAndCachePlaceholderWithArgs:args];
 }
 
-- (TGTwoColors)_colorsForUid:(int32_t)uid
+- (TGTwoColors)_colorsForUid:(int64_t)uid
 {
     if (uid == 0)
         return (TGTwoColors){.top = 0xb1b1b1, .bottom = 0xcdcdcd };
@@ -135,7 +135,7 @@ static const TGTwoColors colors[] = {
     NSString *type = args[@"type"];
     if ([type isEqualToString:@"user-avatar"])
     {
-        int32_t uid = [args[@"uid"] intValue];
+        int64_t uid = [args[@"uid"] longLongValue];
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0f);
         CGContextRef context = UIGraphicsGetCurrentContext();

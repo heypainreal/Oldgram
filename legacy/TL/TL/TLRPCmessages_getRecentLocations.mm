@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getRecentLocations.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x249431e2;
+    return (int32_t)0x702a40e0;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xc613ba1b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -87,6 +89,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:(int32_t)self.limit];
+    [os writeInt64:0];
+}
 
 @end
 

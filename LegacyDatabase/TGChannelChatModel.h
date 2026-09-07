@@ -9,6 +9,6 @@
 @property (nonatomic, readonly) bool isGroup;
 @property (nonatomic, readonly) int64_t accessHash;
 
-- (instancetype)initWithChannelId:(int32_t)channelId title:(NSString *)title avatarLocation:(TGFileLocation *)avatarLocation isGroup:(bool)isGroup accessHash:(int64_t)accessHash;
+- (instancetype)initWithChannelId:(int64_t)channelId title:(NSString *)title avatarLocation:(TGFileLocation *)avatarLocation isGroup:(bool)isGroup accessHash:(int64_t)accessHash;
 
 @end

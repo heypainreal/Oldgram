@@ -1,5 +1,7 @@
 #import "TLInputGeoPoint.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -64,12 +66,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xf3b7acc9;
+    return (int32_t)0x48222faf;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x90c5b4ec;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -96,6 +98,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeDouble:self.lat];
+    [os writeDouble:0];
+}
 
 @end
 

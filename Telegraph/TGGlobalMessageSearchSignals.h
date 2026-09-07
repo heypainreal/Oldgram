@@ -9,7 +9,7 @@ typedef enum {
 @interface TGGlobalMessageSearchSignals : NSObject
 
 + (SSignal *)search:(NSString *)query includeMessages:(bool)includeMessages itemMapping:(id (^)(id))itemMapping;
-+ (SSignal *)searchMessages:(NSString *)query peerId:(int64_t)peerId accessHash:(int64_t)accessHash userId:(int32_t)userId maxId:(int32_t)maxId limit:(int32_t)limit itemMapping:(id (^)(id))itemMapping;
++ (SSignal *)searchMessages:(NSString *)query peerId:(int64_t)peerId accessHash:(int64_t)accessHash userId:(int64_t)userId maxId:(int32_t)maxId limit:(int32_t)limit itemMapping:(id (^)(id))itemMapping;
 
 + (SSignal *)searchDialogs:(NSString *)query itemMapping:(id (^)(id))itemMapping;
 

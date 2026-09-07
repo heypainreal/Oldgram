@@ -15,7 +15,7 @@
 - (instancetype)initWithSize:(CGSize)size placeholder:(UIImage *)placeholder;
 
 - (void)setAvatarUri:(NSString *)avatarUri;
-- (void)setAvatarFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int32_t)uid;
+- (void)setAvatarFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int64_t)uid;
 - (void)setAvatarTitle:(NSString *)title groupId:(int64_t)groupId;
 
 @end

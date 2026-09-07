@@ -142,10 +142,10 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
 
 - (instancetype)initWithConversation:(TGConversation *)conversation activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages
 {
-    return [self initWithConversation:conversation uid:(int32_t)conversation.conversationId activity:activity mayHaveUnreadMessages:mayHaveUnreadMessages];
+    return [self initWithConversation:conversation uid:conversation.conversationId activity:activity mayHaveUnreadMessages:mayHaveUnreadMessages];
 }
 
-- (instancetype)initWithConversation:(TGConversation *)conversation uid:(int)uid activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages
+- (instancetype)initWithConversation:(TGConversation *)conversation uid:(int64_t)uid activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages
 {
     _linkPanelVariable = [[SVariable alloc] init];
     self = [super initWithConversation:conversation mayHaveUnreadMessages:mayHaveUnreadMessages];
@@ -423,7 +423,7 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
                 dict = [[NSMutableDictionary alloc] init];
                 dismissedContactLinkPanelsByUserId()[@(TGTelegraphInstance.clientUserId)] = dict;
             }
-            if (![dict[[[NSString alloc] initWithFormat:@"%" PRId32 "_%@", _uid, @"add"]] boolValue])
+            if (![dict[[[NSString alloc] initWithFormat:@"%" PRId64 "_%@", _uid, @"add"]] boolValue])
             {
                 TGModernConversationContactLinkTitlePanel *linkPanel = nil;
                 if (![panel isKindOfClass:[TGModernConversationContactLinkTitlePanel class]])
@@ -447,7 +447,7 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
                 dict = [[NSMutableDictionary alloc] init];
                 dismissedContactLinkPanelsByUserId()[@(TGTelegraphInstance.clientUserId)] = dict;
             }
-            if (![dict[[[NSString alloc] initWithFormat:@"%" PRId32 "_%@", _uid, @"add"]] boolValue])
+            if (![dict[[[NSString alloc] initWithFormat:@"%" PRId64 "_%@", _uid, @"add"]] boolValue])
             {
                 TGModernConversationContactLinkTitlePanel *linkPanel = nil;
                 if (![panel isKindOfClass:[TGModernConversationContactLinkTitlePanel class]])
@@ -501,7 +501,7 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
         [[TGActionSheetAction alloc] initWithTitle:TGLocalized(@"Common.Cancel") action:@"cancel" type:TGActionSheetActionTypeCancel]
     ] actionBlock:^(TGModernConversationController *controller, NSString *action) {
         if ([action isEqualToString:@"reportSpam"]) {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)conversationId];
+            TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
             SMetaDisposable *metaDisposable = [[SMetaDisposable alloc] init];
             id<SDisposable> disposable = [[[TGServiceSignals reportSpam:conversationId accessHash:user.phoneNumberHash] onDispose:^{
                 [TGTelegraphInstance.disposeOnLogout remove:metaDisposable];
@@ -659,7 +659,7 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
     }
     
     if (user.uid == [TGTelegraphInstance serviceUserUid])
-        return @"Telegram";
+        return @"Oldgram";
     
     if (user.uid == [TGTelegraphInstance voipSupportUserUid])
         return @"VoIP Support";
@@ -1125,8 +1125,8 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
 {
     NSMutableDictionary *peerDict = [[NSMutableDictionary alloc] init];
     peerDict[@"type"] = @"user";
-    peerDict[@"id"] = @((int32_t)_conversationId);
-    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)_conversationId];
+    peerDict[@"id"] = @(_conversationId);
+    TGUser *user = [TGDatabaseInstance() loadUser:_conversationId];
     if (user.userName.length != 0)
         peerDict[@"username"] = user.userName;
     return @{@"user_id": @(TGTelegraphInstance.clientUserId), @"peer": peerDict};
@@ -1464,7 +1464,7 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
             NSString *normalizedMention = [mention lowercaseString];
             NSMutableArray *users = [[NSMutableArray alloc] init];
             for (NSNumber *nUserId in userIds) {
-                TGUser *user = [TGDatabaseInstance() loadUser:[nUserId intValue]];
+                TGUser *user = [TGDatabaseInstance() loadUser:[nUserId longLongValue]];
                 if (user != nil && (normalizedMention.length == 0 || [[user.userName lowercaseString] hasPrefix:normalizedMention])) {
                     [users addObject:user];
                 }
@@ -1488,7 +1488,7 @@ static NSMutableDictionary *dismissedContactLinkPanelsByUserId()
                     for (TGBotReplyMarkupButton *button in row.buttons) {
                         if ([button.action isKindOfClass:[TGBotReplyMarkupButtonActionSwitchInline class]]) {
                             NSString *query = ((TGBotReplyMarkupButtonActionSwitchInline *)button.action).query;
-                            TGUser *user = [TGDatabaseInstance() loadUser:(int)_conversationId];
+                            TGUser *user = [TGDatabaseInstance() loadUser:_conversationId];
                             if (user.userName.length != 0) {
                                 NSNumber *botContextPeerId = self.botContextPeerId;
                                 TGDispatchOnMainThread(^{

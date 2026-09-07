@@ -1041,14 +1041,14 @@ static NSArray *editingButtonTypes(bool muted, bool pinnable, bool pinned, bool 
                         case TGMessageActionChannelInviter:
                         {
                             TGUser *user = [_users objectForKey:@"author"];
-                            if ([actionAttachment.actionData[@"uid"] intValue] == user.uid) {
+                            if ([actionAttachment.actionData[@"uid"] longLongValue] == user.uid) {
                                 if (_isChannelGroup) {
                                     _messageText = TGLocalized(@"Notification.GroupInviterSelf");
                                 } else {
                                     _messageText = TGLocalized(@"Notification.ChannelInviterSelf");
                                 }
                             } else {
-                                int32_t inviterUid = [actionAttachment.actionData[@"uid"] intValue];
+                                int64_t inviterUid = [actionAttachment.actionData[@"uid"] longLongValue];
                                 NSString *inviterName = nil;
                                 TGUser *user = _users[@(inviterUid)];
                                 if (user.uid == inviterUid) {
@@ -1743,7 +1743,7 @@ static NSArray *editingButtonTypes(bool muted, bool pinnable, bool pinned, bool 
                 else if (_titleLetters.count == 1)
                     firstName = _titleLetters[0];
                 
-                [_avatarView loadUserPlaceholderWithSize:CGSizeMake(62.0f, 62.0f) uid:_isEncrypted ? _encryptedUserId : (int32_t)_conversationId firstName:firstName lastName:lastName placeholder:placeholder];
+                [_avatarView loadUserPlaceholderWithSize:CGSizeMake(62.0f, 62.0f) uid:_isEncrypted ? _encryptedUserId : _conversationId firstName:firstName lastName:lastName placeholder:placeholder];
             }
             else
             {

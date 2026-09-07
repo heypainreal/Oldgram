@@ -2,7 +2,7 @@
 
 @implementation TGRemoveContactFutureAction
 
-- (id)initWithUid:(int)uid
+- (id)initWithUid:(int64_t)uid
 {
     self = [super initWithType:TGRemoveContactFutureActionType];
     if (self != nil)
@@ -12,9 +12,9 @@
     return self;
 }
 
-- (int)uid
+- (int64_t)uid
 {
-    return (int)self.uniqueId;
+    return self.uniqueId;
 }
 
 - (NSData *)serialize

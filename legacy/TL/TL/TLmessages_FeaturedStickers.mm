@@ -75,7 +75,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLmessages_FeaturedStickers$messages_featuredStickers *object = [[TLmessages_FeaturedStickers$messages_featuredStickers alloc] init];
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     object.sets = metaObject->getArray((int32_t)0xc535ffc6);
     object.unread = metaObject->getArray((int32_t)0x5027354e);
     return object;

@@ -12,8 +12,8 @@
 
 @interface TGRemoveContactFutureAction : TGFutureAction
 
-- (id)initWithUid:(int)uid;
+- (id)initWithUid:(int64_t)uid;
 
-- (int)uid;
+- (int64_t)uid;
 
 @end

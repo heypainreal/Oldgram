@@ -1,5 +1,7 @@
 #import "TLRPCmessages_addChatUser.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,18 +57,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xf9a0aa09;
+    return (int32_t)0xcbc6d107;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x83811712;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_addChatUser$messages_addChatUser *object = [[TLRPCmessages_addChatUser$messages_addChatUser alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.user_id = metaObject->getObject((int32_t)0xafdf4073);
     object.fwd_limit = metaObject->getInt32((int32_t)0x84177760);
     return object;
@@ -94,6 +96,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+    TLMetaClassStore::serializeObject(os, self.user_id, true);
+    [os writeInt32:(int32_t)self.fwd_limit];
+}
 
 @end
 

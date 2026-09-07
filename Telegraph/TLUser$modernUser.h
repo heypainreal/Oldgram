@@ -6,7 +6,7 @@
 @interface TLUser$modernUser : TLUser
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t n_id;
+@property (nonatomic) int64_t n_id;
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic, strong) NSString *first_name;
 @property (nonatomic, strong) NSString *last_name;

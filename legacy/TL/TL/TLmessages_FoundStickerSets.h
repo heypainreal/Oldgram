@@ -11,7 +11,7 @@
 
 @interface TLmessages_FoundStickerSets$messages_foundStickerSets : TLmessages_FoundStickerSets
 
-@property (nonatomic) int32_t n_hash;
+@property (nonatomic) int64_t n_hash;
 @property (nonatomic, retain) NSArray *sets;
 
 @end

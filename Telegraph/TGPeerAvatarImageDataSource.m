@@ -242,10 +242,7 @@ static ASQueue *taskManagementQueue()
     
     if ([args[@"legacy-cache-url"] respondsToSelector:@selector(characterAtIndex:)])
     {
-        NSString *trimmedUrl = args[@"legacy-cache-url"];
-        NSArray *components = [trimmedUrl componentsSeparatedByString:@"_"];
-        if (components.count >= 5)
-            trimmedUrl = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+        NSString *trimmedUrl = TGTrimmedImageCacheUrl(args[@"legacy-cache-url"]);
         
         NSString *legacyCacheFilePath = [[TGRemoteImageView sharedCache] pathForCachedData:trimmedUrl];
         if ([[NSFileManager defaultManager] fileExistsAtPath:legacyCacheFilePath isDirectory:NULL])
@@ -254,10 +251,7 @@ static ASQueue *taskManagementQueue()
     
     if ([args[@"legacy-thumbnail-cache-url"] respondsToSelector:@selector(characterAtIndex:)])
     {
-        NSString *trimmedUrl = args[@"legacy-thumbnail-cache-url"];
-        NSArray *components = [trimmedUrl componentsSeparatedByString:@"_"];
-        if (components.count >= 5)
-            trimmedUrl = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+        NSString *trimmedUrl = TGTrimmedImageCacheUrl(args[@"legacy-thumbnail-cache-url"]);
         
         NSString *legacyThumbnailFilePath = [[TGRemoteImageView sharedCache] pathForCachedData:trimmedUrl];
         if ([[NSFileManager defaultManager] fileExistsAtPath:legacyThumbnailFilePath isDirectory:NULL])
@@ -318,19 +312,13 @@ static ASQueue *taskManagementQueue()
     
     if ([args[@"legacy-cache-url"] respondsToSelector:@selector(characterAtIndex:)])
     {
-        NSString *trimmedUrl = args[@"legacy-cache-url"];
-        NSArray *components = [trimmedUrl componentsSeparatedByString:@"_"];
-        if (components.count >= 5)
-            trimmedUrl = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+        NSString *trimmedUrl = TGTrimmedImageCacheUrl(args[@"legacy-cache-url"]);
         
         image = [[TGRemoteImageView sharedCache] cachedImage:trimmedUrl availability:TGCacheDisk];
     }
     if (image == nil && [args[@"legacy-thumbnail-cache-url"] respondsToSelector:@selector(characterAtIndex:)])
     {
-        NSString *trimmedUrl = args[@"legacy-thumbnail-cache-url"];
-        NSArray *components = [trimmedUrl componentsSeparatedByString:@"_"];
-        if (components.count >= 5)
-            trimmedUrl = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+        NSString *trimmedUrl = TGTrimmedImageCacheUrl(args[@"legacy-thumbnail-cache-url"]);
         
         image = [[TGRemoteImageView sharedCache] cachedImage:trimmedUrl availability:TGCacheDisk];
         lowQualityThumbnail = true;

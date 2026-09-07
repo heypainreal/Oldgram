@@ -1,5 +1,4 @@
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -16,5 +15,24 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-
 *.dSYM.zip
+*.dSYM
+
+# Ключи приложения: лежат вне репозитория, шаблон — config.example.h
+config.h
+
+# Подписи и профили
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.pem
+*.key
+
+# Мусор macOS и отчёты о падениях
+.DS_Store
+*.ips
+*.crash
+
+# Указатели на бывшие подмодули: исходники теперь лежат прямо в репозитории
+.git.submodule

@@ -157,7 +157,7 @@ static bool isEmojiCharacter(NSString *singleChar)
     _label.hidden = true;
 }
 
-- (void)loadUserPlaceholderWithSize:(CGSize)size uid:(int)uid firstName:(NSString *)firstName lastName:(NSString *)lastName placeholder:(UIImage *)placeholder
+- (void)loadUserPlaceholderWithSize:(CGSize)size uid:(int64_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName placeholder:(UIImage *)placeholder
 {
     _label.font = _doubleFont;
     _usingSingleFont = false;
@@ -185,7 +185,7 @@ static bool isEmojiCharacter(NSString *singleChar)
     [_label sizeToFit];
     [self setNeedsLayout];
     
-    NSString *placeholderUri = [[NSString alloc] initWithFormat:@"placeholder://?type=user-avatar&w=%d&h=%d&uid=%" PRId32 "", (int)size.width, (int)size.height, (int32_t)uid];
+    NSString *placeholderUri = [[NSString alloc] initWithFormat:@"placeholder://?type=user-avatar&w=%d&h=%d&uid=%" PRId64 "", (int)size.width, (int)size.height, uid];
     if (!TGStringCompare([self currentUrl], placeholderUri))
         [super loadImage:placeholderUri filter:nil placeholder:placeholder];
     

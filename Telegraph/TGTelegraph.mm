@@ -277,7 +277,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
 
 @interface TGTelegraph ()
 {
-    std::map<int, TGUserPresence> _userPresenceToDispatch;
+    std::map<int64_t, TGUserPresence> _userPresenceToDispatch;
     std::map<int, std::pair<TGUser *, int> > _userDataToDispatch;
     
     std::map<int, int> _userPresenceExpiration;
@@ -308,6 +308,67 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
 @property (nonatomic, strong) NSMutableDictionary *typingUserRecordsByConversationMainThread;
 
 @end
+
+
+/// Есть ли у процесса разрешение с таким ключом.
+///
+/// Сборку раздают неподписанной, и подписывают её кто чем: свободным Apple ID,
+/// корпоративным профилем, TrollStore. Часть разрешений при этом не выдаётся, а
+/// системные API отвечают на это не ошибкой, а исключением: -[INPreferences
+/// assertThisProcessHasSiriEntitlement] валит процесс сразу после входа.
+/// Перехватить это нельзя — исключение летит через dispatch_once, а libdispatch
+/// на выходе из блока зовёт std::terminate() раньше любого @catch. Остаётся не
+/// вызывать такие API вовсе.
+///
+/// Разрешения, с которыми подписали, перечислены в embedded.mobileprovision
+/// внутри бандла. Профиля может не быть (подпись без него) — тогда считаем, что
+/// разрешения нет: потерять запрос к Siri дешевле, чем падать при запуске.
+static bool TGProcessHasEntitlement(NSString *key)
+{
+    static NSDictionary *entitlements = nil;
+    static bool profileMissing = false;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"embedded" ofType:@"mobileprovision"];
+        NSData *data = path == nil ? nil : [NSData dataWithContentsOfFile:path];
+        if (data == nil)
+        {
+            profileMissing = true;
+            return;
+        }
+
+        // Профиль — это подписанный CMS-контейнер, внутри которого обычный plist.
+        NSString *raw = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+        NSRange start = [raw rangeOfString:@"<plist"];
+        NSRange end = [raw rangeOfString:@"</plist>"];
+        if (start.location == NSNotFound || end.location == NSNotFound || end.location < start.location)
+        {
+            profileMissing = true;
+            return;
+        }
+
+        NSRange plistRange = NSMakeRange(start.location, end.location + end.length - start.location);
+        NSData *plistData = [[raw substringWithRange:plistRange] dataUsingEncoding:NSISOLatin1StringEncoding];
+        NSDictionary *profile = [NSPropertyListSerialization propertyListWithData:plistData options:NSPropertyListImmutable format:NULL error:NULL];
+        id value = profile[@"Entitlements"];
+        if ([value isKindOfClass:[NSDictionary class]])
+            entitlements = value;
+        else
+            profileMissing = true;
+    });
+
+    if (profileMissing)
+        return false;
+
+    id value = entitlements[key];
+    if (value == nil)
+        return false;
+    if ([value isKindOfClass:[NSNumber class]])
+        return [value boolValue];
+    // Групповые разрешения (группы приложений, домены) — это массивы и строки.
+    return true;
+}
 
 @implementation TGTelegraph
 
@@ -923,7 +984,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
         [ActionStageInstance() requestActor:@"/tg/service/updatestate" options:nil watcher:self];
 }
 
-- (void)setClientUserId:(int)clientUserId
+- (void)setClientUserId:(int64_t)clientUserId
 {
     _clientUserId = clientUserId;
     
@@ -1033,16 +1094,16 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
 
 - (void)dispatchUserPresenceChanges:(int64_t)userId presence:(TGUserPresence)presence
 {
-    std::shared_ptr<std::map<int, TGUserPresence> > presenceMap(new std::map<int, TGUserPresence>());
-    presenceMap->insert(std::make_pair((int)userId, presence));
+    std::shared_ptr<std::map<int64_t, TGUserPresence> > presenceMap(new std::map<int64_t, TGUserPresence>());
+    presenceMap->insert(std::make_pair(userId, presence));
     [self dispatchMultipleUserPresenceChanges:presenceMap];
 }
 
-- (void)dispatchMultipleUserPresenceChanges:(std::shared_ptr<std::map<int, TGUserPresence> >)presenceMap
+- (void)dispatchMultipleUserPresenceChanges:(std::shared_ptr<std::map<int64_t, TGUserPresence> >)presenceMap
 {
     [ActionStageInstance() dispatchOnStageQueue:^
     {
-        for (std::map<int, TGUserPresence>::const_iterator it = presenceMap->begin(); it != presenceMap->end(); it++)
+        for (std::map<int64_t, TGUserPresence>::const_iterator it = presenceMap->begin(); it != presenceMap->end(); it++)
         {
             _userPresenceToDispatch[it->first] = it->second;
         }
@@ -1068,11 +1129,11 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     
     bool updatedPresenceExpiration = false;
     
-    int clientUserId = TGTelegraphInstance.clientUserId;
+    int64_t clientUserId = TGTelegraphInstance.clientUserId;
     
-    for (std::map<int, TGUserPresence>::iterator it = _userPresenceToDispatch.begin(); it != _userPresenceToDispatch.end(); it++)
+    for (std::map<int64_t, TGUserPresence>::iterator it = _userPresenceToDispatch.begin(); it != _userPresenceToDispatch.end(); it++)
     {
-        TGUser *databaseUser = [[TGDatabase instance] loadUser:(int)(it->first)];
+        TGUser *databaseUser = [[TGDatabase instance] loadUser:(it->first)];
         if (databaseUser != nil)
         {
             if (databaseUser.presence.online != it->second.online || databaseUser.presence.lastSeen != it->second.lastSeen)
@@ -1230,14 +1291,14 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
         {
             int64_t conversationId = [nConversationId longLongValue];
             
-            std::set<int> usersStoppedTyping;
-            std::set<int> *pUsersStoppedTyping = &usersStoppedTyping;
+            std::set<int64_t> usersStoppedTyping;
+            std::set<int64_t> *pUsersStoppedTyping = &usersStoppedTyping;
             
             [typingUserRecords enumerateKeysAndObjectsUsingBlock:^(NSNumber *nUid, TGTypingRecord *record, __unused BOOL *stop)
             {
                 if (ABS(currentTime - record.date) > 6.0)
                 {
-                    pUsersStoppedTyping->insert([nUid intValue]);
+                    pUsersStoppedTyping->insert([nUid longLongValue]);
                 }
                 else if (record.date + 6.0 < nextTypingUpdate)
                     nextTypingUpdate = record.date + 6.0;
@@ -1245,9 +1306,9 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
             
             if (!usersStoppedTyping.empty())
             {
-                for (std::set<int>::iterator it = usersStoppedTyping.begin(); it != usersStoppedTyping.end(); it++)
+                for (std::set<int64_t>::iterator it = usersStoppedTyping.begin(); it != usersStoppedTyping.end(); it++)
                 {
-                    [typingUserRecords removeObjectForKey:[NSNumber numberWithInt:*it]];
+                    [typingUserRecords removeObjectForKey:@(*it)];
                 }
                 
                 NSMutableDictionary *typingUsersActivitiesDict = [[NSMutableDictionary alloc] init];
@@ -1293,13 +1354,13 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     }];
 }
 
-- (void)dispatchUserActivity:(int)uid inConversation:(int64_t)conversationId type:(NSString *)type
+- (void)dispatchUserActivity:(int64_t)uid inConversation:(int64_t)conversationId type:(NSString *)type
 {
     [ActionStageInstance() dispatchOnStageQueue:^
     {
         NSNumber *key = [[NSNumber alloc] initWithLongLong:conversationId];
         NSMutableDictionary *typingUserRecords = [_typingUserRecordsByConversation objectForKey:key];
-        NSNumber *userKey = [[NSNumber alloc] initWithInt:uid];
+        NSNumber *userKey = @(uid);
         
         if (type != nil)
         {
@@ -1415,7 +1476,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
         TGUser *user = [[TGUser alloc] init];
         user.uid = [self serviceUserUid];
         user.phoneNumber = @"42777";
-        user.firstName = @"Telegram";
+        user.firstName = @"Oldgram";
         user.lastName = @"";
         
         [TGDatabaseInstance() storeUsers:[[NSArray alloc] initWithObjects:user, nil]];
@@ -1445,7 +1506,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     return [self voipSupportUserUid];
 }
 
-- (void)dispatchUserLinkChanged:(int)uid link:(int)link
+- (void)dispatchUserLinkChanged:(int64_t)uid link:(int)link
 {
     [ActionStageInstance() dispatchOnStageQueue:^
     {
@@ -1537,16 +1598,23 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
 
 - (void)processEncryptedPasscode
 {
-//    TGAuthorizedContext *authorizedContext = [[TGAuthorizedContext alloc] initWithUserId:(int32_t)uid];
+//    TGAuthorizedContext *authorizedContext = [[TGAuthorizedContext alloc] initWithUserId:(int64_t)uid];
 //    _authorizedContextPipe.sink(authorizedContext);
 }
 
-- (void)processAuthorizedWithUserId:(int)uid clientIsActivated:(bool)clientIsActivated
+- (void)processAuthorizedWithUserId:(int64_t)uid clientIsActivated:(bool)clientIsActivated
 {
-    if (iosMajorVersion() >= 10) {
+    // Без com.apple.developer.siri этот вызов не возвращает ошибку, а бросает
+    // исключение и валит приложение сразу после входа. Проверяем разрешение и
+    // всё равно страхуемся перехватом: Siri — не то, ради чего стоит падать.
+    if (iosMajorVersion() >= 10 && TGProcessHasEntitlement(@"com.apple.developer.siri")) {
         TGDispatchOnMainThread(^{
-            [INPreferences requestSiriAuthorization:^(__unused INSiriAuthorizationStatus status) {
-            }];
+            @try {
+                [INPreferences requestSiriAuthorization:^(__unused INSiriAuthorizationStatus status) {
+                }];
+            } @catch (NSException *exception) {
+                TGLog(@"Siri authorization unavailable: %@", exception.reason);
+            }
         });
     }
     
@@ -1606,11 +1674,18 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
             {
                 TGDispatchOnMainThread(^
                 {
-                    NSUbiquitousKeyValueStore *store = [NSUbiquitousKeyValueStore defaultStore];
-                    if (!TGStringCompare(user.phoneNumber, [store objectForKey:@"telegram_currentPhoneNumber"]))
-                    {
-                        [store setObject:user.phoneNumber forKey:@"telegram_currentPhoneNumber"];
-                        [store synchronize];
+                    if (!TGProcessHasEntitlement(@"com.apple.developer.ubiquity-kvstore-identifier"))
+                        return;
+
+                    @try {
+                        NSUbiquitousKeyValueStore *store = [NSUbiquitousKeyValueStore defaultStore];
+                        if (!TGStringCompare(user.phoneNumber, [store objectForKey:@"telegram_currentPhoneNumber"]))
+                        {
+                            [store setObject:user.phoneNumber forKey:@"telegram_currentPhoneNumber"];
+                            [store synchronize];
+                        }
+                    } @catch (NSException *exception) {
+                        TGLog(@"iCloud key-value store unavailable: %@", exception.reason);
                     }
                 });
             }
@@ -2034,18 +2109,20 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
 - (NSObject *)doSendConfirmationCode:(NSString *)phoneNumber requestBuilder:(TGSendCodeRequestBuilder *)requestBuilder
 {
     TLRPCauth_sendCode *sendCode = [[TLRPCauth_sendCode alloc] init];
-    sendCode.flags = 0;
     sendCode.phone_number = phoneNumber;
     sendCode.api_id = [_apiId intValue];
     sendCode.api_hash = _apiHash;
     
-    sendCode.lang_code = [[NSLocale preferredLanguages] objectAtIndex:0];
+    ModernTL_codeSettings *settings = [[ModernTL_codeSettings alloc] init];
+    settings.flags = 0;
+    sendCode.settings = settings;
+    
     
     return [[TGTelegramNetworking instance] performRpc:sendCode completionBlock:^(id<TLObject> response, __unused int64_t responseTime, MTRpcError *error)
     {
         if (error == nil)
         {
-            [requestBuilder sendCodeRequestSuccess:(TLauth_SentCode *)response];
+            [requestBuilder sendCodeRequestSuccess:(ModernTL_auth_sentCode *)response];
         }
         else
         {
@@ -2371,7 +2448,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     } progressBlock:nil requiresCompletion:true requestClass:TGRequestClassGeneric];
 }
 
-- (NSObject *)doRequestUserData:(int)uid requestBuilder:(TGUserDataRequestBuilder *)requestBuilder
+- (NSObject *)doRequestUserData:(int64_t)uid requestBuilder:(TGUserDataRequestBuilder *)requestBuilder
 {
     TLRPCusers_getUsers$users_getUsers *getUsers = [[TLRPCusers_getUsers$users_getUsers alloc] init];
     getUsers.n_id = [NSArray arrayWithObject:[self createInputUserForUid:uid]];
@@ -2389,7 +2466,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     } progressBlock:nil requiresCompletion:true requestClass:TGRequestClassGeneric];
 }
 
-- (NSObject *)doRequestExtendedUserData:(int)uid actor:(TGExtendedUserDataRequestActor *)actor
+- (NSObject *)doRequestExtendedUserData:(int64_t)uid actor:(TGExtendedUserDataRequestActor *)actor
 {
     TLRPCusers_getFullUser$users_getFullUser *getFullUser = [[TLRPCusers_getFullUser$users_getFullUser alloc] init];
     getFullUser.n_id = [self createInputUserForUid:uid];
@@ -2529,7 +2606,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
                     importedPhone.phone = clientPhone;
                     importedPhone.user_id = importedContact.user_id;
                     
-                    [debugImportedString appendFormat:@"%@ -> %d\n", clientPhone, importedContact.user_id];
+                    [debugImportedString appendFormat:@"%@ -> %lld\n", clientPhone, (int64_t)importedContact.user_id];
                     
                     [importedArray addObject:importedPhone];
                 }
@@ -2556,7 +2633,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     } progressBlock:nil requiresCompletion:true requestClass:TGRequestClassGeneric];
 }
 
-- (NSObject *)doRequestContactList:(int32_t)hash actor:(TGSynchronizeContactsActor *)actor
+- (NSObject *)doRequestContactList:(int64_t)hash actor:(TGSynchronizeContactsActor *)actor
 {
     TLRPCcontacts_getContacts$contacts_getContacts *getContacts = [[TLRPCcontacts_getContacts$contacts_getContacts alloc] init];
     getContacts.n_hash = hash;
@@ -2678,7 +2755,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     
     for (NSNumber *nUid in uids)
     {
-        TLInputUser *inputUser = [self createInputUserForUid:[nUid intValue]];
+        TLInputUser *inputUser = [self createInputUserForUid:[nUid longLongValue]];
         if (inputUser != nil)
             [inputUsers addObject:inputUser];
     }
@@ -2717,12 +2794,21 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
         TLInputPeer$inputPeerChannel *channelPeer = [[TLInputPeer$inputPeerChannel alloc] init];
         channelPeer.channel_id = TGChannelIdFromPeerId(conversationId);
         channelPeer.access_hash = accessHash;
+        if (accessHash == 0) {
+            // Без access_hash сервер отвечает USER_BANNED_IN_CHANNEL, даже если
+            // пользователь состоит в чате: подставляем сохранённый.
+            TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:conversationId];
+            if (conversation.accessHash != 0) {
+                channelPeer.access_hash = conversation.accessHash;
+            }
+            TGLog(@"[peer] канал %" PRId64 " без access_hash, из базы: %" PRId64 "", conversationId, conversation.accessHash);
+        }
         return channelPeer;
     }
     else if (conversationId < 0)
     {
         TLInputPeer$inputPeerChat *chatPeer = [[TLInputPeer$inputPeerChat alloc] init];
-        chatPeer.chat_id = -(int)conversationId;
+        chatPeer.chat_id = -conversationId;
         return chatPeer;
     }
     else if (conversationId == _clientUserId)
@@ -2734,15 +2820,15 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     {
         if (accessHash != 0) {
             TLInputPeer$inputPeerUser *foreignPeer = [[TLInputPeer$inputPeerUser alloc] init];
-            foreignPeer.user_id = (int)conversationId;
+            foreignPeer.user_id = conversationId;
             foreignPeer.access_hash = accessHash;
             return foreignPeer;
         } else {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int)conversationId];
+            TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
             if (user != nil)
             {
                 TLInputPeer$inputPeerUser *foreignPeer = [[TLInputPeer$inputPeerUser alloc] init];
-                foreignPeer.user_id = (int)conversationId;
+                foreignPeer.user_id = conversationId;
                 foreignPeer.access_hash = user.phoneNumberHash;
                 return foreignPeer;
             }
@@ -2752,7 +2838,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     }
 }
 
-- (TLInputUser *)createInputUserForUid:(int)uid
+- (TLInputUser *)createInputUserForUid:(int64_t)uid
 {
     if (uid == _clientUserId)
     {
@@ -2843,6 +2929,8 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
         sendMessage.entities = entities;
     }
     sendMessage.peer = [self createInputPeerForConversation:conversationId accessHash:accessHash];
+    TGLog(@"[send] чат %" PRId64 ", access_hash %" PRId64 ", peer %@, flags %d",
+          conversationId, accessHash, NSStringFromClass([sendMessage.peer class]), (int)sendMessage.flags);
     sendMessage.message = messageText;
     sendMessage.random_id = tmpId;
     sendMessage.reply_to_msg_id = replyMessageId;
@@ -3020,7 +3108,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     
     for (NSNumber *nUid in userIds)
     {
-        id peer = [self createInputUserForUid:[nUid intValue]];
+        id peer = [self createInputUserForUid:[nUid longLongValue]];
         if (peer != nil)
             [array addObject:peer];
     }
@@ -3202,7 +3290,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     NSMutableArray *inputUsers = [[NSMutableArray alloc] init];
     for (NSNumber *nUid in uidList)
     {
-        int uid = [nUid intValue];
+        int64_t uid = [nUid longLongValue];
         [inputUsers addObject:[self createInputUserForUid:uid]];
     }
     createChat.users = inputUsers;
@@ -3220,7 +3308,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     } progressBlock:nil requiresCompletion:true requestClass:TGRequestClassGeneric | TGRequestClassFailOnServerErrors];
 }
 
-- (NSObject *)doAddConversationMember:(int64_t)conversationId uid:(int)uid actor:(TGConversationAddMemberRequestActor *)actor
+- (NSObject *)doAddConversationMember:(int64_t)conversationId uid:(int64_t)uid actor:(TGConversationAddMemberRequestActor *)actor
 {
     TLRPCmessages_addChatUser$messages_addChatUser *addChatUser = [[TLRPCmessages_addChatUser$messages_addChatUser alloc] init];
     addChatUser.chat_id = TGGroupIdFromPeerId(conversationId);
@@ -3251,7 +3339,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     } progressBlock:nil requiresCompletion:true requestClass:TGRequestClassGeneric];
 }
 
-- (NSObject *)doDeleteConversationMember:(int64_t)conversationId uid:(int)uid actor:(id<TGDeleteChatMemberProtocol>)actor
+- (NSObject *)doDeleteConversationMember:(int64_t)conversationId uid:(int64_t)uid actor:(id<TGDeleteChatMemberProtocol>)actor
 {
     TLRPCmessages_deleteChatUser$messages_deleteChatUser *deleteChatUser = [[TLRPCmessages_deleteChatUser$messages_deleteChatUser alloc] init];
     deleteChatUser.chat_id = TGGroupIdFromPeerId(conversationId);
@@ -3501,7 +3589,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
 {
     TLRPCphotos_getUserPhotos$photos_getUserPhotos *getPhotos = [[TLRPCphotos_getUserPhotos$photos_getUserPhotos alloc] init];
     
-    getPhotos.user_id = [self createInputUserForUid:(int)peerId];
+    getPhotos.user_id = [self createInputUserForUid:(int64_t)peerId];
     getPhotos.offset = 0;
     getPhotos.limit = 80;
     getPhotos.max_id = 0;
@@ -3627,13 +3715,13 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     if (block)
     {
         TLRPCcontacts_block$contacts_block *blockMethod = [[TLRPCcontacts_block$contacts_block alloc] init];
-        blockMethod.n_id = [self createInputUserForUid:(int)peerId];
+        blockMethod.n_id = [self createInputUserForUid:(int64_t)peerId];
         method = blockMethod;
     }
     else
     {
         TLRPCcontacts_unblock$contacts_unblock *unblockMethod = [[TLRPCcontacts_unblock$contacts_unblock alloc] init];
-        unblockMethod.n_id = [self createInputUserForUid:(int)peerId];
+        unblockMethod.n_id = [self createInputUserForUid:(int64_t)peerId];
         method = unblockMethod;
     }
     
@@ -3705,7 +3793,7 @@ typedef std::map<int, std::pair<TGUser *, int > >::iterator UserDataToDispatchIt
     } progressBlock:nil quickAckBlock:nil requiresCompletion:true requestClass:TGRequestClassGeneric datacenterId:TG_DEFAULT_DATACENTER_ID];
 }
 
-- (id)doRequestEncryptedChat:(int)uid randomId:(int64_t)randomId gABytes:(NSData *)gABytes actor:(TGRequestEncryptedChatActor *)actor
+- (id)doRequestEncryptedChat:(int64_t)uid randomId:(int64_t)randomId gABytes:(NSData *)gABytes actor:(TGRequestEncryptedChatActor *)actor
 {
     TLRPCmessages_requestEncryption$messages_requestEncryption *requestEncryption = [[TLRPCmessages_requestEncryption$messages_requestEncryption alloc] init];
     requestEncryption.user_id = [self createInputUserForUid:uid];

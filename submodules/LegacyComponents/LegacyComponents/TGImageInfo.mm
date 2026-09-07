@@ -381,6 +381,12 @@ bool extractFileUrlComponentsWithFileRef(NSString *fileUrl, int *datacenterId, i
     if (fileUrl == nil || fileUrl.length == 0)
         return false;
     
+    // Адреса схемы 228 тоже состоят из пяти сегментов через «_», но координат
+    // файла в них нет. Без этой проверки к ним дописывался суффикс origin-info,
+    // и разбор адреса при загрузке переставал совпадать.
+    if ([fileUrl hasPrefix:@"peerphoto:"] || [fileUrl hasPrefix:@"photofile:"] || [fileUrl hasPrefix:@"docthumb:"])
+        return false;
+    
     NSRange datacenterIdRange = NSMakeRange(NSNotFound, 0);
     NSRange volumeIdRange = NSMakeRange(NSNotFound, 0);
     NSRange localIdRange = NSMakeRange(NSNotFound, 0);

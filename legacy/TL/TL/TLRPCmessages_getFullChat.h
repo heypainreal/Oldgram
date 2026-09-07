@@ -7,7 +7,7 @@
 
 @interface TLRPCmessages_getFullChat : TLMetaRpc
 
-@property (nonatomic) int32_t chat_id;
+@property (nonatomic) int64_t chat_id;
 
 - (Class)responseClass;
 

@@ -1,5 +1,7 @@
 #import "TLRPCmessages_migrateChat.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,18 +56,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x15a3b8e3;
+    return (int32_t)0xa2875319;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x70e9b2f1;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_migrateChat$messages_migrateChat *object = [[TLRPCmessages_migrateChat$messages_migrateChat alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     return object;
 }
 
@@ -79,6 +81,11 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+}
 
 @end
 

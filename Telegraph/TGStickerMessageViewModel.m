@@ -122,7 +122,11 @@
         _savedMessage = forwardAttachment != nil && context.isSavedMessages && forwardAttachment.forwardSourcePeerId != message.cid;
         bool hasForwardPostId = forwardAttachment.forwardPostId != 0 || forwardAttachment.forwardMid != 0;
         
-        _incomingAppearance = _incoming || [authorPeer isKindOfClass:[TGConversation class]] || _savedMessage;
+        // В супергруппе можно писать от имени самой группы: такое сообщение остаётся
+        // нашим исходящим. Слева всегда показываем только посты канала-ленты.
+        TGConversation *authorConversation = [authorPeer isKindOfClass:[TGConversation class]] ? authorPeer : nil;
+        bool authorIsChannel = authorConversation != nil && !(message.outgoing && authorConversation.isChannelGroup);
+        _incomingAppearance = _incoming || authorIsChannel || _savedMessage;
         
         _imageModel = [[TGMessageImageViewModel alloc] init];
         [_imageModel setPresentation:_context.presentation];
@@ -676,7 +680,7 @@
     {
         CGPoint location = [recognizer locationInView:_contentModel.boundView];
         if (_replyHeaderViaUserModel != nil && (CGRectContainsPoint(_replyHeaderViaUserModel.frame, location) || _replyHeaderModel == nil)) {
-            [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @((int32_t)_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
+            [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @(_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
         } else if (_replyHeaderModel != nil) {
             [_context.companionHandle requestAction:@"navigateToMessage" options:@{@"mid": @(_replyMessageId), @"sourceMid": @(_mid)}];
         }

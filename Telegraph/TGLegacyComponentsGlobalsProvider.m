@@ -62,6 +62,12 @@ static __strong NSTimer *userInteractionEnableTimer = nil;
         selector = NSSelectorFromString([[NSString alloc] initWithFormat:@"%@%@", TGEncodeText(str1, 1), TGEncodeText(str2, 1)]);
     });
     
+    // На iOS 13+ -[UIApplication statusBarWindow] отвечает на respondsToSelector,
+    // но при вызове кидает исключение — окна статус-бара больше не существует.
+    if (@available(iOS 13.0, *)) {
+        return nil;
+    }
+    
     if ([[UIApplication sharedApplication] respondsToSelector:selector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"

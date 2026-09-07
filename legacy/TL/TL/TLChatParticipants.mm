@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLChatParticipants$chatParticipants *object = [[TLChatParticipants$chatParticipants alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.participants = metaObject->getArray((int32_t)0xe0e25c28);
     object.version = metaObject->getInt32((int32_t)0x4ea810e9);
     return object;

@@ -1,5 +1,7 @@
 #import "TLRPCmessages_editChatPhoto.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,18 +57,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xca4c79d8;
+    return (int32_t)0x35ddd674;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x829bb82f;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_editChatPhoto$messages_editChatPhoto *object = [[TLRPCmessages_editChatPhoto$messages_editChatPhoto alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.photo = metaObject->getObject((int32_t)0xe6c52372);
     return object;
 }
@@ -87,6 +89,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+    TLMetaClassStore::serializeObject(os, self.photo, true);
+}
 
 @end
 

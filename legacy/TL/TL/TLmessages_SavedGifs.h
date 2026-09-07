@@ -16,7 +16,7 @@
 
 @interface TLmessages_SavedGifs$messages_savedGifs : TLmessages_SavedGifs
 
-@property (nonatomic) int32_t n_hash;
+@property (nonatomic) int64_t n_hash;
 @property (nonatomic, retain) NSArray *gifs;
 
 @end

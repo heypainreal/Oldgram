@@ -88,8 +88,13 @@
     return [[[TGTelegramNetworking instance] requestSignalWithResponseTimestamp:getTopPeers] map:^id(NSDictionary *dict) {
         TLcontacts_TopPeers *result = dict[@"result"];
         int32_t timestamp = (int32_t)[dict[@"timestamp"] doubleValue];
+        // Ветки ниже обязаны вернуть модель: результат уходит туда, где у него
+        // спрашивают .disabled. Раньше здесь возвращался сигнал, и приложение
+        // падало на первом же неизвестном ответе.
+        TGRemoteRecentPeerCategories *empty = [[TGRemoteRecentPeerCategories alloc] initWithLastRefreshTimestamp:CFAbsoluteTimeGetCurrent() categories:@{} disabled:false];
+        
         if ([result isKindOfClass:[TLcontacts_TopPeers$contacts_topPeersNotModified class]]) {
-            return [SSignal complete];
+            return empty;
         } else if ([result isKindOfClass:[TLcontacts_TopPeers$contacts_topPeers class]]) {
             TLcontacts_TopPeers$contacts_topPeers *topPeers = (TLcontacts_TopPeers$contacts_topPeers *)result;
             [TGUserDataRequestBuilder executeUserDataUpdate:topPeers.users];
@@ -111,7 +116,7 @@
         } else if ([result isKindOfClass:[TLcontacts_TopPeers$contacts_topPeersDisabled class]]) {
             return [[TGRemoteRecentPeerCategories alloc] initWithLastRefreshTimestamp:CFAbsoluteTimeGetCurrent() categories:@{} disabled:true];
         } else {
-            return [SSignal complete];
+            return empty;
         }
     }];
 }
@@ -132,7 +137,7 @@
                 }
             }
         } else {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int)peerId];
+            TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
             if (user != nil) {
                 if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot) {
                     return [[TLTopPeerCategory$topPeerCategoryBotsPM alloc] init];

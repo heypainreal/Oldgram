@@ -1,5 +1,7 @@
 #import "TLRPCchannels_createChannel.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xf4893d7f;
+    return (int32_t)0x91006707;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xc7171da5;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -93,6 +95,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // Биты, которые выставляет приложение, в схеме 228 значат то же самое.
+    [os writeInt32:self.flags];
+    [os writeString:self.title == nil ? @"" : self.title];
+    [os writeString:self.about == nil ? @"" : self.about];
+}
 
 @end
 

@@ -1,5 +1,7 @@
 #import "TLRPCaccount_registerDevice.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -53,12 +55,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x1389cc;
+    return (int32_t)0xec86017a;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x8a408e97;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -99,6 +101,20 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeInt32:(int32_t)self.token_type];
+    [os writeString:self.token == nil ? @"" : self.token];
+    [os writeInt32:self.app_sandbox ? TL_BOOL_TRUE_CONSTRUCTOR : TL_BOOL_FALSE_CONSTRUCTOR];
+    [os writeBytes:[NSData data]];
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.other_uids.count];
+    for (id item in self.other_uids) {
+        [os writeInt64:[item longLongValue]];
+    }
+}
 
 @end
 

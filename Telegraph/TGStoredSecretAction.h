@@ -84,12 +84,12 @@ TGStoredSecretActionWithSeqActionId TGStoredSecretActionWithSeqActionIdMake(TGSt
 @property (nonatomic, readonly) int64_t keyId;
 
 @property (nonatomic, readonly) int64_t randomId;
-@property (nonatomic, readonly) int32_t chatId;
+@property (nonatomic, readonly) int64_t chatId;
 @property (nonatomic, readonly) int32_t date;
 @property (nonatomic, strong, readonly) NSData *encryptedData;
 @property (nonatomic, strong, readonly) TGStoredIncomingMessageFileInfo *fileInfo;
 
-- (instancetype)initWithKeyId:(int64_t)keyId randomId:(int64_t)randomId chatId:(int32_t)chatId date:(int32_t)date encryptedData:(NSData *)encryptedData fileInfo:(TGStoredIncomingMessageFileInfo *)fileInfo;
+- (instancetype)initWithKeyId:(int64_t)keyId randomId:(int64_t)randomId chatId:(int64_t)chatId date:(int32_t)date encryptedData:(NSData *)encryptedData fileInfo:(TGStoredIncomingMessageFileInfo *)fileInfo;
 
 @end
 

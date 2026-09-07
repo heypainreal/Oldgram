@@ -122,7 +122,7 @@ static NSDictionary *cachedUnreadCounts;
         NSMutableDictionary *counts = [[NSMutableDictionary alloc] init];
         for (Api86_Dialog *dialog in dialogs.dialogs)
         {
-            int32_t peerId = 0;
+            int64_t peerId = 0;
             if ([dialog.peer isKindOfClass:[Api86_Peer_peerUser class]])
                 peerId = (int32_t)[[(Api86_Peer_peerUser *)dialog.peer userId] integerValue];
             

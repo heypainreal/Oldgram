@@ -174,7 +174,7 @@
 - (void)setConversation:(TGConversation *)conversation {
     NSMutableArray *users = [[NSMutableArray alloc] init];
     for (NSNumber *nUid in conversation.chatParticipants.chatParticipantUids) {
-        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
         if (user != nil) {
             [users addObject:user];
         }
@@ -186,7 +186,7 @@
 }
 
 - (NSArray *)sortedUsers:(NSArray *)users chatAdminUids:(NSSet *)chatAdminUids {
-    int32_t selfUid = TGTelegraphInstance.clientUserId;
+    int64_t selfUid = TGTelegraphInstance.clientUserId;
     return [users sortedArrayUsingComparator:^NSComparisonResult(TGUser *user1, TGUser *user2)
     {
         if (user1.botKind != user2.botKind) {
@@ -421,7 +421,7 @@
 {
     if ([action isEqualToString:@"openUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             TGUser *user = [TGDatabaseInstance() loadUser:uid];

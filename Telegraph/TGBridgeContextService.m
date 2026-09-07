@@ -74,7 +74,7 @@ const NSUInteger TGBridgeContextChatsCount = 4;
                 
                 [userIds enumerateIndexesUsingBlock:^(NSUInteger userId, __unused BOOL *stop)
                 {
-                    TGBridgeUser *bridgeUser = [TGBridgeUser userWithTGUser:[[TGDatabase instance] loadUser:(int)userId]];
+                    TGBridgeUser *bridgeUser = [TGBridgeUser userWithTGUser:[[TGDatabase instance] loadUser:(int64_t)userId]];
                     if (bridgeUser != nil)
                         bridgeUsers[@(userId)] = bridgeUser;
                 }];

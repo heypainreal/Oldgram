@@ -1,5 +1,7 @@
 #import "TLRPCcontacts_search.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x11f812d8;
+    return (int32_t)0x05f58d0f;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xa19c29b8;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -86,6 +88,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeString:self.q == nil ? @"" : self.q];
+    [os writeInt32:(int32_t)self.limit];
+}
 
 @end
 

@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLWallPaper$wallPaper *object = [[TLWallPaper$wallPaper alloc] init];
-    object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
+    object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.title = metaObject->getString((int32_t)0xcdebf414);
     object.sizes = metaObject->getArray((int32_t)0x7b4ec65f);
     object.color = metaObject->getInt32((int32_t)0xaee6bad0);
@@ -103,7 +103,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLWallPaper$wallPaperSolid *object = [[TLWallPaper$wallPaperSolid alloc] init];
-    object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
+    object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.title = metaObject->getString((int32_t)0xcdebf414);
     object.bg_color = metaObject->getInt32((int32_t)0xa262f32b);
     object.color = metaObject->getInt32((int32_t)0xaee6bad0);

@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getFullChat.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,18 +56,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x3b831c66;
+    return (int32_t)0xaeb00b34;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xbb8f9fa6;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_getFullChat$messages_getFullChat *object = [[TLRPCmessages_getFullChat$messages_getFullChat alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     return object;
 }
 
@@ -79,6 +81,11 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+}
 
 @end
 

@@ -9,7 +9,7 @@
 
 @interface TLInputDialogPeer$inputDialogPeerFeed : TLInputDialogPeer
 
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 
 @end
 

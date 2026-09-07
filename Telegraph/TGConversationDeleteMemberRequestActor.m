@@ -17,7 +17,7 @@
 
 @interface TGConversationDeleteMemberRequestActor ()
 
-@property (nonatomic) int uid;
+@property (nonatomic) int64_t uid;
 
 @end
 
@@ -39,9 +39,9 @@
         [ActionStageInstance() actionFailed:self.path reason:-1];
     }
     
-    _uid = [nUid intValue];
+    _uid = [nUid longLongValue];
     
-    self.cancelToken = [TGTelegraphInstance doDeleteConversationMember:[nConversationId longLongValue] uid:[nUid intValue] actor:self];
+    self.cancelToken = [TGTelegraphInstance doDeleteConversationMember:[nConversationId longLongValue] uid:[nUid longLongValue] actor:self];
 }
 
 - (void)extractStatedMessageFromUpdates:(TLUpdates *)updates message:(__autoreleasing TLMessage **)message chats:(__autoreleasing NSArray **)chats users:(__autoreleasing NSArray **)users
@@ -132,7 +132,7 @@
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:[[NSNumber alloc] initWithInt:version] forKey:@"conversationVersion"];
-    [dict setObject:[NSNumber numberWithInt:_uid] forKey:@"uid"];
+    [dict setObject:@(_uid) forKey:@"uid"];
     [ActionStageInstance() actionCompleted:self.path result:[[SGraphObjectNode alloc] initWithObject:dict]];
 }
 

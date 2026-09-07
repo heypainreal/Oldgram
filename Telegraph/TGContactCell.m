@@ -146,12 +146,12 @@
 
 - (void)checkButtonPressed
 {
-    [_actionHandle requestAction:@"/contactlist/toggleItem" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:_itemId], @"itemId", [NSNumber numberWithBool:_contactSelected], @"selected", self, @"cell", nil]];
+    [_actionHandle requestAction:@"/contactlist/toggleItem" options:[NSDictionary dictionaryWithObjectsAndKeys:@(_itemId), @"itemId", [NSNumber numberWithBool:_contactSelected], @"selected", self, @"cell", nil]];
 }
 
 - (void)actionButtonPressed
 {
-    [_actionHandle requestAction:@"contactCellAction" options:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:_itemId], @"itemId", nil]];
+    [_actionHandle requestAction:@"contactCellAction" options:[NSDictionary dictionaryWithObjectsAndKeys:@(_itemId), @"itemId", nil]];
 }
 
 - (void)setBoldMode:(int)index
@@ -231,7 +231,7 @@
     }
     else
     {
-        [_avatarView loadUserPlaceholderWithSize:CGSizeMake(diameter, diameter) uid:_hideAvatar ? 0 : (int32_t)_itemId firstName:_user.firstName lastName:_user.lastName placeholder:placeholder];
+        [_avatarView loadUserPlaceholderWithSize:CGSizeMake(diameter, diameter) uid:_hideAvatar ? 0 : _itemId firstName:_user.firstName lastName:_user.lastName placeholder:placeholder];
     }
     
     if (_checkButton != nil)

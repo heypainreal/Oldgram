@@ -567,7 +567,7 @@ static bool _initialUpdatesScheduled = false;
                                 }
                                 else if (updateServiceNotification.inbox_date != 0)
                                 {
-                                    int uid = [TGTelegraphInstance createServiceUserIfNeeded];
+                                    int64_t uid = [TGTelegraphInstance createServiceUserIfNeeded];
                                     
                                     TGMessage *message = [[TGMessage alloc] init];
                                     message.mid = [[[TGDatabaseInstance() generateLocalMids:1] objectAtIndex:0] intValue];
@@ -720,7 +720,7 @@ static bool _initialUpdatesScheduled = false;
     std::set<int64_t> acceptEncryptedChats;
     std::set<int64_t> updatePeerLayers;
     
-    std::map<int, std::vector<id> > chatParticipantUpdateArrays;
+    std::map<int64_t, std::vector<id> > chatParticipantUpdateArrays;
     
     NSMutableArray *userPhotoUpdates = nil;
     
@@ -1081,7 +1081,7 @@ static bool _initialUpdatesScheduled = false;
             TLUpdate$updateUserStatus *userStatus = (TLUpdate$updateUserStatus *)update;
             
             TGUserPresence presence = extractUserPresence(userStatus.status);
-            TGLog(@"(updateUserStatus user %d status (online: %d, lastSeen: %d))", (int)userStatus.user_id, presence.online ? 1 : 0, (int)presence.lastSeen);
+            TGLog(@"(updateUserStatus user %lld status (online: %d, lastSeen: %d))", (int64_t)userStatus.user_id, presence.online ? 1 : 0, (int)presence.lastSeen);
             
             [TGTelegraphInstance dispatchUserPresenceChanges:userStatus.user_id presence:presence];
         }
@@ -1110,7 +1110,7 @@ static bool _initialUpdatesScheduled = false;
                     if (userPhotoUpdates == nil)
                         userPhotoUpdates = [[NSMutableArray alloc] init];
                     
-                    [userPhotoUpdates addObject:[[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:user.uid], @"uid", photo, @"photo", [[NSNumber alloc] initWithInt:photoUpdate.date], @"date", nil]];
+                    [userPhotoUpdates addObject:[[NSDictionary alloc] initWithObjectsAndKeys:@(user.uid), @"uid", photo, @"photo", [[NSNumber alloc] initWithInt:photoUpdate.date], @"date", nil]];
                 }
                 
                 [TGUserDataRequestBuilder executeUserObjectsUpdate:[NSArray arrayWithObject:user]];
@@ -1395,7 +1395,7 @@ static bool _initialUpdatesScheduled = false;
             }
             else if (updateServiceNotification.inbox_date != 0)
             {
-                int uid = [TGTelegraphInstance createServiceUserIfNeeded];
+                int64_t uid = [TGTelegraphInstance createServiceUserIfNeeded];
                 
                 TGMessage *message = [[TGMessage alloc] init];
                 message.mid = [[[TGDatabaseInstance() generateLocalMids:1] objectAtIndex:0] intValue];
@@ -1676,21 +1676,21 @@ static bool _initialUpdatesScheduled = false;
     
     if (userPhotoUpdates != nil)
     {
-        std::vector<int> uidsList;
+        std::vector<int64_t> uidsList;
         
         for (NSDictionary *dict in userPhotoUpdates)
         {
-            uidsList.push_back([dict[@"uid"] intValue]);
+            uidsList.push_back([dict[@"uid"] longLongValue]);
         }
         
-        std::set<int> uidsWithEnabledNotifications = [TGDatabaseInstance() filterPeerPhotoNotificationsEnabled:uidsList];
+        std::set<int64_t> uidsWithEnabledNotifications = [TGDatabaseInstance() filterPeerPhotoNotificationsEnabled:uidsList];
         
         dispatchPeerPhotoListUpdatesArray = [[NSMutableArray alloc] init];
         
         for (NSDictionary *dict in userPhotoUpdates)
         {
-            int64_t conversationId = [dict[@"uid"] intValue];
-            if (uidsWithEnabledNotifications.find((int)conversationId) != uidsWithEnabledNotifications.end())
+            int64_t conversationId = [dict[@"uid"] longLongValue];
+            if (uidsWithEnabledNotifications.find(conversationId) != uidsWithEnabledNotifications.end())
             {
                 [dispatchPeerPhotoListUpdatesArray addObject:[[NSNumber alloc] initWithLongLong:conversationId]];
             }
@@ -2038,7 +2038,7 @@ static bool _initialUpdatesScheduled = false;
                     
                     int64_t conversationId = 0;
                     int version = 0;
-                    int32_t userId = 0;
+                    int64_t userId = 0;
                     
                     if ([update isKindOfClass:[TLUpdate$updateChatParticipantAdd class]])
                     {
@@ -2072,7 +2072,7 @@ static bool _initialUpdatesScheduled = false;
                     
                     int64_t conversationId = TGPeerIdFromGroupId(concreteUpdate.chat_id);
                     int version = concreteUpdate.version;
-                    int32_t userId = concreteUpdate.user_id;
+                    int64_t userId = concreteUpdate.user_id;
                     
                     TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:conversationId];
                     if (conversation != 0 && conversation.chatParticipants != nil && conversation.chatParticipants.version < version)
@@ -2175,7 +2175,7 @@ static bool _initialUpdatesScheduled = false;
                 int64_t conversationId = [TGDatabaseInstance() peerIdForEncryptedConversationId:updateEncryptedChatTyping.chat_id createIfNecessary:false];
                 if (conversationId != 0)
                 {
-                    int uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:conversationId];
+                    int64_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:conversationId];
                     if (uid != 0)
                     {
                         [TGTelegraphInstance dispatchUserActivity:uid inConversation:conversationId type:@"typing"];
@@ -2208,7 +2208,7 @@ static bool _initialUpdatesScheduled = false;
                 NSMutableArray *users = [[NSMutableArray alloc] init];
                 for (NSNumber *nUid in blockedList)
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                     if (user != nil)
                         [users addObject:user];
                 }
@@ -2781,7 +2781,7 @@ static bool _initialUpdatesScheduled = false;
                     }
                 }
                 
-                int fromUid = 0;
+                int64_t fromUid = 0;
                 bool fromFound = false;
                 
                 if (cachedParticipantIds != NULL)

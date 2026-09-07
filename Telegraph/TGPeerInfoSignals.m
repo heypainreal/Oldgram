@@ -51,7 +51,7 @@
         }
         if (cachedUserId != nil) {
             if ([cachedUserId respondsToSelector:@selector(intValue)]) {
-                TGUser *user = [TGDatabaseInstance() loadUser:[cachedUserId intValue]];
+                TGUser *user = [TGDatabaseInstance() loadUser:[cachedUserId longLongValue]];
                 if (user != nil) {
                     return [SSignal single:user];
                 } else {
@@ -64,7 +64,7 @@
             SSignal *recentCached = [[[TGRecentContextBotsSignal recentBots] take:1] mapToSignal:^SSignal *(NSArray *uids) {
                 return [TGDatabaseInstance() modify:^id{
                     for (NSNumber *nUid in uids) {
-                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                         if (user != nil && [user.userName.lowercaseString isEqualToString:query.lowercaseString]) {
                             return user;
                         }

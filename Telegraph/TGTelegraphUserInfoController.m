@@ -134,24 +134,24 @@
 
 @implementation TGTelegraphUserInfoController
 
-- (instancetype)initWithUid:(int32_t)uid
+- (instancetype)initWithUid:(int64_t)uid
 {
     return [self initWithUid:uid withoutCompose:false];
 }
 
-- (instancetype)initWithUid:(int32_t)uid callMessages:(NSArray *)callMessages
+- (instancetype)initWithUid:(int64_t)uid callMessages:(NSArray *)callMessages
 {
     _callMessages = callMessages;
     return [self initWithUid:uid withoutCompose:false];
 }
 
-- (instancetype)initWithUid:(int32_t)uid withoutCompose:(bool)withoutCompose
+- (instancetype)initWithUid:(int64_t)uid withoutCompose:(bool)withoutCompose
 {
     _withoutCompose = withoutCompose;
     return [self initWithUid:uid withoutActions:false sharedMediaPeerId:uid sharedMediaOptions:nil];
 }
 
-- (instancetype)initWithUid:(int32_t)uid withoutActions:(bool)withoutActions sharedMediaPeerId:(int64_t)sharedMediaPeerId sharedMediaOptions:(NSDictionary *)sharedMediaOptions
+- (instancetype)initWithUid:(int64_t)uid withoutActions:(bool)withoutActions sharedMediaPeerId:(int64_t)sharedMediaPeerId sharedMediaOptions:(NSDictionary *)sharedMediaOptions
 {
     self = [super init];
     if (self != nil)
@@ -1571,7 +1571,7 @@ static UIView *_findBackArrow(UIView *view)
 {
     self.view.userInteractionEnabled = false;
     
-    int nativeId = _phonebookInfo.nativeId;
+    int64_t nativeId = _phonebookInfo.nativeId;
     
     [ActionStageInstance() dispatchOnStageQueue:^
     {
@@ -1591,7 +1591,7 @@ static UIView *_findBackArrow(UIView *view)
             [ActionStageInstance() removeWatcher:self fromPath:@"/tg/phonebook"];
             
             static int actionId = 0;
-            [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(break%d,%d,breakLinkLocal)", _uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:[[NSNumber alloc] initWithInt:_uid], @"uid", [[NSNumber alloc] initWithInt:nativeId], @"nativeId", nil] watcher:self];
+            [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(break%lld,%d,breakLinkLocal)", (int64_t)_uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:@(_uid), @"uid", [[NSNumber alloc] initWithInt:nativeId], @"nativeId", nil] watcher:self];
         }
     }];
 }
@@ -1600,7 +1600,7 @@ static UIView *_findBackArrow(UIView *view)
 {
     self.view.userInteractionEnabled = false;
     
-    int nativeId = _phonebookInfo.nativeId;
+    int64_t nativeId = _phonebookInfo.nativeId;
     
     [ActionStageInstance() dispatchOnStageQueue:^
     {
@@ -1616,7 +1616,7 @@ static UIView *_findBackArrow(UIView *view)
         else
         {
             static int actionId = 0;
-            [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(%d,%d,changeNameLocal)", _uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:[[NSNumber alloc] initWithInt:_uid], @"uid", firstName == nil ? @"" : firstName, @"firstName", lastName == nil ? @"" : lastName, @"lastName", [[NSNumber alloc] initWithInt:nativeId],  @"nativeId", nil] watcher:self];
+            [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(%lld,%d,changeNameLocal)", (int64_t)_uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:@(_uid), @"uid", firstName == nil ? @"" : firstName, @"firstName", lastName == nil ? @"" : lastName, @"lastName", [[NSNumber alloc] initWithInt:nativeId],  @"nativeId", nil] watcher:self];
         }
     }];
 }
@@ -1646,7 +1646,7 @@ static UIView *_findBackArrow(UIView *view)
             static int actionId = 0;
             
             NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
-            [options setObject:[[NSNumber alloc] initWithInt:_uid] forKey:@"uid"];
+            [options setObject:@(_uid) forKey:@"uid"];
             [options setObject:[[NSNumber alloc] initWithInt:_phonebookInfo.nativeId] forKey:@"nativeId"];
             if (phoneNumbers != nil)
                 [options setObject:phoneNumbers forKey:@"phones"];

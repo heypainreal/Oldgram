@@ -30,7 +30,7 @@ static UIColor *colorWithFactor(UIColor *baseColor, CGFloat factor, CGFloat alph
     return singleton;
 }
 
-- (int)currentUserId
+- (int64_t)currentUserId
 {
     return TGTelegraphInstance.clientUserId;
 }
@@ -357,7 +357,7 @@ static UIColor *colorWithFactor(UIColor *baseColor, CGFloat factor, CGFloat alph
     return [UIImage imageNamed:@"InlineAvatarPlaceholder.png"];
 }
 
-- (UIImage *)messageInlineAvatarPlaceholder:(int)uid
+- (UIImage *)messageInlineAvatarPlaceholder:(int64_t)uid
 {
     return [[TGInterfaceAssets instance] smallAvatarPlaceholder:uid];
 }

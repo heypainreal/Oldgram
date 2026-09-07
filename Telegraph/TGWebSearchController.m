@@ -1105,8 +1105,9 @@
             [item.selectionContext setItem:(id<TGMediaSelectableItem>)editableItem selected:true];
     };
     [model.interfaceView updateSelectionInterface:[self totalSelectionCount] counterVisible:([self totalSelectionCount] > 0) animated:false];
-    model.interfaceView.donePressed = ^(id<TGWebSearchResultsGalleryItem> item)
+    model.interfaceView.donePressed = ^(id<TGModernGalleryItem> genericItem)
     {
+        id<TGWebSearchResultsGalleryItem> item = (id<TGWebSearchResultsGalleryItem>)genericItem;
         __strong TGWebSearchController *strongSelf = weakSelf;
         if (strongSelf == nil)
             return;
@@ -1123,8 +1124,9 @@
     modernGallery.model = model;
     
     __weak TGModernGalleryController *weakGallery = modernGallery;
-    modernGallery.itemFocused = ^(id<TGWebSearchResultsGalleryItem> item)
+    modernGallery.itemFocused = ^(id<TGModernGalleryItem> genericItem)
     {
+        id<TGWebSearchResultsGalleryItem> item = (id<TGWebSearchResultsGalleryItem>)genericItem;
         __strong TGWebSearchController *strongSelf = weakSelf;
         __strong TGModernGalleryController *strongGallery = weakGallery;
         if (strongSelf != nil)
@@ -1138,8 +1140,9 @@
         }
     };
 
-    modernGallery.beginTransitionIn = ^UIView *(id<TGWebSearchResultsGalleryItem> item, __unused TGModernGalleryItemView *itemView)
+    modernGallery.beginTransitionIn = ^UIView *(id<TGModernGalleryItem> genericItem, __unused TGModernGalleryItemView *itemView)
     {
+        id<TGWebSearchResultsGalleryItem> item = (id<TGWebSearchResultsGalleryItem>)genericItem;
         __strong TGWebSearchController *strongSelf = weakSelf;
         __strong TGModernGalleryController *strongGallery = weakGallery;
         if (strongSelf != nil)
@@ -1153,8 +1156,9 @@
         return nil;
     };
 
-    modernGallery.beginTransitionOut = ^UIView *(id<TGWebSearchResultsGalleryItem> item, __unused TGModernGalleryItemView *itemView)
+    modernGallery.beginTransitionOut = ^UIView *(id<TGModernGalleryItem> genericItem, __unused TGModernGalleryItemView *itemView)
     {
+        id<TGWebSearchResultsGalleryItem> item = (id<TGWebSearchResultsGalleryItem>)genericItem;
         __strong TGWebSearchController *strongSelf = weakSelf;
         if (strongSelf != nil)
         {

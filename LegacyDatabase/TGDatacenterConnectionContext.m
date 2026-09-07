@@ -37,7 +37,7 @@
         {
             MTRequest *request = [[MTRequest alloc] init];
             
-            [request setPayload:functionContext.payload metadata:functionContext.metadata responseParser:functionContext.responseParser];
+            [request setPayload:functionContext.payload metadata:functionContext.metadata shortMetadata:nil responseParser:functionContext.responseParser];
             
             [request setCompleted:^(id result, __unused NSTimeInterval timestamp, MTRpcError *error)
             {

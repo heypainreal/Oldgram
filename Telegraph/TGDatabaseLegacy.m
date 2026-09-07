@@ -450,7 +450,7 @@
          TGMessage *lastIncomingMesageWithMarkup = nil;
          struct { int32_t messageId, botId; } lastKickedBot = {0, 0};
          
-         std::map<int32_t, bool> userIsBot;
+         std::map<int64_t, bool> userIsBot;
          
          int unreadCount = 0;
          int localUnreadCount = 0;
@@ -558,12 +558,12 @@
                  bool isBot = false;
                  if (conversationId > INT_MIN && conversationId < 0)
                  {
-                     auto isBotIt = userIsBot.find((int32_t)message.fromUid);
+                     auto isBotIt = userIsBot.find(message.fromUid);
                      if (isBotIt == userIsBot.end())
                      {
-                         TGUser *user = [self loadUser:(int)message.fromUid];
+                         TGUser *user = [self loadUser:message.fromUid];
                          isBot = user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot;
-                         userIsBot.insert(std::pair<int32_t, bool>((int32_t)message.fromUid, isBot));
+                         userIsBot.insert(std::pair<int64_t, bool>(message.fromUid, isBot));
                      }
                      else
                          isBot = isBotIt->second;
@@ -580,16 +580,16 @@
              {
                  if (message.actionInfo.actionType == TGMessageActionChatDeleteMember)
                  {
-                     int32_t deletedUserId = [message.actionInfo.actionData[@"uid"] intValue];
+                     int64_t deletedUserId = [message.actionInfo.actionData[@"uid"] longLongValue];
                      bool isBot = false;
                      if (conversationId > INT_MIN && conversationId < 0)
                      {
-                         auto isBotIt = userIsBot.find((int32_t)deletedUserId);
+                         auto isBotIt = userIsBot.find(deletedUserId);
                          if (isBotIt == userIsBot.end())
                          {
-                             TGUser *user = [self loadUser:(int)deletedUserId];
+                             TGUser *user = [self loadUser:deletedUserId];
                              isBot = user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot;
-                             userIsBot.insert(std::pair<int32_t, bool>((int32_t)deletedUserId, isBot));
+                             userIsBot.insert(std::pair<int64_t, bool>(deletedUserId, isBot));
                          }
                          else
                              isBot = isBotIt->second;
@@ -669,7 +669,7 @@
              [_database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:message.mid], [[NSNumber alloc] initWithLongLong:conversationId], [[NSNumber alloc] initWithInt:currentLifetime], message.text, [message serializeMediaAttachments:false], [[NSNumber alloc] initWithLongLong:message.fromUid], [[NSNumber alloc] initWithLongLong:message.toUid], [[NSNumber alloc] initWithInt:message.outgoing ? 1 : 0], [currentConversation isMessageUnread:message] ? [[NSNumber alloc] initWithLongLong:message.outgoing ? INT_MAX : conversationId] : nil, [[NSNumber alloc] initWithInt:message.deliveryState], [[NSNumber alloc] initWithInt:(int)(message.date)], [[NSNumber alloc] initWithLongLong:message.flags], [[NSNumber alloc] initWithInt:message.seqIn], [[NSNumber alloc] initWithInt:message.seqOut], [message serializeContentProperties]];
              
              if (mediaData != nil && mediaData.length != 0)
-                 [_database executeUpdate:mediaInsertQueryFormat, [[NSNumber alloc] initWithInt:message.mid], [[NSNumber alloc] initWithLongLong:conversationId], [[NSNumber alloc] initWithInt:(int)message.date], [[NSNumber alloc] initWithInt:(int)message.fromUid], [[NSNumber alloc] initWithInt:mediaType], mediaData];
+                 [_database executeUpdate:mediaInsertQueryFormat, [[NSNumber alloc] initWithInt:message.mid], [[NSNumber alloc] initWithLongLong:conversationId], [[NSNumber alloc] initWithInt:(int)message.date], @(message.fromUid), [[NSNumber alloc] initWithInt:mediaType], mediaData];
              
              if (message.local && message.deliveryState == TGMessageDeliveryStatePending)
              {
@@ -736,7 +736,7 @@
          {
              if (lastIncomingMesageWithMarkup != nil)
              {
-                 TGUser *user = [self loadUser:(int)conversationId];
+                 TGUser *user = [self loadUser:(int64_t)conversationId];
                  if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot)
                  {
                      [self storeBotReplyMarkup:lastIncomingMesageWithMarkup.replyMarkup hideMarkupAuthorId:user.uid forPeerId:conversationId messageId:lastIncomingMesageWithMarkup.mid];
@@ -751,7 +751,7 @@
              }
              else if (lastIncomingMesageWithMarkup != nil)
              {
-                 [self storeBotReplyMarkup:lastIncomingMesageWithMarkup.replyMarkup hideMarkupAuthorId:(int32_t)lastIncomingMesageWithMarkup.fromUid forPeerId:conversationId messageId:lastIncomingMesageWithMarkup.mid];
+                 [self storeBotReplyMarkup:lastIncomingMesageWithMarkup.replyMarkup hideMarkupAuthorId:lastIncomingMesageWithMarkup.fromUid forPeerId:conversationId messageId:lastIncomingMesageWithMarkup.mid];
              }
          }
          

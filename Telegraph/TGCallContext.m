@@ -6,7 +6,7 @@
 
 @implementation TGCallWaitingContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId a:(NSData *)a gA:(NSData *)gA dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId a:(NSData *)a gA:(NSData *)gA dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate {
     self = [super init];
     if (self != nil) {
         _callId = callId;
@@ -26,7 +26,7 @@
 
 @implementation TGCallWaitingConfirmContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId b:(NSData *)b gAHash:(NSData *)gAHash dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId b:(NSData *)b gAHash:(NSData *)gAHash dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate {
     self = [super init];
     if (self != nil) {
         _callId = callId;
@@ -46,7 +46,7 @@
 
 @implementation TGCallRequestedContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gAHash:(NSData *)gAHash declined:(bool)declined {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gAHash:(NSData *)gAHash declined:(bool)declined {
     self = [super init];
     if (self != nil) {
         _callId = callId;
@@ -64,7 +64,7 @@
 
 @implementation TGCallReceivedContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId dhConfig:(id)dhConfig b:(NSData *)b gB:(NSData *)gB gAHash:(NSData *)gAHash {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId dhConfig:(id)dhConfig b:(NSData *)b gB:(NSData *)gB gAHash:(NSData *)gAHash {
     self = [super init];
     if (self != nil) {
         _callId = callId;
@@ -84,7 +84,7 @@
 
 @implementation TGCallAcceptedContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gA:(NSData *)gA gB:(NSData *)gB {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gA:(NSData *)gA gB:(NSData *)gB {
     self = [super init];
     if (self != nil) {
         _callId = callId;
@@ -102,7 +102,7 @@
 
 @implementation TGCallConfirmedContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gA:(NSData *)gA keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gA:(NSData *)gA keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections {
     self = [super init];
     if (self != nil) {
         _callId = callId;
@@ -122,7 +122,7 @@
 
 @implementation TGCallOngoingContext
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId key:(NSData *)key keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections {
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId key:(NSData *)key keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections {
     self = [super init];
     if (self != nil) {
         _callId = callId;

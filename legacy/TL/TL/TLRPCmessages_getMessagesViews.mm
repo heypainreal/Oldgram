@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getMessagesViews.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xc4c8a55d;
+    return (int32_t)0x5784d3e1;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x359b04a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -94,6 +96,17 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.n_id.count];
+    for (id item in self.n_id) {
+        [os writeInt32:[item intValue]];
+    }
+    [os writeInt32:self.increment ? TL_BOOL_TRUE_CONSTRUCTOR : TL_BOOL_FALSE_CONSTRUCTOR];
+}
 
 @end
 

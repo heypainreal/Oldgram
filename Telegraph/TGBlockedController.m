@@ -109,7 +109,7 @@
 
 #pragma mark -
 
-- (void)_unblockUserWithUid:(int32_t)uid
+- (void)_unblockUserWithUid:(int64_t)uid
 {
     bool wasEmpty = ((TGCollectionMenuSection *)self.menuSections.sections[0]).items.count <= 1;
     
@@ -148,13 +148,13 @@
 {
     if ([action isEqualToString:@"userItemDeleteRequested"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
             [self _unblockUserWithUid:uid];
     }
     else if ([action isEqualToString:@"userItemSelected"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
@@ -171,7 +171,7 @@
             TGUser *user = options;
             if (user != nil)
             {
-                int32_t uid = user.uid;
+                int64_t uid = user.uid;
                 bool alreadyInList = false;
                 for (id item in ((TGCollectionMenuSection *)self.menuSections.sections[0]).items)
                 {

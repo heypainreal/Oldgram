@@ -19,6 +19,23 @@ typedef UIImage *(^TGImageUniversalProcessor)(NSString *, UIImage *);
 
 typedef void (^TGImageProgressHandler)(TGRemoteImageView *imageView, float progress);
 
+/// Ключ дискового кеша для адреса изображения.
+///
+/// Старые адреса выглядят как «dc_volume_local_secret»: последняя часть меняется
+/// при каждом ответе сервера, поэтому её отбрасывали, оставляя четыре сегмента.
+/// Адреса схемы 228 («peerphoto:», «photofile:», «docthumb:») тоже состоят из
+/// пяти сегментов, но там значимы все — обрезка ломала разбор и файл не
+/// скачивался вовсе.
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+NSString *TGTrimmedImageCacheUrl(NSString *url);
+
+#ifdef __cplusplus
+}
+#endif
+
 @interface TGRemoteImageView : UIImageView
 <ASWatcher>
 @property (nonatomic, strong) ASHandle *actionHandle;

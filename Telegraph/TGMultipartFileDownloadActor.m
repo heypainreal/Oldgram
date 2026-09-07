@@ -652,6 +652,11 @@
                 if ([strongSelf->_fileLocation isKindOfClass:[TLInputFileLocation$inputDocumentFileLocation class]]) {
                     TLInputFileLocation$inputDocumentFileLocation *location = (TLInputFileLocation$inputDocumentFileLocation *)strongSelf->_fileLocation;
                     location.file_reference = [next fileReference];
+                } else if ([strongSelf->_fileLocation isKindOfClass:[TLInputFileLocation$inputPhotoFileLocation class]]) {
+                    // Фотографии схемы 228: без этой ветки ссылка не обновлялась
+                    // и загрузка бесконечно падала с FILE_REFERENCE_EXPIRED.
+                    TLInputFileLocation$inputPhotoFileLocation *location = (TLInputFileLocation$inputPhotoFileLocation *)strongSelf->_fileLocation;
+                    location.file_reference = [next fileReferenceForPhotoId:location.n_id accessHash:location.access_hash];
                 } else if ([strongSelf->_fileLocation isKindOfClass:[TLInputFileLocation$inputFileLocation class]]) {
                     TLInputFileLocation$inputFileLocation *location = (TLInputFileLocation$inputFileLocation *)strongSelf->_fileLocation;
                     location.file_reference = [next fileReferenceForVolumeId:location.volume_id localId:location.local_id];

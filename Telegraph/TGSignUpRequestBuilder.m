@@ -81,7 +81,7 @@
 
 - (void)signUpSuccess:(TLauth_Authorization *)authorization
 {
-    int userId = ((TLUser$modernUser *)authorization.user).n_id;
+    int64_t userId = ((TLUser$modernUser *)authorization.user).n_id;
     
     [TGUserDataRequestBuilder executeUserDataUpdate:[NSArray arrayWithObject:authorization.user]];
     

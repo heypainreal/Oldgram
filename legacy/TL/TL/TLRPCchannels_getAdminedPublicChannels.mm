@@ -1,5 +1,7 @@
 #import "TLRPCchannels_getAdminedPublicChannels.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x8d8d82d7;
+    return (int32_t)0xf8b036af;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xda925482;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
@@ -72,6 +74,11 @@
 {
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+}
 
 @end
 

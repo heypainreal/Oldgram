@@ -74,7 +74,7 @@
         }
         else
         {
-            [_avatarView loadUserPlaceholderWithSize:CGSizeMake(40.0f, 40.0f) uid:(int32_t)conversation.conversationId firstName:nil lastName:nil placeholder:placeholder];
+            [_avatarView loadUserPlaceholderWithSize:CGSizeMake(40.0f, 40.0f) uid:conversation.conversationId firstName:nil lastName:nil placeholder:placeholder];
         }
     }
     else

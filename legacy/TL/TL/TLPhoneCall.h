@@ -23,8 +23,8 @@
 @property (nonatomic) int32_t flags;
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 @property (nonatomic, retain) TLPhoneCallProtocol *protocol;
 @property (nonatomic) int32_t receive_date;
 
@@ -34,8 +34,8 @@
 
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 @property (nonatomic, retain) NSData *g_a_hash;
 @property (nonatomic, retain) TLPhoneCallProtocol *protocol;
 
@@ -53,8 +53,8 @@
 
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 @property (nonatomic, retain) NSData *g_b;
 @property (nonatomic, retain) TLPhoneCallProtocol *protocol;
 
@@ -64,8 +64,8 @@
 
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 @property (nonatomic, retain) NSData *g_a_or_b;
 @property (nonatomic) int64_t key_fingerprint;
 @property (nonatomic, retain) TLPhoneCallProtocol *protocol;

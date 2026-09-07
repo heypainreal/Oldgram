@@ -13,14 +13,14 @@
 @interface TGPrivateModernConversationCompanion : TGGenericModernConversationCompanion
 {
     @public
-    int32_t _uid;
+    int64_t _uid;
 }
 
 @property (nonatomic, strong) NSString *botStartPayload;
 @property (nonatomic, strong) NSString *botAutostartPayload;
 
 - (instancetype)initWithConversation:(TGConversation *)conversation activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages;
-- (instancetype)initWithConversation:(TGConversation *)conversation uid:(int)uid activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages;
+- (instancetype)initWithConversation:(TGConversation *)conversation uid:(int64_t)uid activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages;
 
 - (void)setAdditionalTitleIcons:(NSArray *)additionalTitleIcons;
 - (bool)shouldDisplayContactLinkPanel;

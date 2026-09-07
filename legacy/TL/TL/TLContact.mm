@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLContact$contact *object = [[TLContact$contact alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.mutual = metaObject->getBool((int32_t)0xea637e57);
     return object;
 }

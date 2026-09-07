@@ -49,7 +49,7 @@
     {
         TGUser *user = [[TGUser alloc] initWithTelegraphUserDesc:userDesc];
         if (user.uid != 0)
-            [parsedUsers setObject:user forKey:[[NSNumber alloc] initWithInt:user.uid]];
+            [parsedUsers setObject:user forKey:@(user.uid)];
     }
     
     NSMutableArray *foundList = [[NSMutableArray alloc] init];
@@ -57,7 +57,7 @@
     for (TLPeer *peer in contactsFound.results)
     {
         if ([peer isKindOfClass:[TLPeer$peerUser class]]) {
-        TGUser *user = [parsedUsers objectForKey:[[NSNumber alloc] initWithInt:((TLPeer$peerUser *)peer).user_id]];
+        TGUser *user = [parsedUsers objectForKey:@(((TLPeer$peerUser *)peer).user_id)];
             if (user != nil)
             {
                 [foundList addObject:user];

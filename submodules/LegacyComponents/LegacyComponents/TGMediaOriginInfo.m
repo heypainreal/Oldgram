@@ -61,6 +61,14 @@
     return _fileReferences[[NSString stringWithFormat:@"%lld_%lld", documentId, accessHash]];
 }
 
+- (NSData *)fileReferenceForPhotoId:(int64_t)photoId accessHash:(int64_t)accessHash
+{
+    NSData *reference = _fileReferences[[NSString stringWithFormat:@"%lld_%lld", photoId, accessHash]];
+    // Общая ссылка обновляется вместе с сообщением, поэтому она свежее той,
+    // что была вшита в адрес при первом разборе.
+    return reference ?: _fileReference;
+}
+
 + (instancetype)mediaOriginInfoWithStringRepresentation:(NSString *)string
 {
     if (string.length == 0)
@@ -257,7 +265,7 @@
     return info;
 }
 
-+ (instancetype)mediaOriginInfoWithFileReference:(NSData *)fileReference fileReferences:(NSDictionary *)fileReferences userId:(int32_t)userId offset:(int32_t)offset
++ (instancetype)mediaOriginInfoWithFileReference:(NSData *)fileReference fileReferences:(NSDictionary *)fileReferences userId:(int64_t)userId offset:(int32_t)offset
 {
     TGMediaOriginInfo *info = [[TGMediaOriginInfo alloc] init];
     info->_type = TGMediaOriginTypeProfilePhoto;

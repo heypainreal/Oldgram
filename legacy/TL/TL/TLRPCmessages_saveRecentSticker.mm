@@ -1,5 +1,7 @@
 #import "TLRPCmessages_saveRecentSticker.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x348e39bf;
+    return (int32_t)0x392718f8;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xfb028aa4;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -86,6 +88,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.n_id, true);
+    [os writeInt32:self.unsave ? TL_BOOL_TRUE_CONSTRUCTOR : TL_BOOL_FALSE_CONSTRUCTOR];
+}
 
 @end
 

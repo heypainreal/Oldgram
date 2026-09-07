@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLPeer$peerUser *object = [[TLPeer$peerUser alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     return object;
 }
 
@@ -82,7 +82,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLPeer$peerChat *object = [[TLPeer$peerChat alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     return object;
 }
 
@@ -115,7 +115,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLPeer$peerChannel *object = [[TLPeer$peerChannel alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     return object;
 }
 

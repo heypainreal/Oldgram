@@ -13,4 +13,8 @@
 + (UIImage *)convertFromWebP:(NSString *)filePath compressedData:(__autoreleasing NSData **)compressedData error:(NSError **)error;
 + (UIImage *)convertFromGZippedData:(NSString *)filePath size:(CGSize)size;
 
+/// Кадр анимированного стикера (.tgs) — это сжатый gzip'ом JSON формата Lottie.
+/// Возвращает nil, если файл не .tgs.
++ (UIImage *)convertFromAnimatedSticker:(NSString *)filePath size:(CGSize)size;
+
 @end

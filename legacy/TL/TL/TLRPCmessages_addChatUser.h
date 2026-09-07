@@ -8,7 +8,7 @@
 
 @interface TLRPCmessages_addChatUser : TLMetaRpc
 
-@property (nonatomic) int32_t chat_id;
+@property (nonatomic) int64_t chat_id;
 @property (nonatomic, retain) TLInputUser *user_id;
 @property (nonatomic) int32_t fwd_limit;
 

@@ -12,7 +12,7 @@
 
 @interface TGUserUpdatesAdapter : NSObject <ASWatcher>
 {
-    int32_t _userId;
+    int64_t _userId;
     void (^_userUpdated)(TGUser *);
 }
 
@@ -22,7 +22,7 @@
 
 @implementation TGUserUpdatesAdapter
 
-- (instancetype)initWithUserId:(int32_t)userId userUpdated:(void (^)(TGUser *))userUpdated
+- (instancetype)initWithUserId:(int64_t)userId userUpdated:(void (^)(TGUser *))userUpdated
 {
     self = [super init];
     if (self != nil)
@@ -66,7 +66,7 @@
 
 @implementation TGUserSignal
 
-+ (SSignal *)userWithUserId:(int32_t)userId
++ (SSignal *)userWithUserId:(int64_t)userId
 {
     SSignal *localSignal = [[SSignal alloc] initWithGenerator:^id<SDisposable>(SSubscriber *subscriber)
     {
@@ -97,7 +97,7 @@
     return [localSignal then:updatesSignal];
 }
 
-+ (SSignal *)updatedUserCachedDataWithUserId:(int32_t)userId {
++ (SSignal *)updatedUserCachedDataWithUserId:(int64_t)userId {
     return [[TGDatabaseInstance() modify:^id {
         TGUser *user = [TGDatabaseInstance() loadUser:userId];
         if (user != nil) {
@@ -125,7 +125,7 @@
     }] switchToLatest];
 }
 
-+ (SSignal *)groupsInCommon:(int32_t)userId {
++ (SSignal *)groupsInCommon:(int64_t)userId {
     return [[TGDatabaseInstance() modify:^id {
         TGUser *user = [TGDatabaseInstance() loadUser:userId];
         if (user != nil) {

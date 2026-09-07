@@ -292,7 +292,8 @@
             CKRecordID *prefixRecordId = [[CKRecordID alloc] initWithRecordName:[NSString stringWithFormat:@"emergency-datacenter-%@", prefix]];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordID = %@", prefixRecordId];
             //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"TRUEPREDICATE"];
-            CKSubscription *subscription = [[CKSubscription alloc] initWithRecordType:@"EmergencyDatacenterInfo" predicate:predicate options:CKSubscriptionOptionsFiresOnRecordCreation | CKSubscriptionOptionsFiresOnRecordUpdate];
+            // CKSubscription с options убрали из SDK; современный аналог — CKQuerySubscription.
+            CKQuerySubscription *subscription = [[CKQuerySubscription alloc] initWithRecordType:@"EmergencyDatacenterInfo" predicate:predicate options:CKQuerySubscriptionOptionsFiresOnRecordCreation | CKQuerySubscriptionOptionsFiresOnRecordUpdate];
             CKNotificationInfo *notificationInfo = [CKNotificationInfo new];
             notificationInfo.desiredKeys = @[@"data"];
             notificationInfo.shouldSendContentAvailable = true;

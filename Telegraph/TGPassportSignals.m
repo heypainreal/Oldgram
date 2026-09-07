@@ -106,7 +106,7 @@ static SPipe *passportPipe;
     }];
 }
 
-+ (SSignal *)authorizationFormForBotId:(int32_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey
++ (SSignal *)authorizationFormForBotId:(int64_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey
 {
     TLRPCaccount_getAuthorizationForm *getAuthorizationForm = [[TLRPCaccount_getAuthorizationForm alloc] init];
     getAuthorizationForm.bot_id = botId;
@@ -120,7 +120,7 @@ static SPipe *passportPipe;
     }];
 }
 
-+ (SSignal *)acceptAuthorizationForBotId:(int32_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey finalForm:(TGPassportDecryptedForm *)finalForm payload:(NSString *)payload nonce:(NSString *)nonce
++ (SSignal *)acceptAuthorizationForBotId:(int64_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey finalForm:(TGPassportDecryptedForm *)finalForm payload:(NSString *)payload nonce:(NSString *)nonce
 {
     TLRPCaccount_acceptAuthorization *acceptAuthorization = [[TLRPCaccount_acceptAuthorization alloc] init];
     acceptAuthorization.bot_id = botId;

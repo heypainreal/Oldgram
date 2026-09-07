@@ -208,7 +208,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLMessageAction$messageActionChatDeleteUser *object = [[TLMessageAction$messageActionChatDeleteUser alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     return object;
 }
 
@@ -300,7 +300,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLMessageAction$messageActionChatJoinedByLink *object = [[TLMessageAction$messageActionChatJoinedByLink alloc] init];
-    object.inviter_id = metaObject->getInt32((int32_t)0x9ddfbd93);
+    object.inviter_id = metaObject->getInt64((int32_t)0x9ddfbd93);
     return object;
 }
 
@@ -399,7 +399,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLMessageAction$messageActionChatMigrateTo *object = [[TLMessageAction$messageActionChatMigrateTo alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     return object;
 }
 
@@ -485,7 +485,7 @@
 {
     TLMessageAction$messageActionChannelMigrateFrom *object = [[TLMessageAction$messageActionChannelMigrateFrom alloc] init];
     object.title = metaObject->getString((int32_t)0xcdebf414);
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     return object;
 }
 

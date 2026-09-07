@@ -27,6 +27,9 @@
 
 @implementation TGCollectionMenuView
 
+// Сеттер написан вручную, поэтому автосинтез ивара не срабатывает.
+@synthesize editing = _editing;
+
 - (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout
 {
     self = [super initWithFrame:frame collectionViewLayout:layout];

@@ -17,8 +17,8 @@
 "Share.Select" = "Выбрать";
 "Share.Done" = "Готово";
 
-"Share.AuthTitle" = "Войдите в Telegram";
-"Share.AuthText" = "Откройте приложение Telegram и авторизуйтесь";
+"Share.AuthTitle" = "Войдите в Oldgram";
+"Share.AuthText" = "Откройте приложение Oldgram и авторизуйтесь";
 
 "Share.ChoosePhoneNumber" = "Choose a phone number to share";
 

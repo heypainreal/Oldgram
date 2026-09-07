@@ -242,7 +242,7 @@
                 title = conversation.chatTitle;
             }
         } else {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+            TGUser *user = [TGDatabaseInstance() loadUser:message.fromUid];
             author = user;
             title = user.displayName;
         }
@@ -263,7 +263,7 @@
                 }
                 else
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)forwardPeerId];
+                    TGUser *user = [TGDatabaseInstance() loadUser:forwardPeerId];
                     author = user;
                     title = user.displayName;
                 }
@@ -281,7 +281,7 @@
                     title = conversation.chatTitle;
                 }
             } else {
-                TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+                TGUser *user = [TGDatabaseInstance() loadUser:message.fromUid];
                 author = user;
                 title = user.displayName;
             }

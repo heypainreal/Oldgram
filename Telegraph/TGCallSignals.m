@@ -65,12 +65,16 @@ const int32_t TGCallMaxLayer = 74;
     phoneCallProtocol.flags = (1 << 0) | (1 << 1);
     phoneCallProtocol.min_layer = TGCallMinLayer;
     phoneCallProtocol.max_layer = TGCallMaxLayer;
+    // Собеседник выбирает голосовую библиотеку по этому списку. 2.4.4 — метка
+    // протокола libtgvoip, её понимают и современные клиенты; без списка
+    // разговор с ними не устанавливается.
+    phoneCallProtocol.library_versions = @[@"2.4.4"];
     return phoneCallProtocol;
 }
 
 + (SSignal *)requestedOutgoingCallWithPeerId:(int64_t)peerId {
     return [[TGDatabaseInstance() modify:^id{
-        return [TGTelegraphInstance createInputUserForUid:(int32_t)peerId];
+        return [TGTelegraphInstance createInputUserForUid:(int64_t)peerId];
     }] mapToSignal:^SSignal *(TLInputUser *inputUser) {
         if (inputUser == nil) {
             return [SSignal fail:nil];
@@ -159,7 +163,7 @@ const int32_t TGCallMaxLayer = 74;
     }];
 }
 
-+ (SSignal *)receivedIncomingCallWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gAHash:(NSData *)gAHash {
++ (SSignal *)receivedIncomingCallWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gAHash:(NSData *)gAHash {
     return [[self encryptionConfig] mapToSignal:^SSignal *(TLmessages_DhConfig$messages_dhConfig *config) {
         uint8_t bBytes[256];
         __unused int result = SecRandomCopyBytes(kSecRandomDefault, 256, bBytes);

@@ -4966,7 +4966,7 @@ typedef enum {
     if (TGPeerIdIsChannel(peerId))
         peer = [TGDatabaseInstance() loadChannels:@[@(peerId)]][@(peerId)];
     else
-        peer = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+        peer = [TGDatabaseInstance() loadUser:(int64_t)peerId];
     
     int64_t conversationId = ((TGGenericModernConversationCompanion *)_companion).conversationId;
     TGConversation *chat = [TGDatabaseInstance() loadConversationWithId:peerId];
@@ -4995,7 +4995,7 @@ typedef enum {
             controller = [[TGLocationViewController alloc] initWithContext:[TGLegacyComponentsContext shared] message:message peer:peer];
         }
         controller.pallete = self.presentation.locationPallete;
-        controller.receivingPeer = TGPeerIdIsUser(message.cid) ? [TGDatabaseInstance() loadUser:(int32_t)message.cid] : [TGDatabaseInstance() loadConversationWithId:message.cid];
+        controller.receivingPeer = TGPeerIdIsUser(message.cid) ? [TGDatabaseInstance() loadUser:message.cid] : [TGDatabaseInstance() loadConversationWithId:message.cid];
         controller.allowLiveLocationSharing = [self.companion allowLiveLocations];
         controller.zoomToFitAllLocationsOnScreen = zoomToFitAll;
         
@@ -5144,7 +5144,7 @@ typedef enum {
                 if (TGPeerIdIsChannel(peerId))
                     peer = [TGDatabaseInstance() loadChannels:@[@(peerId)]][@(peerId)];
                 else
-                    peer = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+                    peer = [TGDatabaseInstance() loadUser:(int64_t)peerId];
                 
                 bool isOwnLocation = peerId == TGTelegraphInstance.clientUserId || (isChannel && canPostMessages);
                 [liveLocations addObject:[[TGLiveLocation alloc] initWithMessage:message peer:peer hasOwnSession:ownLiveLocation.message.mid == message.mid isOwnLocation:isOwnLocation isExpired:currentTime > expires]];
@@ -7686,7 +7686,7 @@ typedef enum {
     {
         NSString *title = TGLocalized(@"Conversation.DeleteMessagesForEveryone");
         if (TGPeerIdIsUser(conversationId)) {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int)conversationId];
+            TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
             if (user != nil) {
                 title = [NSString stringWithFormat:TGLocalized(@"Conversation.DeleteMessagesFor"), user.displayFirstName];
             }
@@ -9820,7 +9820,7 @@ typedef enum {
     TGLocationPickerController *controller = [[TGLocationPickerController alloc] initWithContext:[TGLegacyComponentsContext shared] intent:intent];
     controller.pallete = self.presentation.locationPallete;
     controller.peer = isChannel ? chat : [TGDatabaseInstance() loadUser:TGTelegraphInstance.clientUserId];
-    controller.receivingPeer = TGPeerIdIsUser(peerId) ? [TGDatabaseInstance() loadUser:(int32_t)peerId] : [TGDatabaseInstance() loadConversationWithId:peerId];
+    controller.receivingPeer = TGPeerIdIsUser(peerId) ? [TGDatabaseInstance() loadUser:(int64_t)peerId] : [TGDatabaseInstance() loadConversationWithId:peerId];
     controller.allowLiveLocationSharing = self.companion.allowLiveLocations;
     [controller setLiveLocationsSignal:[[SSignal combineSignals:@[[[TGTelegraphInstance.liveLocationManager sessionForPeerId:peerId] map:^id (TGLiveLocationSession *session)
     {
@@ -11661,7 +11661,7 @@ static UIView *_findBackArrow(UIView *view)
             else if ([menuAction isEqualToString:@"moderate"]) {
                 if (menuMessageItem != nil)
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)menuMessageItem->_message.fromUid];
+                    TGUser *user = [TGDatabaseInstance() loadUser:menuMessageItem->_message.fromUid];
                     if (user != nil) {
                         [self _showModerateSheetForMessageIndices:@[[TGMessageIndex indexWithPeerId:menuMessageItem->_message.fromUid messageId:menuMessageItem->_message.mid]] author:user];
                     }
@@ -11670,7 +11670,7 @@ static UIView *_findBackArrow(UIView *view)
             else if ([menuAction isEqualToString:@"ban"]) {
                 if (menuMessageItem != nil)
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)menuMessageItem->_message.fromUid];
+                    TGUser *user = [TGDatabaseInstance() loadUser:menuMessageItem->_message.fromUid];
                     if (user != nil && [self isAdminLog]) {
                         [((TGAdminLogConversationCompanion *)_companion) banUser:user];
                     }
@@ -12446,7 +12446,7 @@ static UIView *_findBackArrow(UIView *view)
     if (_searchDisposable == nil)
         _searchDisposable = [[SMetaDisposable alloc] init];
     
-    int32_t queryUserId = 0;
+    int64_t queryUserId = 0;
     _searchQuery = query;
     
     if (_searchingByName) {
@@ -12962,7 +12962,7 @@ static UIView *_findBackArrow(UIView *view)
                 }
             }
             if (botUser == nil) {
-                TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+                TGUser *user = [TGDatabaseInstance() loadUser:message.fromUid];
                 if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot) {
                     botUser = user;
                 }

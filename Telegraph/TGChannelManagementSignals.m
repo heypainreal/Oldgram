@@ -1200,9 +1200,9 @@ static dispatch_block_t recursiveBlock(void (^block)(dispatch_block_t recurse))
         bool isCreator = false;
         TGChannelAdminRights *adminRights = nil;
         TGChannelBannedRights *bannedRights = nil;
-        int32_t inviterId = 0;
-        int32_t adminInviterId = 0;
-        int32_t kickedById = 0;
+        int64_t inviterId = 0;
+        int64_t adminInviterId = 0;
+        int64_t kickedById = 0;
         bool adminCanManage = false;
         
         if ([participant isKindOfClass:[TLChannelParticipant$channelParticipant class]]) {
@@ -1257,9 +1257,9 @@ static dispatch_block_t recursiveBlock(void (^block)(dispatch_block_t recurse))
                     bool isCreator = false;
                     TGChannelAdminRights *adminRights = nil;
                     TGChannelBannedRights *bannedRights = nil;
-                    int32_t inviterId = 0;
-                    int32_t adminInviterId = 0;
-                    int32_t kickedById = 0;
+                    int64_t inviterId = 0;
+                    int64_t adminInviterId = 0;
+                    int64_t kickedById = 0;
                     bool adminCanManage = false;
                     
                     if ([participant isKindOfClass:[TLChannelParticipant$channelParticipant class]]) {
@@ -1341,7 +1341,7 @@ static dispatch_block_t recursiveBlock(void (^block)(dispatch_block_t recurse))
         [TGUserDataRequestBuilder executeUserDataUpdate:result.users];
         
         TLChannelParticipant *participant = result.participant;
-        int32_t inviterUid = 0;
+        int64_t inviterUid = 0;
         int32_t timestamp = 0;
         
         if (cachedData.migrationData == nil && [participant isKindOfClass:[TLChannelParticipant$channelParticipantSelf class]]) {
@@ -1549,7 +1549,7 @@ static dispatch_block_t recursiveBlock(void (^block)(dispatch_block_t recurse))
     if (userIds != nil) {
         NSMutableArray *users = [[NSMutableArray alloc] init];
         for (NSNumber *userId in userIds) {
-            TGUser *user = [TGDatabaseInstance() loadUser:[userId intValue]];
+            TGUser *user = [TGDatabaseInstance() loadUser:[userId longLongValue]];
             if (user != nil) {
                 TLInputUser$inputUser *inputUser = [[TLInputUser$inputUser alloc] init];
                 inputUser.user_id = user.uid;
@@ -1579,9 +1579,9 @@ static dispatch_block_t recursiveBlock(void (^block)(dispatch_block_t recurse))
     bool isCreator = false;
     TGChannelAdminRights *adminRights = nil;
     TGChannelBannedRights *bannedRights = nil;
-    int32_t inviterId = 0;
-    int32_t adminInviterId = 0;
-    int32_t kickedById = 0;
+    int64_t inviterId = 0;
+    int64_t adminInviterId = 0;
+    int64_t kickedById = 0;
     bool adminCanManage = false;
     
     if ([participant isKindOfClass:[TLChannelParticipant$channelParticipant class]]) {

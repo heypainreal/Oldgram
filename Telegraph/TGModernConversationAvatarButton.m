@@ -176,7 +176,7 @@
         }
         else
         {
-            [_avatarView loadUserPlaceholderWithSize:CGSizeMake(37.0f, 37.0f) uid:(int32_t)_avatarConversationId firstName:_avatarFirstName lastName:_avatarLastName placeholder:placeholder];
+            [_avatarView loadUserPlaceholderWithSize:CGSizeMake(37.0f, 37.0f) uid:_avatarConversationId firstName:_avatarFirstName lastName:_avatarLastName placeholder:placeholder];
         }
     }
     else

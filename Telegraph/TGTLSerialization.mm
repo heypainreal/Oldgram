@@ -10,6 +10,9 @@
 
 #import "TL/TLMetaScheme.h"
 #import "TLMetaClassStore.h"
+#import "ModernTL.h"
+
+#import <objc/runtime.h>
 #import "TLMetaSchemeData.h"
 
 #import "TLMessageContainer.h"
@@ -121,6 +124,38 @@
     return topObject;
 }
 
+/// В схеме 228 часть методов отвечает обёрткой: users.getFullUser отдаёт
+/// users.userFull{full_user, chats, users}, messages.getPeerSettings —
+/// messages.peerSettings{settings, ...}. Код 2018 года ждёт сам объект,
+/// поэтому достаём его из обёртки по типу, который объявил запрос.
++ (id)unwrapResponse:(id)result forRequest:(TLMetaRpc *)request
+{
+    Class expected = [request responseClass];
+    if (expected == Nil || result == nil || [result isKindOfClass:expected]) {
+        return result;
+    }
+    
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([result class], &count);
+    id unwrapped = nil;
+    for (unsigned int i = 0; i < count && unwrapped == nil; i++) {
+        NSString *name = [[NSString alloc] initWithUTF8String:property_getName(properties[i])];
+        id value = nil;
+        @try {
+            value = [result valueForKey:name];
+        } @catch (NSException *exception) {
+            continue;
+        }
+        if ([value isKindOfClass:expected]) {
+            unwrapped = value;
+            TGLog(@"[ModernTL] %@ развёрнут из %@.%@", NSStringFromClass(expected), NSStringFromClass([result class]), name);
+        }
+    }
+    free(properties);
+    
+    return unwrapped != nil ? unwrapped : result;
+}
+
 + (id)parseResponse:(NSData *)data request:(TLMetaRpc *)request
 {
     NSInputStream *is = [[NSInputStream alloc] initWithData:data];
@@ -143,7 +178,7 @@
     
     [is close];
     
-    return topObject;
+    return [self unwrapResponse:topObject forRequest:request];
 }
 
 - (MTExportAuthorizationResponseParser)exportAuthorization:(int32_t)datacenterId data:(__autoreleasing NSData **)data
@@ -165,7 +200,7 @@
     };
 }
 
-- (NSData *)importAuthorization:(int32_t)authId bytes:(NSData *)bytes
+- (NSData *)importAuthorization:(int64_t)authId bytes:(NSData *)bytes
 {
     TLRPCauth_importAuthorization$auth_importAuthorization *importAuthorization = [[TLRPCauth_importAuthorization$auth_importAuthorization alloc] init];
     importAuthorization.n_id = authId;
@@ -183,19 +218,27 @@
     return ^MTDatacenterAddressListData *(NSData *response)
     {
         id result = [self parseMessage:response];
-        if ([result isKindOfClass:[TLConfig class]])
+        // config может прийти как ModernTL_config, так и в виде старого
+        // TLConfig$config — если для него нашёлся мост.
+        if ([result respondsToSelector:@selector(dc_options)])
         {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
             
-            for (TLDcOption$modernDcOption *dcOption in ((TLConfig *)result).dc_options)
+            id config = result;
+            for (id dcOption in [config dc_options])
             {
-                NSMutableArray *array = dict[@(dcOption.n_id)];
+                if (![dcOption respondsToSelector:@selector(ip_address)])
+                    continue;
+                int32_t datacenterId = [[dcOption valueForKey:@"n_id"] intValue];
+                int32_t optionFlags = [[dcOption valueForKey:@"flags"] intValue];
+                
+                NSMutableArray *array = dict[@(datacenterId)];
                 if (array == nil) {
                     array = [[NSMutableArray alloc] init];
-                    dict[@(dcOption.n_id)] = array;
+                    dict[@(datacenterId)] = array;
                 }
                 
-                MTDatacenterAddress *address = [[MTDatacenterAddress alloc] initWithIp:dcOption.ip_address port:(uint16_t)dcOption.port preferForMedia:dcOption.flags & (1 << 1) restrictToTcp:dcOption.flags & (1 << 2) cdn:dcOption.flags & (1 << 3)  preferForProxy:dcOption.flags & (1 << 4) secret:dcOption.secret];
+                MTDatacenterAddress *address = [[MTDatacenterAddress alloc] initWithIp:[dcOption valueForKey:@"ip_address"] port:(uint16_t)[[dcOption valueForKey:@"port"] intValue] preferForMedia:optionFlags & (1 << 1) restrictToTcp:optionFlags & (1 << 2) cdn:optionFlags & (1 << 3) preferForProxy:optionFlags & (1 << 4) secret:[dcOption valueForKey:@"secret"]];
                 [array addObject:address];
             }
             
@@ -220,7 +263,8 @@
 
 - (NSUInteger)currentLayer
 {
-    return 86;
+    // Слой, под который сгенерирован ModernTL (modern_scheme.tl).
+    return 228;
 }
 
 @end

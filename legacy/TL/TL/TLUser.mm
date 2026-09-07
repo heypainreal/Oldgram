@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUser$userEmpty *object = [[TLUser$userEmpty alloc] init];
-    object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
+    object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     return object;
 }
 

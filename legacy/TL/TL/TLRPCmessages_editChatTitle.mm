@@ -1,5 +1,7 @@
 #import "TLRPCmessages_editChatTitle.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,18 +56,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xdc452855;
+    return (int32_t)0x73783ffd;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xf186ee03;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_editChatTitle$messages_editChatTitle *object = [[TLRPCmessages_editChatTitle$messages_editChatTitle alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.title = metaObject->getString((int32_t)0xcdebf414);
     return object;
 }
@@ -86,6 +88,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+    [os writeString:self.title == nil ? @"" : self.title];
+}
 
 @end
 

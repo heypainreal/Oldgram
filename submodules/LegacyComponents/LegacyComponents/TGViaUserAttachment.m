@@ -4,7 +4,7 @@
 
 @implementation TGViaUserAttachment
 
-- (instancetype)initWithUserId:(int32_t)userId username:(NSString *)username {
+- (instancetype)initWithUserId:(int64_t)userId username:(NSString *)username {
     self = [super init];
     if (self != nil) {
         self.type = TGViaUserAttachmentType;
@@ -16,11 +16,11 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    return [self initWithUserId:[aDecoder decodeInt32ForKey:@"userId"] username:[aDecoder decodeObjectForKey:@"username"]];
+    return [self initWithUserId:([aDecoder containsValueForKey:@"userId64"] ? [aDecoder decodeInt64ForKey:@"userId64"] : [aDecoder decodeInt32ForKey:@"userId"]) username:[aDecoder decodeObjectForKey:@"username"]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeInt32:_userId forKey:@"userId"];
+    [aCoder encodeInt64:_userId forKey:@"userId64"];
     if (_username != nil) {
         [aCoder encodeObject:_username forKey:@"username"];
     }

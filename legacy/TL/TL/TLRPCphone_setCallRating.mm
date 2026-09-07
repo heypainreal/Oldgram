@@ -1,5 +1,7 @@
 #import "TLRPCphone_setCallRating.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x1c536a34;
+    return (int32_t)0x59ead627;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x7173d1c5;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -94,6 +96,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:(int32_t)self.rating];
+    [os writeString:self.comment == nil ? @"" : self.comment];
+}
 
 @end
 

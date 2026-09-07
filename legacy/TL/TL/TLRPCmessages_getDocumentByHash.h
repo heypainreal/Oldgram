@@ -8,7 +8,7 @@
 @interface TLRPCmessages_getDocumentByHash : TLMetaRpc
 
 @property (nonatomic, retain) NSData *sha256;
-@property (nonatomic) int32_t size;
+@property (nonatomic) int64_t size;
 @property (nonatomic, retain) NSString *mime_type;
 
 - (Class)responseClass;

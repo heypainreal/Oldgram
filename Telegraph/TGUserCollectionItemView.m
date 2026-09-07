@@ -56,7 +56,7 @@
     self.separatorInset = showAvatar ? (15.0f + 40.0f + 8.0f) : 15.0f;
 }
 
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int32_t)uidForPlaceholderCalculation avatarUri:(NSString *)avatarUri
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int64_t)uidForPlaceholderCalculation avatarUri:(NSString *)avatarUri
 {
     if (firstName.length != 0 && lastName.length != 0)
     {

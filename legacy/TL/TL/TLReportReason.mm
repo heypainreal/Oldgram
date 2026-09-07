@@ -1,5 +1,7 @@
 #import "TLReportReason.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -116,12 +118,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xe1746d0a;
+    return (int32_t)0xc1e4a2b1;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xc92626ed;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -141,6 +143,10 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+}
 
 @end
 

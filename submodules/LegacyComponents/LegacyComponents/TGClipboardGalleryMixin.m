@@ -100,7 +100,7 @@
         };
         
         [model.interfaceView updateSelectionInterface:selectionContext.count counterVisible:(selectionContext.count > 0) animated:false];
-        model.interfaceView.donePressed = ^(TGClipboardGalleryPhotoItem *item)
+        model.interfaceView.donePressed = (typeof(model.interfaceView.donePressed))^(TGClipboardGalleryPhotoItem *item)
         {
             __strong TGClipboardGalleryMixin *strongSelf = weakSelf;
             if (strongSelf == nil)
@@ -113,14 +113,14 @@
         };
         
         modernGallery.model = model;
-        modernGallery.itemFocused = ^(TGClipboardGalleryPhotoItem *item)
+        modernGallery.itemFocused = (typeof(modernGallery.itemFocused))^(TGClipboardGalleryPhotoItem *item)
         {
             __strong TGClipboardGalleryMixin *strongSelf = weakSelf;
             if (strongSelf != nil && strongSelf.itemFocused != nil)
                 strongSelf.itemFocused(item);
         };
         
-        modernGallery.beginTransitionIn = ^UIView *(TGClipboardGalleryPhotoItem *item, TGModernGalleryItemView *itemView)
+        modernGallery.beginTransitionIn = (typeof(modernGallery.beginTransitionIn))^UIView *(TGClipboardGalleryPhotoItem *item, TGModernGalleryItemView *itemView)
         {
             __strong TGClipboardGalleryMixin *strongSelf = weakSelf;
             if (strongSelf == nil)
@@ -135,7 +135,7 @@
             return nil;
         };
         
-        modernGallery.finishedTransitionIn = ^(__unused TGClipboardGalleryPhotoItem *item, __unused TGModernGalleryItemView *itemView)
+        modernGallery.finishedTransitionIn = (typeof(modernGallery.finishedTransitionIn))^(__unused TGClipboardGalleryPhotoItem *item, __unused TGModernGalleryItemView *itemView)
         {
             __strong TGClipboardGalleryMixin *strongSelf = weakSelf;
             if (strongSelf == nil)
@@ -144,7 +144,7 @@
             [strongSelf->_galleryModel.interfaceView setSelectedItemsModel:strongSelf->_galleryModel.selectedItemsModel];
         };
         
-        modernGallery.beginTransitionOut = ^UIView *(TGClipboardGalleryPhotoItem *item, TGModernGalleryItemView *itemView)
+        modernGallery.beginTransitionOut = (typeof(modernGallery.beginTransitionOut))^UIView *(TGClipboardGalleryPhotoItem *item, TGModernGalleryItemView *itemView)
         {
             __strong TGClipboardGalleryMixin *strongSelf = weakSelf;
             if (strongSelf != nil)

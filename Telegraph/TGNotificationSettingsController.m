@@ -235,7 +235,7 @@
         {
             if (exception.peerId == 0)
                 continue;
-            [peerSignals addObject:[[[TGUserSignal userWithUserId:(int32_t)exception.peerId] catch:^SSignal *(__unused id error) {
+            [peerSignals addObject:[[[TGUserSignal userWithUserId:exception.peerId] catch:^SSignal *(__unused id error) {
                 return [SSignal single:[NSNull null]];
             }] take:1]];
         }

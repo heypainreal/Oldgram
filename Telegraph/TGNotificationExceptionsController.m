@@ -505,7 +505,7 @@ static NSArray *breakStringIntoParts(NSString *string)
         
         if (_peers[@(peerId)] == nil)
         {
-            id peer = TGPeerIdIsUser(peerId) ? [TGDatabaseInstance() loadUser:(int32_t)peerId] : [TGDatabaseInstance() loadConversationWithId:peerId];
+            id peer = TGPeerIdIsUser(peerId) ? [TGDatabaseInstance() loadUser:(int64_t)peerId] : [TGDatabaseInstance() loadConversationWithId:peerId];
             if (peer != nil)
             {
                 NSMutableDictionary *peers = [[NSMutableDictionary alloc] init];

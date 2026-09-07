@@ -54,18 +54,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x7d885289;
+    return (int32_t)0xa455de90;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x3fe1647c;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_exportChatInvite$messages_exportChatInvite *object = [[TLRPCmessages_exportChatInvite$messages_exportChatInvite alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     return object;
 }
 
@@ -79,6 +79,13 @@
     }
 }
 
+// layer 228: приглашение теперь экспортируется для пира, а не для chat_id
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeInt32:(int32_t)0x35a95cb9];      // inputPeerChat
+    [os writeInt64:(int64_t)self.chat_id];
+}
 
 @end
 

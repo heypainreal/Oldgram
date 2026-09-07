@@ -15,7 +15,7 @@
 
 - (SSignal *)watchAppInstalledSignal;
 
-- (void)setAuthorized:(bool)authorized userId:(int32_t)userId;
+- (void)setAuthorized:(bool)authorized userId:(int64_t)userId;
 - (void)setPasscodeEnabled:(bool)passcodeEnabled passcodeEncrypted:(bool)passcodeEncrypted;
 - (void)setMicAccessAllowed:(bool)allowed;
 - (void)setCustomLocalizationEnabled:(bool)enabled;

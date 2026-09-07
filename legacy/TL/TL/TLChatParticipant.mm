@@ -49,8 +49,8 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLChatParticipant$chatParticipant *object = [[TLChatParticipant$chatParticipant alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
-    object.inviter_id = metaObject->getInt32((int32_t)0x9ddfbd93);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
+    object.inviter_id = metaObject->getInt64((int32_t)0x9ddfbd93);
     object.date = metaObject->getInt32((int32_t)0xb76958ba);
     return object;
 }
@@ -96,7 +96,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLChatParticipant$chatParticipantCreator *object = [[TLChatParticipant$chatParticipantCreator alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     return object;
 }
 
@@ -129,8 +129,8 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLChatParticipant$chatParticipantAdmin *object = [[TLChatParticipant$chatParticipantAdmin alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
-    object.inviter_id = metaObject->getInt32((int32_t)0x9ddfbd93);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
+    object.inviter_id = metaObject->getInt64((int32_t)0x9ddfbd93);
     object.date = metaObject->getInt32((int32_t)0xb76958ba);
     return object;
 }

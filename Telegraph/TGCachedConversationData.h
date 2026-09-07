@@ -8,20 +8,20 @@
 
 @interface TGCachedConversationMember : NSObject <PSCoding>
 
-@property (nonatomic, readonly) int32_t uid;
+@property (nonatomic, readonly) int64_t uid;
 @property (nonatomic, readonly) bool isCreator;
 @property (nonatomic, readonly) TGChannelAdminRights *adminRights;
 @property (nonatomic, readonly) TGChannelBannedRights *bannedRights;
 @property (nonatomic, readonly) int32_t timestamp;
-@property (nonatomic, readonly) int32_t inviterId;
-@property (nonatomic, readonly) int32_t adminInviterId;
-@property (nonatomic, readonly) int32_t kickedById;
+@property (nonatomic, readonly) int64_t inviterId;
+@property (nonatomic, readonly) int64_t adminInviterId;
+@property (nonatomic, readonly) int64_t kickedById;
 @property (nonatomic, readonly) bool adminCanManage;
 
-- (instancetype)initWithUid:(int32_t)uid isCreator:(bool)isCreator adminRights:(TGChannelAdminRights *)adminRights bannedRights:(TGChannelBannedRights *)bannedRights timestamp:(int32_t)timestamp inviterId:(int32_t)inviterId adminInviterId:(int32_t)adminInviterId kickedById:(int32_t)kickedById adminCanManage:(bool)adminCanManage;
+- (instancetype)initWithUid:(int64_t)uid isCreator:(bool)isCreator adminRights:(TGChannelAdminRights *)adminRights bannedRights:(TGChannelBannedRights *)bannedRights timestamp:(int32_t)timestamp inviterId:(int64_t)inviterId adminInviterId:(int64_t)adminInviterId kickedById:(int64_t)kickedById adminCanManage:(bool)adminCanManage;
 
 - (TGCachedConversationMember *)withUpdatedBannedRights:(TGChannelBannedRights *)bannedRights;
-- (TGCachedConversationMember *)withUpdatedAdminRights:(TGChannelAdminRights *)adminRights adminInviterId:(int32_t)adminInviterId adminCanManage:(bool)adminCanManage;
+- (TGCachedConversationMember *)withUpdatedAdminRights:(TGChannelAdminRights *)adminRights adminInviterId:(int64_t)adminInviterId adminCanManage:(bool)adminCanManage;
 
 @end
 
@@ -63,9 +63,9 @@
 
 - (TGCachedConversationData *)updateManagementCount:(int32_t)managementCount blacklistCount:(int32_t)blacklistCount bannedCount:(int32_t)bannedCount memberCount:(int32_t)memberCount;
 
-- (TGCachedConversationData *)updateMemberBannedRights:(int32_t)uid rights:(TGChannelBannedRights *)rights timestamp:(int32_t)timestamp isMember:(bool)isMember kickedById:(int32_t)kickedById;
+- (TGCachedConversationData *)updateMemberBannedRights:(int64_t)uid rights:(TGChannelBannedRights *)rights timestamp:(int32_t)timestamp isMember:(bool)isMember kickedById:(int64_t)kickedById;
 - (TGCachedConversationData *)addManagementMember:(TGCachedConversationMember *)member;
-- (TGCachedConversationData *)removeManagementMember:(int32_t)uid;
+- (TGCachedConversationData *)removeManagementMember:(int64_t)uid;
 - (TGCachedConversationData *)addMembers:(NSArray *)uids timestamp:(int32_t)timestamp;
 - (TGCachedConversationData *)updatePrivateLink:(NSString *)privateLink;
 

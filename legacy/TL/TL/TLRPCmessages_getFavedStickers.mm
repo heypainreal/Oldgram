@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getFavedStickers.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,18 +56,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x21ce0b0e;
+    return (int32_t)0x04f1aaa9;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x4d66ed5c;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_getFavedStickers$messages_getFavedStickers *object = [[TLRPCmessages_getFavedStickers$messages_getFavedStickers alloc] init];
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     return object;
 }
 
@@ -79,6 +81,11 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.n_hash];
+}
 
 @end
 

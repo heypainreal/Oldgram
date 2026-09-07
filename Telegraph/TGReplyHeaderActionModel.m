@@ -83,13 +83,13 @@
             if (uids != nil) {
                 NSMutableArray *subjectUsers = [[NSMutableArray alloc] init];
                 for (NSNumber *nUid in uids) {
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                     if (user != nil) {
                         [subjectUsers addObject:user];
                     }
                 }
                 
-                int32_t authorUid = 0;
+                int64_t authorUid = 0;
                 if ([author isKindOfClass:[TGUser class]]) {
                     authorUid = ((TGUser *)author).uid;
                 }
@@ -110,7 +110,7 @@
                 NSNumber *nUid = [actionMedia.actionData objectForKey:@"uid"];
                 if (nUid != nil)
                 {
-                    TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                    TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                     if ([author isKindOfClass:[TGUser class]] && ((TGUser *)author).uid == subjectUser.uid)
                         messageText = [[NSString alloc] initWithFormat:TGLocalized(@"Notification.JoinedChat"), [self titleForPeer:author shortName:false]];
                     else
@@ -125,7 +125,7 @@
             NSNumber *nUid = [actionMedia.actionData objectForKey:@"uid"];
             if (nUid != nil)
             {
-                TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                 if ([author isKindOfClass:[TGUser class]] && ((TGUser *)author).uid == subjectUser.uid)
                     messageText = [[NSString alloc] initWithFormat:TGLocalized(@"Notification.LeftChat"), [self titleForPeer:author shortName:false]];
                 else
@@ -177,7 +177,7 @@
             
             int scoreCount = (int)[actionMedia.actionData[@"score"] intValue];
             
-            int32_t authorUid = 0;
+            int64_t authorUid = 0;
             if ([author isKindOfClass:[TGUser class]]) {
                 authorUid = ((TGUser *)author).uid;
             }
@@ -255,7 +255,7 @@
         }
         case TGMessageActionPhoneCall:
         {
-            int32_t authorUid = 0;
+            int64_t authorUid = 0;
             if ([author isKindOfClass:[TGUser class]]) {
                 authorUid = ((TGUser *)author).uid;
             }

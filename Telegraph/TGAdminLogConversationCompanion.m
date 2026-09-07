@@ -1238,7 +1238,7 @@ static bool isEventFilterAllSet(TGChannelEventFilter filter) {
     [self.controller presentViewController:navigationController animated:true completion:nil];
 }
 
-- (bool)canBanUser:(int32_t)userId {
+- (bool)canBanUser:(int64_t)userId {
     if (userId == TGTelegraphInstance.clientUserId) {
         return false;
     }

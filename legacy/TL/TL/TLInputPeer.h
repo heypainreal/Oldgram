@@ -21,21 +21,30 @@
 
 @interface TLInputPeer$inputPeerChat : TLInputPeer
 
-@property (nonatomic) int32_t chat_id;
+@property (nonatomic) int64_t chat_id;
 
 @end
 
 @interface TLInputPeer$inputPeerUser : TLInputPeer
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic) int64_t access_hash;
 
 @end
 
 @interface TLInputPeer$inputPeerChannel : TLInputPeer
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic) int64_t access_hash;
 
 @end
 
+@class TLInputUser;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void TLSerializeInputUserAsPeer(NSOutputStream *os, TLInputUser *inputUser);
+#ifdef __cplusplus
+}
+#endif

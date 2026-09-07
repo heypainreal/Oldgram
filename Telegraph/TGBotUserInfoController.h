@@ -2,6 +2,6 @@
 
 @interface TGBotUserInfoController : TGUserInfoController
 
-- (instancetype)initWithUid:(int32_t)uid sendCommand:(void (^)(NSString *))sendCommand;
+- (instancetype)initWithUid:(int64_t)uid sendCommand:(void (^)(NSString *))sendCommand;
 
 @end

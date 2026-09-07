@@ -18,11 +18,11 @@
 
 @interface TGCreateContactController () <TGUserInfoEditingPhoneCollectionItemDelegate, TGPhoneLabelPickerControllerDelegate>
 {
-    int32_t _uid;
+    int64_t _uid;
     TGUser *_user;
     
     TGPhonebookContact *_phonebookInfo;
-    int32_t _uidToAdd;
+    int64_t _uidToAdd;
     NSString *_phoneNumberToAdd;
     
     bool _activateNameEditingOnReset;
@@ -48,7 +48,7 @@
     return self;
 }
 
-- (instancetype)initWithUid:(int32_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
+- (instancetype)initWithUid:(int64_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
 {
     self = [super init];
     if (self != nil)
@@ -139,7 +139,7 @@
     return self;
 }
 
-- (instancetype)initWithUid:(int32_t)uid phoneNumber:(NSString *)phoneNumber existingUid:(int32_t)existingUid attachment:(TGContactMediaAttachment *)attachment
+- (instancetype)initWithUid:(int64_t)uid phoneNumber:(NSString *)phoneNumber existingUid:(int64_t)existingUid attachment:(TGContactMediaAttachment *)attachment
 {
     self = [super init];
     if (self != nil)
@@ -205,7 +205,7 @@
     return self;
 }
 
-- (instancetype)initWithUid:(int32_t)uid phoneNumber:(NSString *)phoneNumber existingNativeContactId:(int)existingNativeContactId attachment:(TGContactMediaAttachment *)attachment modal:(bool)modal
+- (instancetype)initWithUid:(int64_t)uid phoneNumber:(NSString *)phoneNumber existingNativeContactId:(int)existingNativeContactId attachment:(TGContactMediaAttachment *)attachment modal:(bool)modal
 {
     self = [super init];
     if (self != nil)
@@ -377,7 +377,7 @@
                 options[@"vcard"] = vcardString;
         }
         static int actionId = 0;
-        [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(%d,%d,addContactLocal)", _uid, actionId++] options:options watcher:self];
+        [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(%lld,%d,addContactLocal)", (long long)_uid, actionId++] options:options watcher:self];
     }
 }
 
@@ -481,7 +481,7 @@
             static int actionId = 0;
             
             NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
-            [options setObject:[[NSNumber alloc] initWithInt:_uid] forKey:@"uid"];
+            [options setObject:@(_uid) forKey:@"uid"];
             [options setObject:[[NSNumber alloc] initWithInt:_phonebookInfo.nativeId] forKey:@"nativeId"];
             if (phoneNumbers != nil)
                 [options setObject:phoneNumbers forKey:@"phones"];

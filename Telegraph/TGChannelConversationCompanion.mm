@@ -1567,7 +1567,7 @@
         
         for (NSNumber *nUid in activities)
         {
-            TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+            TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
             if (user != nil)
             {
                 if (typingString.length != 0)
@@ -1866,7 +1866,7 @@
     }
     
     if (sharedAuthorId != nil) {
-        return [TGDatabaseInstance() loadUser:[sharedAuthorId intValue]];
+        return [TGDatabaseInstance() loadUser:[sharedAuthorId longLongValue]];
     }
     
     return nil;
@@ -2143,7 +2143,7 @@
     TGModernConversationController *controller = self.controller;
     for (TGMessageModernConversationItem *item in [controller _items])
     {
-        int32_t uid = (int32_t)(item->_message.fromUid);
+        int64_t uid = (int32_t)(item->_message.fromUid);
         if (![visibleUserIds containsObject:@(uid)]) {
             [visibleUserIds addObject:@(uid)];
         }
@@ -2193,7 +2193,7 @@
             if (![existingUsers containsObject:nUserId]) {
                 [existingUsers addObject:nUserId];
                 
-                TGUser *user = [TGDatabaseInstance() loadUser:[nUserId intValue]];
+                TGUser *user = [TGDatabaseInstance() loadUser:[nUserId longLongValue]];
                 if (user != nil && (normalizedMention.length == 0 || [[user.userName lowercaseString] hasPrefix:normalizedMention] || [[user.firstName lowercaseString] hasPrefix:normalizedMention] || [[user.lastName lowercaseString] hasPrefix:normalizedMention])) {
                     if (user.isContextBot) {
                         [contextBots addObject:user];
@@ -2224,7 +2224,7 @@
         if (isGroup) {
             for (NSNumber *nUid in visibleUserIds)
             {
-                int32_t uid = [nUid intValue];
+                int64_t uid = [nUid longLongValue];
                 TGUser *user = userDict[@(uid)];
                 if (user == nil) {
                     TGUser *candidateUser = [TGDatabaseInstance() loadUser:uid];
@@ -2266,7 +2266,7 @@
             NSMutableArray *initialStates = [[NSMutableArray alloc] init];
             for (NSNumber *nUid in [cachedData.botInfos allKeys])
             {
-                TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                 if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot)
                 {
                     [botUsers addObject:user];
@@ -2604,7 +2604,7 @@
     }
     
     if ([actions containsObject:@(TGMessageModerateActionDeleteAll)]) {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)anyMessage.fromUid];
+        TGUser *user = [TGDatabaseInstance() loadUser:anyMessage.fromUid];
         if (user != nil) {
             [signals addObject:[[TGChannelManagementSignals removeAllUserMessages:_conversationId accessHash:_accessHash user:user] catch:^SSignal *(__unused id error) {
                 return [SSignal complete];
@@ -2620,7 +2620,7 @@
     }
     
     if ([actions containsObject:@(TGMessageModerateActionReport)]) {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)anyMessage.fromUid];
+        TGUser *user = [TGDatabaseInstance() loadUser:anyMessage.fromUid];
         if (user != nil) {
             SSignal *signal = [[TGChannelManagementSignals reportUserSpam:_conversationId accessHash:_accessHash user:user messageIds:messageIds] catch:^SSignal *(__unused id error) {
                 return [SSignal complete];
@@ -2630,7 +2630,7 @@
     }
     
     if ([actions containsObject:@(TGMessageModerateActionBan)]) {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)anyMessage.fromUid];
+        TGUser *user = [TGDatabaseInstance() loadUser:anyMessage.fromUid];
         if (user != nil) {
             TGChannelBannedRights *rights = [[TGChannelBannedRights alloc] initWithBanReadMessages:true banSendMessages:true banSendMedia:true banSendStickers:true banSendGifs:false banSendGames:false banSendInline:false banEmbedLinks:true timeout:INT32_MAX];
             SSignal *signal = [[[TGChannelManagementSignals updateChannelBannedRightsAndGetMembership:_conversationId accessHash:_accessHash user:user rights:rights] onNext:^(TGCachedConversationMember *resultMember) {

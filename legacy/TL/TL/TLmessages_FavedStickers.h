@@ -16,7 +16,7 @@
 
 @interface TLmessages_FavedStickers$messages_favedStickers : TLmessages_FavedStickers
 
-@property (nonatomic) int32_t n_hash;
+@property (nonatomic) int64_t n_hash;
 @property (nonatomic, retain) NSArray *packs;
 @property (nonatomic, retain) NSArray *stickers;
 

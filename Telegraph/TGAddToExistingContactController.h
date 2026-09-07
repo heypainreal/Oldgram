@@ -23,6 +23,6 @@
 
 @property (nonatomic, weak) id<TGAddToExistingContactControllerDelegate> delegate;
 
-- (id)initWithUid:(int32_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
+- (id)initWithUid:(int64_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
 
 @end

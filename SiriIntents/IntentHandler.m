@@ -14,8 +14,8 @@ static INPerson *personWithLegacyUser(TGLegacyUser *user) {
     } else {
         displayName = @"";
     }
-    NSString *identifier = [NSString stringWithFormat:@"tg%d", (int)user.userId];
-    NSString *customIdentifier = [NSString stringWithFormat:@"tg%d_%lld", (int)user.userId, (long long)user.accessHash];
+    NSString *identifier = [NSString stringWithFormat:@"tg%lld", (long long)user.userId];
+    NSString *customIdentifier = [NSString stringWithFormat:@"tg%lld_%lld", (long long)user.userId, (long long)user.accessHash];
     NSPersonNameComponents *nameComponents = [[NSPersonNameComponents alloc] init];
     nameComponents.givenName = user.firstName;
     nameComponents.familyName = user.lastName;
@@ -229,7 +229,7 @@ static INPerson *personWithContact(CNContact *contact) {
             if ([person.customIdentifier hasPrefix:@"tg"]) {
                 NSRange underscoreRange = [person.customIdentifier rangeOfString:@"_"];
                 if (underscoreRange.location != NSNotFound) {
-                    int32_t userId = [[[person.customIdentifier substringToIndex:underscoreRange.location] substringFromIndex:2] intValue];
+                    int64_t userId = [[[person.customIdentifier substringToIndex:underscoreRange.location] substringFromIndex:2] intValue];
                     int64_t accessHash = [[person.customIdentifier substringFromIndex:underscoreRange.location + underscoreRange.length] longLongValue];
                     [users addObject:[[TGUserModel alloc] initWithUserId:userId accessHash:accessHash firstName:@"" lastName:@"" avatarLocation:nil]];
                 }
@@ -273,7 +273,7 @@ static INPerson *personWithContact(CNContact *contact) {
             if ([person.customIdentifier hasPrefix:@"tg"]) {
                 NSRange underscoreRange = [person.customIdentifier rangeOfString:@"_"];
                 if (underscoreRange.location != NSNotFound) {
-                    int32_t userId = [[[person.customIdentifier substringToIndex:underscoreRange.location] substringFromIndex:2] intValue];
+                    int64_t userId = [[[person.customIdentifier substringToIndex:underscoreRange.location] substringFromIndex:2] intValue];
                     int64_t accessHash = [[person.customIdentifier substringFromIndex:underscoreRange.location + underscoreRange.length] longLongValue];
                     [users addObject:[[TGUserModel alloc] initWithUserId:userId accessHash:accessHash firstName:@"" lastName:@"" avatarLocation:nil]];
                 }

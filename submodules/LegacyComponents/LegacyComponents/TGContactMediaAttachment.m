@@ -57,7 +57,7 @@
     
     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] init];
     
-    int uid = 0;
+    int64_t uid = 0;
     [is read:(uint8_t *)&uid maxLength:4];
     read += 4;
     contactAttachment.uid = uid;
@@ -100,7 +100,7 @@
     self = [super init];
     if (self != nil) {
         self.type = TGContactMediaAttachmentType;
-        _uid = [aDecoder decodeInt32ForKey:@"uid"];
+        _uid = ([aDecoder containsValueForKey:@"uid64"] ? [aDecoder decodeInt64ForKey:@"uid64"] : [aDecoder decodeInt32ForKey:@"uid"]);
         _firstName = [aDecoder decodeObjectForKey:@"firstName"];
         _lastName = [aDecoder decodeObjectForKey:@"lastName"];
         _phoneNumber = [aDecoder decodeObjectForKey:@"phoneNumber"];
@@ -110,7 +110,7 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeInt32:_uid forKey:@"uid"];
+    [aCoder encodeInt64:_uid forKey:@"uid64"];
     [aCoder encodeObject:_firstName forKey:@"firstName"];
     [aCoder encodeObject:_lastName forKey:@"lastName"];
     [aCoder encodeObject:_phoneNumber forKey:@"phoneNumber"];

@@ -1,5 +1,7 @@
 #import "TLRPCmessages_sendEncrypted.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xa9776773;
+    return (int32_t)0x44fa7a15;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x9253fb1b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -94,6 +96,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt64:(int64_t)self.random_id];
+    [os writeBytes:self.data == nil ? [NSData data] : self.data];
+}
 
 @end
 

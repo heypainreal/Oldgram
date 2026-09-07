@@ -11,7 +11,7 @@
     {
         _fileId = file.n_id;
         _accessHash = file.access_hash;
-        _size = file.size;
+        _size = (int32_t)MIN(file.size, (int64_t)INT32_MAX);
         _dcId = file.dc_id;
         _date = file.date;
         _fileHash = file.file_hash;

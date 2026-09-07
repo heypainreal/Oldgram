@@ -9,7 +9,7 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return 0xc000e4c8;
+    return (int32_t)0xb106e66c;
 }
 
 - (int32_t)TLconstructorName
@@ -29,7 +29,7 @@
 
 - (int)layerVersion
 {
-    return 78;
+    return 228;
 }
 
 - (void)setNo_webpage:(bool)no_webpage {

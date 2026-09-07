@@ -1,5 +1,7 @@
 #import "TGDeleteUserAvatarActor.h"
 
+#import "TGUser+Telegraph.h"
+
 #import <LegacyComponents/LegacyComponents.h>
 
 #import <LegacyComponents/ActionStage.h>
@@ -28,8 +30,8 @@
 
 - (void)prepare:(NSDictionary *)options
 {
-    _uid = [[options objectForKey:@"uid"] intValue];
-    self.requestQueueName = [[NSString alloc] initWithFormat:@"timeline/%d", _uid];
+    _uid = [[options objectForKey:@"uid"] longLongValue];
+    self.requestQueueName = [[NSString alloc] initWithFormat:@"timeline/%lld", (long long)_uid];
     
     [super prepare:options];
 }
@@ -51,9 +53,8 @@
         TGUser *selfUser = [originalUser copy];
         if (selfUser != nil)
         {
-            selfUser.photoUrlSmall = extractFileUrl(concretePhoto.photo_small);
-            selfUser.photoUrlMedium = nil;
-            selfUser.photoUrlBig = extractFileUrl(concretePhoto.photo_big);
+            // Схема 228 не отдаёт координаты файла — только photo_id и датацентр.
+            extractUserPhoto(concretePhoto, selfUser);
         }
         
         NSString *url = [[NSString alloc] initWithFormat:@"{filter:%@}%@", @"profileAvatar", selfUser.photoUrlSmall];

@@ -21,7 +21,7 @@
 
 @implementation TGShareContactController
 
-- (instancetype)initWithContext:(TGShareContext *)context vCard:(TGVCard *)vcard uid:(int32_t)uid
+- (instancetype)initWithContext:(TGShareContext *)context vCard:(TGVCard *)vcard uid:(int64_t)uid
 {
     self = [super init];
     if (self != nil)

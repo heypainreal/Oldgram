@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLFileHash$fileHash *object = [[TLFileHash$fileHash alloc] init];
-    object.offset = metaObject->getInt32((int32_t)0xfc56269);
+    object.offset = metaObject->getInt64((int32_t)0xfc56269);
     object.limit = metaObject->getInt32((int32_t)0xb8433fca);
     object.n_hash = metaObject->getBytes((int32_t)0xc152e470);
     return object;

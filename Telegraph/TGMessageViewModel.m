@@ -136,7 +136,7 @@ void TGUpdateMessageViewModelLayoutConstants(CGFloat baseFontPointSize)
 
 @interface TGMessageViewModel ()
 {
-    int _uid;
+    int64_t _uid;
     NSString *_firstName;
     NSString *_lastName;
     

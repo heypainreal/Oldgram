@@ -50,7 +50,7 @@
 {
     TLHighScore$highScore *object = [[TLHighScore$highScore alloc] init];
     object.pos = metaObject->getInt32((int32_t)0xc46b441c);
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.score = metaObject->getInt32((int32_t)0xe2546678);
     return object;
 }

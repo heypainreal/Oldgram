@@ -25,7 +25,7 @@
     int64_t _peerId;
     int64_t _encryptedChatId;
     int64_t _accessHash;
-    int32_t _userId;
+    int64_t _userId;
 }
 
 @end
@@ -80,7 +80,7 @@
             {
                 TLEncryptedMessage$encryptedMessage *encryptedMessage = [[TLEncryptedMessage$encryptedMessage alloc] init];
                 encryptedMessage.random_id = encryptedAction.action.randomId;
-                encryptedMessage.chat_id = encryptedAction.action.chatId;
+                encryptedMessage.chat_id = (int32_t)encryptedAction.action.chatId;
                 encryptedMessage.date = encryptedAction.action.date;
                 encryptedMessage.bytes = encryptedAction.action.encryptedData;
                 
@@ -868,7 +868,7 @@
     }
 }
 
-+ (TGMessage *)parseDecryptedMessage:(id)decryptedMessage date:(int32_t)date fileInfo:(TGStoredIncomingMessageFileInfo *)fileInfo conversationId:(int64_t)conversationId fromUid:(int32_t)fromUid seqIn:(int32_t)seqIn seqOut:(int32_t)seqOut
++ (TGMessage *)parseDecryptedMessage:(id)decryptedMessage date:(int32_t)date fileInfo:(TGStoredIncomingMessageFileInfo *)fileInfo conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid seqIn:(int32_t)seqIn seqOut:(int32_t)seqOut
 {
     TGMessage *message = nil;
     

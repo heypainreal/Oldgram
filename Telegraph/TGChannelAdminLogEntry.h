@@ -14,10 +14,10 @@
 
 @property (nonatomic, readonly) int64_t entryId;
 @property (nonatomic, readonly) int32_t timestamp;
-@property (nonatomic, readonly) int32_t userId;
+@property (nonatomic, readonly) int64_t userId;
 @property (nonatomic, strong, readonly) id<TGChannelAdminLogEntryContent> content;
 
-- (instancetype)initWithEntryId:(int64_t)entryId timestamp:(int32_t)timestamp userId:(int32_t)userId content:(id<TGChannelAdminLogEntryContent>)content;
+- (instancetype)initWithEntryId:(int64_t)entryId timestamp:(int32_t)timestamp userId:(int64_t)userId content:(id<TGChannelAdminLogEntryContent>)content;
 
 - (instancetype)initWithTL:(TLChannelAdminLogEvent *)event;
 
@@ -114,29 +114,29 @@
 
 @interface TGChannelAdminLogEntryInvite : NSObject <TGChannelAdminLogEntryContent>
 
-@property (nonatomic, readonly) int32_t userId;
+@property (nonatomic, readonly) int64_t userId;
 
-- (instancetype)initWithUserId:(int32_t)userId;
+- (instancetype)initWithUserId:(int64_t)userId;
 
 @end
 
 @interface TGChannelAdminLogEntryToggleBan : NSObject <TGChannelAdminLogEntryContent>
 
-@property (nonatomic, readonly) int32_t userId;
+@property (nonatomic, readonly) int64_t userId;
 @property (nonatomic, strong, readonly) TGChannelBannedRights *previousRights;
 @property (nonatomic, strong, readonly) TGChannelBannedRights *rights;
 
-- (instancetype)initWithUserId:(int32_t)userId previousRights:(TGChannelBannedRights *)previousRights rights:(TGChannelBannedRights *)rights;
+- (instancetype)initWithUserId:(int64_t)userId previousRights:(TGChannelBannedRights *)previousRights rights:(TGChannelBannedRights *)rights;
 
 @end
 
 @interface TGChannelAdminLogEntryToggleAdmin : NSObject <TGChannelAdminLogEntryContent>
 
-@property (nonatomic, readonly) int32_t userId;
+@property (nonatomic, readonly) int64_t userId;
 @property (nonatomic, strong, readonly) TGChannelAdminRights *previousRights;
 @property (nonatomic, strong, readonly) TGChannelAdminRights *rights;
 
-- (instancetype)initWithUserId:(int32_t)userId previousRights:(TGChannelAdminRights *)previousRights rights:(TGChannelAdminRights *)rights;
+- (instancetype)initWithUserId:(int64_t)userId previousRights:(TGChannelAdminRights *)previousRights rights:(TGChannelAdminRights *)rights;
 
 @end
 

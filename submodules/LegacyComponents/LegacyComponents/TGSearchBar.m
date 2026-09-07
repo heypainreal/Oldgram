@@ -47,16 +47,18 @@
 
 + (CGFloat)searchBarBaseHeight
 {
-    return 44.0f;
+    // Поле поиска в системе давно 36 pt, а не 28: со старыми размерами строка
+    // в списке чатов выглядела вдвое ниже соседних элементов.
+    return 52.0f;
 }
 
 - (CGFloat)baseHeight {
     if (self.showsScopeBar)
-        return 44.0f;
+        return [TGSearchBar searchBarBaseHeight];
     if (_style == TGSearchBarStyleKeyboard) {
         return [self inputHeight] + 17.0f;
     }
-    return [self inputHeight] + 12.0f;
+    return [self inputHeight] + 16.0f;
 }
 
 - (CGFloat)inputContentOffset {
@@ -73,9 +75,8 @@
 - (CGFloat)inputHeight {
     if (_style == TGSearchBarStyleKeyboard) {
         return 33.0f;
-    } else {
-        return _style == TGSearchBarStyleLightAlwaysPlain ? 36.0f : 28.0f;
     }
+    return 36.0f;
 }
 
 + (CGFloat)searchBarScopeHeight
@@ -226,7 +227,7 @@
         _placeholderLabel.userInteractionEnabled = false;
         _placeholderLabel.textColor = placeholderColor;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
-        _placeholderLabel.font = TGSystemFontOfSize(style == TGSearchBarStyleLightAlwaysPlain ? 16.0f : 14.0f);
+        _placeholderLabel.font = TGSystemFontOfSize(style == TGSearchBarStyleLightAlwaysPlain ? 17.0f : 17.0f);
         _placeholderLabel.text = TGLocalized(@"Common.Search");
         [_wrappingView addSubview:_placeholderLabel];
         
@@ -235,7 +236,7 @@
         _prefixLabel.userInteractionEnabled = false;
         _prefixLabel.textColor = placeholderColor;
         _prefixLabel.backgroundColor = [UIColor clearColor];
-        _prefixLabel.font = TGSystemFontOfSize(style == TGSearchBarStyleLightAlwaysPlain ? 16.0f : 14.0f);
+        _prefixLabel.font = TGSystemFontOfSize(style == TGSearchBarStyleLightAlwaysPlain ? 17.0f : 17.0f);
         [_wrappingView addSubview:_prefixLabel];
         
         UIImage *iconImage = nil;
@@ -270,18 +271,20 @@
 
 + (UIImage *)searchBarIcon:(UIColor *)color
 {
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(13, 13), false, 0.0f);
+    // Размеры подогнаны под системную лупу: прежние 13 pt рядом с текстом
+    // в 17 pt выглядели мелкими.
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(16, 16), false, 0.0f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetStrokeColorWithColor(context, color.CGColor);
-    CGContextSetLineWidth(context, 1.0f);
+    CGContextSetLineWidth(context, 1.3f);
     CGContextSetLineCap(context, kCGLineCapRound);
-    CGContextStrokeEllipseInRect(context, CGRectMake(0.5f, 0.5f, 9.0f, 9.0f));
+    CGContextStrokeEllipseInRect(context, CGRectMake(0.75f, 0.75f, 11.0f, 11.0f));
     
-    CGContextSetLineWidth(context, 1.5f);
-    CGContextMoveToPoint(context, 8.5f, 8.5f);
-    CGContextAddLineToPoint(context, 8.5f + 3.5f, 8.5f + 3.5f);
+    CGContextSetLineWidth(context, 1.9f);
+    CGContextMoveToPoint(context, 10.5f, 10.5f);
+    CGContextAddLineToPoint(context, 10.5f + 4.0f, 10.5f + 4.0f);
     CGContextStrokePath(context);
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
@@ -771,11 +774,13 @@
     CGSize placeholderSize = [_placeholderLabel.text sizeWithFont:_placeholderLabel.font];
     placeholderSize.width = MIN(placeholderSize.width, self.frame.size.width - rightPadding - 50.0f - prefixOffset);
     
-    _customSearchIcon.frame = CGRectMake(_showsCustomCancelButton ? (_textFieldBackground.frame.origin.x + 8.0f) : ((CGFloor((self.frame.size.width - placeholderSize.width) / 2) + 10 + TGScreenPixel) - 20), [self searchIconOffset] + [self inputContentOffset] + 16 + retinaPixel + [self topPadding], _customSearchIcon.frame.size.width, _customSearchIcon.frame.size.height);
+    CGFloat inputCenterY = CGRectGetMidY(_textFieldBackground.frame);
+    
+    _customSearchIcon.frame = CGRectMake(_showsCustomCancelButton ? (_textFieldBackground.frame.origin.x + 8.0f) : ((CGFloor((self.frame.size.width - placeholderSize.width) / 2) + 10 + TGScreenPixel) - 20), CGFloor(inputCenterY - _customSearchIcon.frame.size.height / 2.0f) + [self searchIconOffset] + retinaPixel, _customSearchIcon.frame.size.width, _customSearchIcon.frame.size.height);
     
     _customSearchActivityIndicator.frame = (CGRect){{CGFloor(_customSearchIcon.frame.origin.x + (_customSearchIcon.frame.size.width - _customSearchActivityIndicator.frame.size.width) / 2.0f), CGFloor(_customSearchIcon.frame.origin.y + (_customSearchIcon.frame.size.height - _customSearchActivityIndicator.frame.size.height) / 2.0f) + 1.0f + TGScreenPixel}, _customSearchActivityIndicator.frame.size};
     
-    _placeholderLabel.frame = CGRectMake(_showsCustomCancelButton ? ((TGIsRTL() ? (CGRectGetMaxX(_textFieldBackground.frame) - placeholderSize.width - 32.0f) : 36 + _safeAreaInset.left) + prefixOffset) : (CGFloor((self.frame.size.width - placeholderSize.width) / 2) + 10 + TGScreenPixel), [self inputContentOffset] + 14 + [self topPadding], placeholderSize.width, placeholderSize.height);
+    _placeholderLabel.frame = CGRectMake(_showsCustomCancelButton ? ((TGIsRTL() ? (CGRectGetMaxX(_textFieldBackground.frame) - placeholderSize.width - 32.0f) : 36 + _safeAreaInset.left) + prefixOffset) : (CGFloor((self.frame.size.width - placeholderSize.width) / 2) + 10 + TGScreenPixel), CGFloor(inputCenterY - placeholderSize.height / 2.0f), placeholderSize.width, placeholderSize.height);
     
     if (_customTextField != nil)
     {
@@ -789,7 +794,7 @@
         
         _customTextField.frame = frame;
         
-        _customClearButton.frame = CGRectMake(CGRectGetMaxX(_textFieldBackground.frame) - 22, [self inputContentOffset] + 16 + [self topPadding] + (_style == TGSearchBarStyleLightAlwaysPlain ? 1.0f : 0.0f), _customClearButton.frame.size.width, _customClearButton.frame.size.height);
+        _customClearButton.frame = CGRectMake(CGRectGetMaxX(_textFieldBackground.frame) - 22, CGFloor(inputCenterY - _customClearButton.frame.size.height / 2.0f), _customClearButton.frame.size.width, _customClearButton.frame.size.height);
     }
     
     if (_customCancelButton != nil)

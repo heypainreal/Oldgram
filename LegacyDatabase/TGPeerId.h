@@ -2,7 +2,7 @@
 
 typedef struct {
     int32_t namespaceId;
-    int32_t peerId;
+    int64_t peerId;
 } TGPeerId;
 
 typedef enum {

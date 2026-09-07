@@ -1,5 +1,7 @@
 #import "TLInputSingleMedia.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -39,12 +41,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x5eaa7809;
+    return (int32_t)0x1cc6e91f;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x2652950c;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -71,5 +73,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000000)];
+    TLMetaClassStore::serializeObject(os, self.media, true);
+    [os writeInt64:(int64_t)self.random_id];
+    [os writeString:self.message == nil ? @"" : self.message];
+}
 
 @end
+

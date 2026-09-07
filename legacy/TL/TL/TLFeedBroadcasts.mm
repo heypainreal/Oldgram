@@ -48,7 +48,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLFeedBroadcasts$feedBroadcasts *object = [[TLFeedBroadcasts$feedBroadcasts alloc] init];
-    object.feed_id = metaObject->getInt32((int32_t)0xf204bed5);
+    object.feed_id = metaObject->getInt64((int32_t)0xf204bed5);
     object.channels = metaObject->getObject((int32_t)0x0ae18efd);
     return object;
 }

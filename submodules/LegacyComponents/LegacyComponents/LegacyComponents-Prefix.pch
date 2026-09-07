@@ -1,0 +1,23 @@
+#import <Availability.h>
+
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+/// Защита от нулевого размера графического контекста.
+///
+/// Код 2018 года свободно создавал контекст под размер вью, которая ещё не
+/// разложена (нулевой фрейм). Раньше это давало пустую картинку, а с iOS 17
+/// приводит к ассерту внутри UIKit и падению приложения. Подставляем
+/// минимальный допустимый размер вместо нулевого.
+NS_INLINE void TGLegacyBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
+{
+    CGSize safeSize = CGSizeMake(MAX(size.width, 1.0), MAX(size.height, 1.0));
+    UIGraphicsBeginImageContextWithOptions(safeSize, opaque, scale);
+}
+
+#define UIGraphicsBeginImageContextWithOptions(size, opaque, scale) \
+    TGLegacyBeginImageContextWithOptions((size), (opaque), (scale))
+
+#endif

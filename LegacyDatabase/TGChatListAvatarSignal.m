@@ -66,7 +66,7 @@ static OSSpinLock imageDataLock;
 
 #define TGColorWithHex(x) [UIColor hexColor:x]
 
-+ (NSArray *)gradientColorsForPeerId:(TGPeerId)peerId myUserId:(int32_t)myUserId
++ (NSArray *)gradientColorsForPeerId:(TGPeerId)peerId myUserId:(int64_t)myUserId
 {
     static OSSpinLock lock = 0;
     static NSMutableDictionary *dict = nil;
@@ -101,7 +101,7 @@ static OSSpinLock imageDataLock;
 
 + (SSignal *)chatListAvatarWithContext:(TGShareContext *)context letters:(NSString *)letters peerId:(TGPeerId)peerId imageSize:(CGSize)imageSize
 {
-    NSString *key = [[NSString alloc] initWithFormat:@"GradientAvatar-%d.%d-%@-%d", (int)peerId.namespaceId, (int)peerId.peerId, letters, (int)imageSize.width];
+    NSString *key = [[NSString alloc] initWithFormat:@"GradientAvatar-%d.%lld-%@-%d", (int)peerId.namespaceId, (long long)peerId.peerId, letters, (int)imageSize.width];
     UIImage *image = [context.memoryImageCache imageForKey:key attributes:NULL];
     if (image != nil)
         return [SSignal single:image];

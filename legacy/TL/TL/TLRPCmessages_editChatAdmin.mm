@@ -1,5 +1,7 @@
 #import "TLRPCmessages_editChatAdmin.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,18 +56,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xa9e69f2e;
+    return (int32_t)0xa85bd1c2;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x54cc80d9;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_editChatAdmin$messages_editChatAdmin *object = [[TLRPCmessages_editChatAdmin$messages_editChatAdmin alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.user_id = metaObject->getObject((int32_t)0xafdf4073);
     object.is_admin = metaObject->getBool((int32_t)0x41fdf05a);
     return object;
@@ -93,6 +95,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+    TLMetaClassStore::serializeObject(os, self.user_id, true);
+    [os writeInt32:self.is_admin ? TL_BOOL_TRUE_CONSTRUCTOR : TL_BOOL_FALSE_CONSTRUCTOR];
+}
 
 @end
 

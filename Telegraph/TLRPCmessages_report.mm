@@ -8,7 +8,7 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return 0xbd82b658;
+    return (int32_t)0xfc78af9b;
 }
 
 - (int32_t)TLconstructorName
@@ -28,9 +28,10 @@
 
 - (int)layerVersion
 {
-    return 76;
+    return 228;
 }
 
+// messages.report#fc78af9b peer:InputPeer id:Vector<int> option:bytes message:string
 - (void)TLserialize:(NSOutputStream *)os
 {
     TLMetaClassStore::serializeObject(os, self.peer, true);
@@ -42,7 +43,10 @@
         [os writeInt32:mid.int32Value];
     }
     
-    TLMetaClassStore::serializeObject(os, self.reason, true);
+    // Причину жалобы теперь выбирают в диалоге на стороне сервера: первый
+    // запрос уходит с пустым option, сервер отвечает списком вариантов.
+    [os writeBytes:[NSData data]];
+    [os writeString:@""];
 }
 
 - (id<TLObject>)TLdeserialize:(NSInputStream *)__unused is signature:(int32_t)__unused signature environment:(id<TLSerializationEnvironment>)__unused environment context:(TLSerializationContext *)__unused context error:(__autoreleasing NSError **)__unused error

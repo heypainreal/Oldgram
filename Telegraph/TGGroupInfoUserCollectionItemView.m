@@ -97,7 +97,7 @@
 
 @interface TGGroupInfoUserCollectionItemView ()
 {
-    int32_t _uidForPlaceholderCalculation;
+    int64_t _uidForPlaceholderCalculation;
     TGLetteredAvatarView *_avatarView;
     TGGroupInfoUserCollectionItemViewContent *_content;
     UISwitch *_switchView;
@@ -199,7 +199,7 @@
     _wrapView.presentation = presentation;
 }
 
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int32_t)uidForPlaceholderCalculation canPromote:(bool)canPromote canRestrict:(bool)canRestrict canBan:(bool)canBan canDelete:(bool)canDelete
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int64_t)uidForPlaceholderCalculation canPromote:(bool)canPromote canRestrict:(bool)canRestrict canBan:(bool)canBan canDelete:(bool)canDelete
 {
     if (firstName.length != 0)
     {

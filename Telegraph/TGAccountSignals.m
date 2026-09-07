@@ -103,7 +103,7 @@
             if (TGPeerIdIsSecretChat(peerId)) {
                 return [[TGDatabaseInstance() modify:^id{
                     TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:peerId];
-                    int32_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:peerId];
+                    int64_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:peerId];
                     TGCachedPeerReportSpamState reportSpamState = TGCachedPeerReportSpamShow;
                     if (conversation.chatParticipants.chatAdminId != TGTelegraphInstance.clientUserId) {
                         if ([TGDatabaseInstance() uidIsRemoteContact:uid]) {

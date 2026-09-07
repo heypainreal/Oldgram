@@ -237,6 +237,12 @@
         else if ([incomingMessage.body isKindOfClass:[TLUpdates$updateShort class]])
         {
             TLUpdates$updateShort *updateShort = (TLUpdates$updateShort *)incomingMessage.body;
+            if (updateShort.update == nil)
+            {
+                // Обновление неизвестного схеме типа разбирается в nil, а @[nil]
+                // бросает исключение: пропускаем такое, а не роняем приложение.
+                continue;
+            }
             if ([updateShort.update hasPts])
             {
                 NSAssert([updateShort.update respondsToSelector:@selector(pts_count)], @"update with pts should also contain pts_count");

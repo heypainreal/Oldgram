@@ -48,7 +48,7 @@
     
     TGPhonebookContact *contact = nil;
     
-    int nativeId = -1;
+    int64_t nativeId = -1;
     if (user.uid < 0)
     {
         nativeId = -user.uid;

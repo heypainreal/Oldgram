@@ -29,7 +29,7 @@
         
         [ActionStageInstance() dispatchOnStageQueue:^
         {
-            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/blockedUsers/(%" PRId32 ",cached)", (int32_t)peerId] options:@{@"uid": @(peerId)} watcher:self];
+            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/blockedUsers/(%" PRId64 ",cached)", peerId] options:@{@"uid": @(peerId)} watcher:self];
             [ActionStageInstance() watchForPath:@"/tg/blockedUsers" watcher:self];
         }];
     }
@@ -98,7 +98,7 @@
     return [[SSignal alloc] initWithGenerator:^id<SDisposable>(SSubscriber *subscriber)
     {
         static int actionId = 0;
-        [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/changePeerBlockedStatus/(cbs%d)", actionId++] options:@{@"peerId": @((int32_t)peerId), @"block": @(blocked)} watcher:TGTelegraphInstance];
+        [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/changePeerBlockedStatus/(cbs%d)", actionId++] options:@{@"peerId": @(peerId), @"block": @(blocked)} watcher:TGTelegraphInstance];
         [subscriber putCompletion];
         
         return nil;

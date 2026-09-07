@@ -3,7 +3,7 @@
 
 @implementation TGUserModel
 
-- (instancetype)initWithUserId:(int32_t)userId accessHash:(int64_t)accessHash firstName:(NSString *)firstName lastName:(NSString *)lastName avatarLocation:(TGFileLocation *)avatarLocation
+- (instancetype)initWithUserId:(int64_t)userId accessHash:(int64_t)accessHash firstName:(NSString *)firstName lastName:(NSString *)lastName avatarLocation:(TGFileLocation *)avatarLocation
 {
     self = [super init];
     if (self != nil)

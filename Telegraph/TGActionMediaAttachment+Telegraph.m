@@ -31,7 +31,7 @@
         {
             TLMessageAction$messageActionChatDeleteUser *concreteAction = (TLMessageAction$messageActionChatDeleteUser *)actionDesc;
             self.actionType = TGMessageActionChatDeleteMember;
-            self.actionData = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:concreteAction.user_id] forKey:@"uid"];
+            self.actionData = [NSDictionary dictionaryWithObject:@(concreteAction.user_id) forKey:@"uid"];
         }
         else if ([actionDesc isKindOfClass:[TLMessageAction$messageActionChatEditTitle class]])
         {
@@ -69,7 +69,7 @@
         {
             TLMessageAction$messageActionChatJoinedByLink *concreteAction = (TLMessageAction$messageActionChatJoinedByLink *)actionDesc;
             self.actionType = TGMessageActionJoinedByLink;
-            self.actionData = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:concreteAction.inviter_id] forKey:@"invitedBy"];
+            self.actionData = [NSDictionary dictionaryWithObject:@(concreteAction.inviter_id) forKey:@"invitedBy"];
         }
         else if ([actionDesc isKindOfClass:[TLMessageAction$messageActionChannelCreate class]])
         {

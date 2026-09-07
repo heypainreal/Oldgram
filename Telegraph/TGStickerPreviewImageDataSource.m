@@ -265,6 +265,10 @@ static ASQueue *taskManagementQueue()
         image = [UIImage convertFromWebP:filePath compressedData:&compressedData error:nil];
         if (compressedData != nil)
             [compressedData writeToFile:cachedFilePath atomically:true];
+
+        // Анимированный стикер webp-декодер не берёт — рисуем первый кадр Lottie.
+        if (image == nil)
+            image = [UIImage convertFromAnimatedSticker:filePath size:size];
     }
     
     if (image != nil)

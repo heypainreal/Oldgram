@@ -62,7 +62,7 @@
 
 @implementation TGSecretModernConversationCompanion
 
-- (instancetype)initWithConversation:(TGConversation *)conversation encryptedConversationId:(int64_t)encryptedConversationId accessHash:(int64_t)accessHash uid:(int)uid activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages
+- (instancetype)initWithConversation:(TGConversation *)conversation encryptedConversationId:(int64_t)encryptedConversationId accessHash:(int64_t)accessHash uid:(int64_t)uid activity:(NSString *)activity mayHaveUnreadMessages:(bool)mayHaveUnreadMessages
 {
     self = [super initWithConversation:conversation uid:uid activity:activity mayHaveUnreadMessages:mayHaveUnreadMessages];
     if (self != nil)

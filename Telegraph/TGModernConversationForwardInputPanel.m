@@ -229,7 +229,7 @@ typedef enum {
                     [peers addObject:conversation];
                 }
             } else {
-                TGUser *user = [TGDatabaseInstance() loadUser:(int)peerId];
+                TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
                 if (user != nil) {
                     [peers addObject:user];
                 }

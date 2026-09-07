@@ -37,7 +37,7 @@ typedef enum {
 + (NSArray *)phoneLabels;
 + (NSArray *)customPhoneLabels;
 
-- (void)scheduleContactPhoneAddition:(int32_t)userId;
+- (void)scheduleContactPhoneAddition:(int64_t)userId;
 - (void)clearState;
 
 @end
@@ -45,7 +45,7 @@ typedef enum {
 @interface TGImportedPhone : NSObject
 
 @property (nonatomic, strong) NSString *phone;
-@property (nonatomic) int user_id;
+@property (nonatomic) int64_t user_id;
 
 @end
 

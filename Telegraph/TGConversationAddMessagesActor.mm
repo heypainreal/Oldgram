@@ -97,7 +97,7 @@
     bool playNotification = false;
     bool needsSound = false;
     
-    std::shared_ptr<std::map<int64_t, std::set<int> > > pProcessedUsersStoppedTyping(new std::map<int64_t, std::set<int> >());
+    std::shared_ptr<std::map<int64_t, std::set<int64_t> > > pProcessedUsersStoppedTyping(new std::map<int64_t, std::set<int64_t> >());
 
     NSMutableDictionary *messagesByConversation = [[NSMutableDictionary alloc] init];
     std::set<int64_t> conversationsWithNotification;
@@ -147,16 +147,16 @@
             {
                 if (message.date > currentTime - 20)
                 {
-                    std::map<int64_t, std::set<int> >::iterator it = pProcessedUsersStoppedTyping->find(message.cid);
+                    std::map<int64_t, std::set<int64_t> >::iterator it = pProcessedUsersStoppedTyping->find(message.cid);
                     if (it == pProcessedUsersStoppedTyping->end())
                     {
-                        std::set<int> usersStoppedTypingInConversation;
-                        usersStoppedTypingInConversation.insert((int)message.fromUid);
+                        std::set<int64_t> usersStoppedTypingInConversation;
+                        usersStoppedTypingInConversation.insert(message.fromUid);
                         pProcessedUsersStoppedTyping->insert(std::make_pair(message.cid, usersStoppedTypingInConversation));
                     }
                     else
                     {
-                        it->second.insert((int)message.fromUid);
+                        it->second.insert(message.fromUid);
                     }
                 }
                 
@@ -195,16 +195,16 @@
         
         if (message.date > currentTime - 20)
         {
-            std::map<int64_t, std::set<int> >::iterator it = pProcessedUsersStoppedTyping->find(conversationId);
+            std::map<int64_t, std::set<int64_t> >::iterator it = pProcessedUsersStoppedTyping->find(conversationId);
             if (it == pProcessedUsersStoppedTyping->end())
             {
-                std::set<int> usersStoppedTypingInConversation;
-                usersStoppedTypingInConversation.insert((int)message.fromUid);
+                std::set<int64_t> usersStoppedTypingInConversation;
+                usersStoppedTypingInConversation.insert(message.fromUid);
                 pProcessedUsersStoppedTyping->insert(std::make_pair(conversationId, usersStoppedTypingInConversation));
             }
             else
             {
-                it->second.insert((int)message.fromUid);
+                it->second.insert(message.fromUid);
             }
         }
         
@@ -373,9 +373,9 @@
     {
         if (!pProcessedUsersStoppedTyping->empty())
         {
-            for (std::map<int64_t, std::set<int> >::iterator it = pProcessedUsersStoppedTyping->begin(); it != pProcessedUsersStoppedTyping->end(); it++)
+            for (std::map<int64_t, std::set<int64_t> >::iterator it = pProcessedUsersStoppedTyping->begin(); it != pProcessedUsersStoppedTyping->end(); it++)
             {
-                for (std::set<int>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
+                for (std::set<int64_t>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
                 {
                     [TGTelegraphInstance dispatchUserActivity:*it2 inConversation:it->first type:nil];
                 }

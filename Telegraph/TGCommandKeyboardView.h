@@ -7,7 +7,7 @@
 
 @property (nonatomic, assign) bool matchDefaultHeight;
 
-@property (nonatomic, copy) void (^commandActivated)(TGBotReplyMarkupButton *, int32_t userId, int32_t messageId);
+@property (nonatomic, copy) void (^commandActivated)(TGBotReplyMarkupButton *, int64_t userId, int32_t messageId);
 
 - (void)setReplyMarkup:(TGBotReplyMarkup *)replyMarkup;
 - (void)animateTransitionIn;

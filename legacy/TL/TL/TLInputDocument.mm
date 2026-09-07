@@ -1,5 +1,7 @@
 #import "TLInputDocument.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -38,12 +40,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x1abfb575;
+    return (int32_t)0x72f0eaae;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x6e4122d1;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
@@ -56,6 +58,10 @@
 {
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+}
 
 @end
 
@@ -64,12 +70,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x18798952;
+    return (int32_t)0x1abfb575;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x3effa48f;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -103,6 +109,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.n_id];
+    [os writeInt64:(int64_t)self.access_hash];
+    [os writeBytes:self.file_reference == nil ? [NSData data] : self.file_reference];
+}
 
 @end
 

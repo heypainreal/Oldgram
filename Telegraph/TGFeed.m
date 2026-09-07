@@ -14,7 +14,7 @@
     self = [super init];
     if (self != nil)
     {
-        _fid = [coder decodeInt32ForCKey:"i"];
+        _fid = [coder decodeInt64ForCKey:"i64"] ?: [coder decodeInt32ForCKey:"i"];
         _channelIds = [NSSet setWithArray:[self decodeInt64Array:coder key:@"chis"]];
         _cachedChannelsHash = [coder decodeInt32ForCKey:"ch"];
         _addsJoinedChannels = [coder decodeInt32ForCKey:"a"];
@@ -38,7 +38,7 @@
 
 - (void)encodeWithKeyValueCoder:(PSKeyValueCoder *)coder
 {
-    [coder encodeInt32:_fid forCKey:"i"];
+    [coder encodeInt64:_fid forCKey:"i64"];
     [self encodeInt64Array:[_channelIds allObjects] coder:coder key:@"chis"];
     [coder encodeInt32:_cachedChannelsHash forCKey:"ch"];
     [coder encodeInt32:_addsJoinedChannels forCKey:"a"];

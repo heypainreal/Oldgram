@@ -113,8 +113,9 @@ typedef struct
 {
     TGDatabaseActionType type;
     int64_t subject;
-    int arg0;
-    int arg1;
+    // arg0 несёт идентификатор канала — он давно не помещается в 32 бита.
+    int64_t arg0;
+    int64_t arg1;
 } TGDatabaseAction;
 
 typedef struct
@@ -217,11 +218,11 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (void)setContactListPreloaded:(bool)contactListPreloaded;
 - (NSArray *)loadContactUsers;
 #ifdef __cplusplus
-- (void)loadRemoteContactUids:(std::vector<int> &)contactUids;
-- (void)loadRemoteContactUidsContactIds:(std::map<int, int> &)contactUidsAndIds;
+- (void)loadRemoteContactUids:(std::vector<int64_t> &)contactUids;
+- (void)loadRemoteContactUidsContactIds:(std::map<int, int64_t> &)contactUidsAndIds;
 #endif
 - (bool)haveRemoteContactUids;
-- (bool)uidIsRemoteContact:(int)uid;
+- (bool)uidIsRemoteContact:(int64_t)uid;
 
 - (void)replacePhonebookContacts:(NSArray *)phonebookContacts;
 - (void)replacePhonebookContact:(int)nativeId phonebookContact:(TGPhonebookContact *)phonebookContact generateContactBindings:(bool)generateContactBindings;
@@ -250,26 +251,26 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (BOOL)containsConversationWithId:(int64_t)conversationId;
 
 - (void)buildTransliterationCache;
-- (void)searchDialogs:(NSString *)query ignoreUid:(int)ignoreUid partial:(bool)partial completion:(void (^)(NSDictionary *, bool))completion isCancelled:(bool (^)())isCancelled;
-- (dispatch_block_t)searchContacts:(NSString *)query ignoreUid:(int)ignoreUid searchPhonebook:(bool)searchPhonebook completion:(void (^)(NSDictionary *))completion;
+- (void)searchDialogs:(NSString *)query ignoreUid:(int64_t)ignoreUid partial:(bool)partial completion:(void (^)(NSDictionary *, bool))completion isCancelled:(bool (^)())isCancelled;
+- (dispatch_block_t)searchContacts:(NSString *)query ignoreUid:(int64_t)ignoreUid searchPhonebook:(bool)searchPhonebook completion:(void (^)(NSDictionary *))completion;
 - (NSArray *)searchPhonebookContacts:(NSString *)query contacts:(NSArray *)contacts;
 
 - (dispatch_block_t)searchMessages:(NSString *)query peerId:(int64_t)peerId completion:(void (^)(NSArray *, NSSet *))completion;
 
-- (void)setLocalUserId:(int)localUserId;
+- (void)setLocalUserId:(int64_t)localUserId;
 - (void)setLocalUserStatusPrivacyRules:(TGNotificationPrivacyAccountSetting *)privacyRules changedLoadedUsers:(void (^)(NSArray *))changedLoadedUsers;
-- (TGUser *)loadUser:(int)uid;
-- (int)loadCachedPhoneIdByUid:(int)uid;
+- (TGUser *)loadUser:(int64_t)uid;
+- (int)loadCachedPhoneIdByUid:(int64_t)uid;
 - (void)storeUsers:(NSArray *)userList;
-- (int)loadUsersOnlineCount:(NSArray *)uids alwaysOnlineUid:(int)alwaysOnlineUid;
+- (int)loadUsersOnlineCount:(NSArray *)uids alwaysOnlineUid:(int64_t)alwaysOnlineUid;
 #ifdef __cplusplus
-- (void)loadCachedUsersWithContactIds:(std::set<int> const &)contactIds resultMap:(std::map<int, TGUser *> &)resultMap;
-- (std::shared_ptr<std::map<int, TGUser *> >)loadUsers:(std::vector<int> const &)uidList;
-- (void)storeUsersPresences:(std::map<int, TGUserPresence> *)presenceMap;
+- (void)loadCachedUsersWithContactIds:(std::set<int> const &)contactIds resultMap:(std::map<int64_t, TGUser *> &)resultMap;
+- (std::shared_ptr<std::map<int64_t, TGUser *> >)loadUsers:(std::vector<int64_t> const &)uidList;
+- (void)storeUsersPresences:(std::map<int64_t, TGUserPresence> *)presenceMap;
 #endif
 
-- (int)loadUserLink:(int)uid outdated:(bool *)outdated;
-- (void)storeUserLink:(int)uid link:(int)link;
+- (int)loadUserLink:(int64_t)uid outdated:(bool *)outdated;
+- (void)storeUserLink:(int64_t)uid link:(int)link;
 - (void)upgradeUserLinks;
 - (void)clearCachedUserLinks;
 
@@ -352,7 +353,7 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (void)loadPeerNotificationExceptions:(void (^)(NSArray *privateExceptions, NSArray *groupExceptions))completion;
 
 #ifdef __cplusplus
-- (std::set<int>)filterPeerPhotoNotificationsEnabled:(std::vector<int> const &)uidList;
+- (std::set<int64_t>)filterPeerPhotoNotificationsEnabled:(std::vector<int64_t> const &)uidList;
 #endif
 
 - (int)minAutosaveMessageIdForConversation:(int64_t)conversationId;
@@ -407,10 +408,10 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (void)storeEncryptionKeyForConversationId:(int64_t)conversationId key:(NSData *)key keyFingerprint:(int64_t)keyFingerprint firstSeqOut:(int32_t)firstSeqOut;
 - (void)discardEncryptionKeysForConversationId:(int64_t)conversationId beforeSeqOut:(int32_t)beforeSeqOut;
 - (void)raiseSecretMessageFlagsByMessageId:(int32_t)messageId flagsToRise:(int)flagsToRise;
-- (int)encryptedParticipantIdForConversationId:(int64_t)conversationId;
+- (int64_t)encryptedParticipantIdForConversationId:(int64_t)conversationId;
 - (bool)encryptedConversationIsCreator:(int64_t)conversationId;
 
-- (int64_t)activeEncryptedPeerIdForUserId:(int)userId;
+- (int64_t)activeEncryptedPeerIdForUserId:(int64_t)userId;
 
 - (void)setLastReportedToPeerLayer:(int64_t)peerId layer:(NSUInteger)layer;
 - (NSUInteger)lastReportedToPeerLayer:(int64_t)peerId;
@@ -474,8 +475,8 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (void)setEncryptionEnabled:(bool)encryptionEnabled completion:(void (^)())completion;
 - (bool)isEncryptionEnabled;
 
-- (TGBotInfo *)botInfoForUserId:(int32_t)userId;
-- (void)storeBotInfo:(TGBotInfo *)botInfo forUserId:(int32_t)userId;
+- (TGBotInfo *)botInfoForUserId:(int64_t)userId;
+- (void)storeBotInfo:(TGBotInfo *)botInfo forUserId:(int64_t)userId;
 - (SSignal *)signalBotReplyMarkupForPeerId:(int64_t)peerId;
 - (TGBotReplyMarkup *)botReplyMarkupForPeerId:(int64_t)peerId;
 - (void)storeBotReplyMarkupActivated:(TGBotReplyMarkup *)botReplyMarkup forPeerId:(int64_t)peerId;
@@ -507,7 +508,7 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 
 - (void)addTrailingHoleToChannelAndDispatch:(int64_t)peerId messages:(NSArray *)messages pts:(int32_t)pts importantUnreadCount:(int32_t)importantUnreadCount unimportantUnreadCount:(int32_t)unimportantUnreadCount unreadMentionsCount:(int32_t)unreadMentionsCount maxReadId:(int32_t)maxReadId topMessageId:(int32_t)topMessageId;
 - (void)addMessagesToChannelAndDispatch:(int64_t)peerId messages:(NSArray *)messages deletedMessages:(NSArray *)deletedMessages holes:(NSArray *)holes pts:(int32_t)pts skipFeedUpdate:(bool)skipFeedUpdate;
-- (SSignal *)deleteMessagesInChannel:(int64_t)peerId fromUserId:(int32_t)userId;
+- (SSignal *)deleteMessagesInChannel:(int64_t)peerId fromUserId:(int64_t)userId;
 - (void)channelPts:(int64_t)peerId completion:(void (^)(int32_t pts))completion;
 - (SSignal *)existingChannel:(int64_t)peerId;
 - (bool)_channelExists:(int64_t)peerId;
@@ -515,7 +516,7 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (SSignal *)areChannelsSynchronized;
 - (SSignal *)channelList;
 
-- (TGFeed *)loadFeed:(int32_t)feedId;
+- (TGFeed *)loadFeed:(int64_t)feedId;
 - (NSArray *)feeds;
 - (void)updateFeeds:(NSArray *)feeds replace:(bool)replace;
 - (void)updateFeeds:(NSArray *)feeds replace:(bool)replace dispatch:(bool)dispatch remote:(bool)remote;
@@ -524,8 +525,8 @@ typedef void (^TGDatabaseCleanupEverythingBlock)();
 - (void)feedMessageExists:(int32_t)feedId peerId:(int64_t)peerId messageId:(int32_t)messageId completion:(void (^)(bool exists, TGMessageSortKey key))completion;
 - (void)closestFeedMessageKey:(int32_t)feedId peerId:(int64_t)peerId messageId:(int32_t)messageId completion:(void (^)(bool exists, TGMessageSortKey key))completion;
 - (void)nextFeedMessageKey:(int32_t)feedId peerId:(int64_t)peerId messageId:(int32_t)messageId timestamp:(int32_t)timestamp completion:(void (^)(bool exists, TGMessageSortKey key, int64_t peerId))completion;
-- (void)addMessagesToFeed:(int32_t)feedId messages:(NSArray *)messages deleteMessages:(NSArray *)deleteMessages addedHoles:(NSArray *)addedHoles removedHoles:(NSArray *)removedHoles keepUnreadCounters:(bool)keepUnreadCounters changedMessages:(void (^)(NSArray *addedMessages, NSArray *removedMessages, NSDictionary *updatedMessages))changedMessages;
-- (void)updateFeedRead:(int32_t)feedId maxReadPosition:(TGFeedPosition *)maxReadPosition;
+- (void)addMessagesToFeed:(int64_t)feedId messages:(NSArray *)messages deleteMessages:(NSArray *)deleteMessages addedHoles:(NSArray *)addedHoles removedHoles:(NSArray *)removedHoles keepUnreadCounters:(bool)keepUnreadCounters changedMessages:(void (^)(NSArray *addedMessages, NSArray *removedMessages, NSDictionary *updatedMessages))changedMessages;
+- (void)updateFeedRead:(int64_t)feedId maxReadPosition:(TGFeedPosition *)maxReadPosition;
 
 - (void)enqueueFeedMessagesPoll:(int32_t)feedId position:(TGFeedPosition *)position;
 - (void)enqueueChannelPoll:(int64_t)peerId;

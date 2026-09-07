@@ -8,7 +8,7 @@
 
 @property (nonatomic, strong) ASHandle *actionHandle;
 
-- (id)initWithUid:(int32_t)uid;
+- (id)initWithUid:(int64_t)uid;
 
 - (void)_updateProfileImage:(UIImage *)image;
 

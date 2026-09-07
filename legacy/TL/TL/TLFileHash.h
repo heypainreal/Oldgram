@@ -6,7 +6,7 @@
 
 @interface TLFileHash : NSObject <TLObject>
 
-@property (nonatomic) int32_t offset;
+@property (nonatomic) int64_t offset;
 @property (nonatomic) int32_t limit;
 @property (nonatomic, retain) NSData *n_hash;
 

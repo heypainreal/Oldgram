@@ -9,7 +9,7 @@
 @interface TLRPCmessages_getDialogsMeta : TLMetaRpc
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic) int32_t offset_date;
 @property (nonatomic) int32_t offset_id;
 @property (nonatomic, retain) TLInputPeer *offset_peer;

@@ -52,7 +52,7 @@
 - (instancetype)initWithMessage:(TGMessage *)message receiptMessageId:(int32_t)receiptMessageId {
     self = [super init];
     if (self != nil) {
-        _bot = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+        _bot = [TGDatabaseInstance() loadUser:message.fromUid];
         
         bool isTest = false;
         for (id attachment in message.mediaAttachments) {

@@ -55,7 +55,7 @@ static NSString *fallbackString(NSString *key, NSString *code) {
             appTitle = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
         }
         if (appTitle == nil) {
-            appTitle = @"Telegram";
+            appTitle = @"Oldgram";
         }
         NSString *originalTitle = @"Telegram";
         if (![appTitle isEqualToString:originalTitle]) {

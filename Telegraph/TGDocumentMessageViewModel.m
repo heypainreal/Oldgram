@@ -806,7 +806,7 @@ static CTFontRef textFontForSize(CGFloat size)
             if (TGPeerIdIsChannel(_forwardedPeerId)) {
                 [_context.companionHandle requestAction:@"peerAvatarTapped" options:@{@"peerId": @(_forwardedPeerId), @"messageId": @(_forwardedMessageId)}];
             } else {
-                [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @((int32_t)_forwardedPeerId)}];
+                [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @(_forwardedPeerId)}];
             }
         }
         else if (_replyHeaderModel && CGRectContainsPoint(_replyHeaderModel.frame, point))

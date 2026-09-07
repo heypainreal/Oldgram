@@ -52,7 +52,7 @@
     TLChannelAdminLogEvent$channelAdminLogEvent *object = [[TLChannelAdminLogEvent$channelAdminLogEvent alloc] init];
     object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.date = metaObject->getInt32((int32_t)0xb76958ba);
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.action = metaObject->getObject((int32_t)0xc2d4a0f7);
     return object;
 }

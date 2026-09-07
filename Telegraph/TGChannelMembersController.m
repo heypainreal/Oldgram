@@ -689,13 +689,13 @@
 - (void)actionStageActionRequested:(NSString *)action options:(id)options {
     if ([action isEqualToString:@"deleteUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
             [self _commitDeleteParticipant:uid completion:nil];
     }
     else if ([action isEqualToString:@"openUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             TGUser *user = [TGDatabaseInstance() loadUser:uid];
@@ -1029,7 +1029,7 @@
     }
 }
 
-- (void)_commitDeleteParticipant:(int32_t)userId completion:(void (^)())completion {
+- (void)_commitDeleteParticipant:(int64_t)userId completion:(void (^)())completion {
     TGProgressWindow *progressWindow = [[TGProgressWindow alloc] init];
     [progressWindow showWithDelay:0.5];
     
@@ -1794,7 +1794,7 @@
     return tableView;
 }
 
-- (void)removeParticipantFromList:(int32_t)uid {
+- (void)removeParticipantFromList:(int64_t)uid {
     if (_searchResultUsers != nil) {
         NSMutableArray *updatedSearchResultUsers = [[NSMutableArray alloc] initWithArray:_searchResultUsers];
         NSMutableDictionary *updatedSearchResultMemberDatas = [[NSMutableDictionary alloc] initWithDictionary:_searchResultsMemberDatas];

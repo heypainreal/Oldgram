@@ -5,7 +5,7 @@
 @interface TLRPCchannels_getFeed : TLMetaRpc
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic, strong) TLFeedPosition *offset_position;
 @property (nonatomic) int32_t add_offset;
 @property (nonatomic) int32_t limit;

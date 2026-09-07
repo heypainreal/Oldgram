@@ -152,7 +152,7 @@
 
 - (void)createPressed
 {
-    int32_t feedId = 1;
+    int64_t feedId = 1;
     
     NSMutableArray *channels = [[NSMutableArray alloc] init];
     NSMutableSet *peerIds = [[NSMutableSet alloc] init];
@@ -576,7 +576,7 @@
 //                std::map<int, bool>::iterator it = pUpdateViewItems->find(contactCell.itemId);
 //                if (it != updateViewItems.end())
 //                {
-//                    std::map<int, TGUser *>::iterator itemIt = _selectedUsers.find(contactCell.itemId);
+//                    std::map<int64_t, TGUser *>::iterator itemIt = _selectedUsers.find(contactCell.itemId);
 //                    if (itemIt == _selectedUsers.end())
 //                        [contactCell updateFlags:false];
 //                    else

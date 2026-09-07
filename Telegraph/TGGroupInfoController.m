@@ -290,7 +290,7 @@
                     for (NSString *path in addActions)
                     {
                         NSRange range = [path rangeOfString:@"/addMember/("];
-                        int32_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
+                        int64_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
                         
                         [_soonToBeAddedUserIds addObject:@(uid)];
                     }
@@ -298,7 +298,7 @@
                     for (NSString *path in deleteActions)
                     {
                         NSRange range = [path rangeOfString:@"/deleteMember/("];
-                        int32_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
+                        int64_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
                         
                         [_soonToBeRemovedUserIds addObject:@(uid)];
                     }
@@ -820,7 +820,7 @@
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
-- (void)_commitDeleteParticipant:(int32_t)uid
+- (void)_commitDeleteParticipant:(int64_t)uid
 {
     for (id item in _usersSection.items)
     {
@@ -1048,7 +1048,7 @@
     NSMutableArray *participantUsers = [[NSMutableArray alloc] init];
     for (NSNumber *nUid in conversation.chatParticipants.chatParticipantUids)
     {
-        TGUser *user = [TGDatabaseInstance() loadUser:[nUid int32Value]];
+        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
         if (user != nil)
             [participantUsers addObject:user];
     }
@@ -1063,7 +1063,7 @@
         {
             if (![conversation.chatParticipants.chatParticipantUids containsObject:nUid])
             {
-                TGUser *user = [TGDatabaseInstance() loadUser:[nUid int32Value]];
+                TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                 if (user != nil)
                     [participantUsers addObject:user];
             }
@@ -1106,7 +1106,7 @@
 {
     NSDictionary *invitedDates = _conversation.chatParticipants.chatInvitedDates;
     
-    int32_t selfUid = TGTelegraphInstance.clientUserId;
+    int64_t selfUid = TGTelegraphInstance.clientUserId;
     NSArray *sortedUsers = [participantUsers sortedArrayUsingComparator:^NSComparisonResult(TGUser *user1, TGUser *user2)
     {
         if (user1.botKind != user2.botKind)
@@ -1132,8 +1132,8 @@
         
         if (user1.presence.online)
         {
-            NSNumber *nDate1 = invitedDates[[[NSNumber alloc] initWithInt:user1.uid]];
-            NSNumber *nDate2 = invitedDates[[[NSNumber alloc] initWithInt:user2.uid]];
+            NSNumber *nDate1 = invitedDates[@(user1.uid)];
+            NSNumber *nDate2 = invitedDates[@(user2.uid)];
             
             if (nDate1 != nil && nDate2 != nil)
                 return [nDate1 intValue] < [nDate2 intValue] ? NSOrderedAscending : NSOrderedDescending;
@@ -1147,8 +1147,8 @@
         
         if (user1.presence.lastSeen < 0)
         {
-            NSNumber *nDate1 = invitedDates[[[NSNumber alloc] initWithInt:user1.uid]];
-            NSNumber *nDate2 = invitedDates[[[NSNumber alloc] initWithInt:user2.uid]];
+            NSNumber *nDate1 = invitedDates[@(user1.uid)];
+            NSNumber *nDate2 = invitedDates[@(user2.uid)];
             
             if (nDate1 != nil && nDate2 != nil)
                 return [nDate1 intValue] < [nDate2 intValue] ? NSOrderedAscending : NSOrderedDescending;
@@ -1286,7 +1286,7 @@
 - (void)_updateAllowCellEditing:(bool)animated
 {
     bool anyCanEdit = false;
-    int32_t selfUid = TGTelegraphInstance.clientUserId;
+    int64_t selfUid = TGTelegraphInstance.clientUserId;
     
     for (id item in _usersSection.items)
     {
@@ -1508,13 +1508,13 @@
 {
     if ([action isEqualToString:@"deleteUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
             [self _commitDeleteParticipant:uid];
     }
     else if ([action isEqualToString:@"openUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             TGUser *user = [TGDatabaseInstance() loadUser:uid];
@@ -1629,7 +1629,7 @@
         TGDispatchOnMainThread(^
         {
             NSRange range = [path rangeOfString:@"/addMember/("];
-            int32_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
+            int64_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
             
             [_soonToBeAddedUserIds removeObject:@(uid)];
             [_toBeUpdatedUserIds addObject:@(uid)];
@@ -1685,7 +1685,7 @@
     else if ([path hasPrefix:[NSString stringWithFormat:@"/tg/conversation/(%" PRId64 ")/deleteMember/", _conversationId]])
     {
         NSRange range = [path rangeOfString:@"/deleteMember/("];
-        int32_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
+        int64_t uid = (int32_t)[[path substringFromIndex:(range.location + range.length)] intValue];
         
         TGDispatchOnMainThread(^
         {

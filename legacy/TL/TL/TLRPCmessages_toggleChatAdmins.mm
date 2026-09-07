@@ -65,7 +65,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_toggleChatAdmins$messages_toggleChatAdmins *object = [[TLRPCmessages_toggleChatAdmins$messages_toggleChatAdmins alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.enabled = metaObject->getBool((int32_t)0x335ec0ee);
     return object;
 }

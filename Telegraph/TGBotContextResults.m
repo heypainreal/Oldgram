@@ -24,7 +24,7 @@
 
 @implementation TGBotContextResults
 
-- (instancetype)initWithUserId:(int32_t)userId peerId:(int64_t)peerId accessHash:(int64_t)accessHash isMedia:(bool)isMedia query:(NSString *)query nextOffset:(NSString *)nextOffset results:(NSArray *)results switchPm:(TGBotContextResultsSwitchPm *)switchPm {
+- (instancetype)initWithUserId:(int64_t)userId peerId:(int64_t)peerId accessHash:(int64_t)accessHash isMedia:(bool)isMedia query:(NSString *)query nextOffset:(NSString *)nextOffset results:(NSArray *)results switchPm:(TGBotContextResultsSwitchPm *)switchPm {
     self = [super init];
     if (self != nil) {
         _userId = userId;
@@ -40,11 +40,11 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    return [self initWithUserId:[aDecoder decodeInt32ForKey:@"userId"] peerId:[aDecoder decodeInt64ForKey:@"peerId"] accessHash:[aDecoder decodeInt64ForKey:@"accessHash"] isMedia:[aDecoder decodeBoolForKey:@"isMedia"] query:[aDecoder decodeObjectForKey:@"query"] nextOffset:[aDecoder decodeObjectForKey:@"nextOffset"] results:[aDecoder decodeObjectForKey:@"results"] switchPm:[aDecoder decodeObjectForKey:@"switchPm"]];
+    return [self initWithUserId:([aDecoder containsValueForKey:@"userId64"] ? [aDecoder decodeInt64ForKey:@"userId64"] : [aDecoder decodeInt32ForKey:@"userId"]) peerId:[aDecoder decodeInt64ForKey:@"peerId"] accessHash:[aDecoder decodeInt64ForKey:@"accessHash"] isMedia:[aDecoder decodeBoolForKey:@"isMedia"] query:[aDecoder decodeObjectForKey:@"query"] nextOffset:[aDecoder decodeObjectForKey:@"nextOffset"] results:[aDecoder decodeObjectForKey:@"results"] switchPm:[aDecoder decodeObjectForKey:@"switchPm"]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeInt32:_userId forKey:@"userId"];
+    [aCoder encodeInt64:_userId forKey:@"userId64"];
     [aCoder encodeInt64:_peerId forKey:@"peerId"];
     [aCoder encodeBool:_isMedia forKey:@"isMedia"];
     [aCoder encodeObject:_query forKey:@"query"];

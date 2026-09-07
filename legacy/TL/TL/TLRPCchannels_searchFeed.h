@@ -4,7 +4,7 @@
 
 @interface TLRPCchannels_searchFeed : TLMetaRpc
 
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic, strong) NSString *q;
 @property (nonatomic) int32_t offset_date;
 @property (nonatomic, strong) TLInputPeer *offset_peer;

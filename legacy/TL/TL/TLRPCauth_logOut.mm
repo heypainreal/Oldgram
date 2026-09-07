@@ -1,5 +1,7 @@
 #import "TLRPCauth_logOut.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -53,12 +55,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x5717da40;
+    return (int32_t)0x3e72ba19;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x8e64d5e6;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
@@ -71,6 +73,10 @@
 {
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+}
 
 @end
 

@@ -51,7 +51,7 @@
     return value;
 }
 
-+ (void)importKeychain:(id<MTKeychain>)keychain clientUserId:(int32_t)clientUserId
++ (void)importKeychain:(id<MTKeychain>)keychain clientUserId:(int64_t)clientUserId
 {
     NSMutableDictionary *datacenterAddressSets = [[NSMutableDictionary alloc] init];
     NSInteger currentDatacenterId = 0;

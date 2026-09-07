@@ -1,5 +1,7 @@
 #import "TLRPCcontacts_getLocated.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x61b5827c;
+    return (int32_t)0xd348bc44;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xb01f0675;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -101,6 +103,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.geo_point, true);
+}
 
 @end
 

@@ -41,7 +41,7 @@ static std::map<int64_t, int> gidToColor;
     TG_SYNCHRONIZED_END(gidToColor);
 }
 
-- (UIColor *)userColor:(int)uid
+- (UIColor *)userColor:(int64_t)uid
 {
     static __strong UIColor *userColors[8];
     
@@ -60,9 +60,13 @@ static std::map<int64_t, int> gidToColor;
     return userColors[[self userColorIndex:uid]];
 }
 
-- (int)userColorIndex:(int)uid
+- (int)userColorIndex:(int64_t)uid
 {
-    return uid % 7;
+    // Идентификатор бывает отрицательным (усечённый 64-битный uid, а для
+    // запасного варианта в группах сюда попадает и id самого чата). Остаток от
+    // деления тогда тоже отрицательный, и обращение к массиву цветов уходило
+    // за его начало — приложение падало при открытии группы.
+    return (int)(llabs(uid) % 7);
 }
 
 - (int)groupColorIndex:(int64_t)groupId
@@ -72,7 +76,7 @@ static std::map<int64_t, int> gidToColor;
         peerId = TGChannelIdFromPeerId(peerId);
     else if (TGPeerIdIsGroup(peerId))
         peerId = TGGroupIdFromPeerId(peerId);
-    return labs(peerId) % 7;
+    return (int)(llabs(peerId) % 7);
 }
 
 - (UIColor *)groupColor:(int64_t)groupId

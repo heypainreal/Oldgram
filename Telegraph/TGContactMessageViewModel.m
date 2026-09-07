@@ -137,7 +137,10 @@
         _mid = message.mid;
         _authorPeerId = message.fromUid;
         _incoming = !message.outgoing;
-        _incomingAppearance = _incoming || isChannel || _savedMessage;
+        // В супергруппе можно писать от имени самой группы: такое сообщение остаётся
+        // нашим исходящим. Слева всегда показываем только посты канала-ленты.
+        bool authorIsGroup = [authorPeer isKindOfClass:[TGConversation class]] && ((TGConversation *)authorPeer).isChannelGroup;
+        _incomingAppearance = _incoming || (isChannel && !(message.outgoing && authorIsGroup)) || _savedMessage;
         _deliveryState = message.deliveryState;
         _read = ![_context isMessageUnread:message];
         _date = (int32_t)message.date;
@@ -958,12 +961,12 @@
                 [_context.companionHandle requestAction:@"messageSelectionRequested" options:@{@"mid": @(_mid), @"peerId": @(_authorPeerId)}];
             else if (_forwardedHeaderModel && CGRectContainsPoint(_forwardedHeaderModel.frame, point)) {
                 if (_viaUser != nil && [_forwardedHeaderModel linkAtPoint:CGPointMake(point.x - _forwardedHeaderModel.frame.origin.x, point.y - _forwardedHeaderModel.frame.origin.y) regionData:NULL]) {
-                    [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @((int32_t)_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
+                    [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @(_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
                 } else {
                     if (TGPeerIdIsChannel(_forwardedPeerId)) {
                         [_context.companionHandle requestAction:@"peerAvatarTapped" options:@{@"peerId": @(_forwardedPeerId), @"messageId": @(_forwardedMessageId)}];
                     } else {
-                        [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @((int32_t)_forwardedPeerId)}];
+                        [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @(_forwardedPeerId)}];
                     }
                 }
             }

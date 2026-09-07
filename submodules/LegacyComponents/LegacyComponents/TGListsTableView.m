@@ -144,6 +144,13 @@
     //FreedomBitfield tableFlagsOffset = freedomIvarBitOffset([UITableView class], 0x3fa93ecU, 0xe3ca73b1U);
     //if (tableFlagsOffset.offset != -1 && tableFlagsOffset.bit != -1)
     //    freedomSetBitfield((__bridge void *)self, tableFlagsOffset, 1);
+
+    // iOS 15 сам добавляет отступ над заголовком каждой секции, даже когда
+    // заголовка нет. В списке чатов это давало пустую полосу между строкой
+    // поиска и закреплёнными чатами.
+    if (@available(iOS 15.0, *)) {
+        self.sectionHeaderTopPadding = 0.0f;
+    }
 }
 
 - (void)scrollToTop

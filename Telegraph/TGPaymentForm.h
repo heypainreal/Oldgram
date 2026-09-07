@@ -102,7 +102,7 @@
 
 @property (nonatomic, readonly) bool canSaveCredentials;
 @property (nonatomic, readonly) bool passwordMissing;
-@property (nonatomic, readonly) int32_t botId;
+@property (nonatomic, readonly) int64_t botId;
 @property (nonatomic, strong, readonly) NSString *url;
 @property (nonatomic, strong, readonly) TGInvoice *invoice;
 @property (nonatomic, readonly) int32_t providerId;
@@ -111,7 +111,7 @@
 @property (nonatomic, strong, readonly) TGPaymentRequestedInfo *savedInfo;
 @property (nonatomic, strong, readonly) TGPaymentSavedCredentialsCard *savedCredentials;
 
-- (instancetype)initWithCanSaveCredentials:(bool)canSaveCredentials passwordMissing:(bool)passwordMissing botId:(int32_t)botId url:(NSString *)url invoice:(TGInvoice *)invoice providerId:(int32_t)providerId nativeProvider:(NSString *)nativeProvider nativeParams:(NSString *)nativeParams savedInfo:(TGPaymentRequestedInfo *)savedInfo savedCredentials:(TGPaymentSavedCredentialsCard *)savedCredentials;
+- (instancetype)initWithCanSaveCredentials:(bool)canSaveCredentials passwordMissing:(bool)passwordMissing botId:(int64_t)botId url:(NSString *)url invoice:(TGInvoice *)invoice providerId:(int32_t)providerId nativeProvider:(NSString *)nativeProvider nativeParams:(NSString *)nativeParams savedInfo:(TGPaymentRequestedInfo *)savedInfo savedCredentials:(TGPaymentSavedCredentialsCard *)savedCredentials;
 
 @end
 
@@ -141,7 +141,7 @@
 @interface TGPaymentReceipt : NSObject
 
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t botId;
+@property (nonatomic, readonly) int64_t botId;
 @property (nonatomic, strong, readonly) TGInvoice *invoice;
 @property (nonatomic, readonly) int32_t providerId;
 @property (nonatomic, strong, readonly) TGPaymentRequestedInfo *info;
@@ -150,6 +150,6 @@
 @property (nonatomic, readonly) int64_t totalAmount;
 @property (nonatomic, strong, readonly) NSString *credentialsTitle;
 
-- (instancetype)initWithDate:(int32_t)date botId:(int32_t)botId invoice:(TGInvoice *)invoice providerId:(int32_t)providerId info:(TGPaymentRequestedInfo *)info shippingOption:(TGShippingOption *)shippingOption currency:(NSString *)currency totalAmount:(int64_t)totalAmount credentialsTitle:(NSString *)credentialsTitle;
+- (instancetype)initWithDate:(int32_t)date botId:(int64_t)botId invoice:(TGInvoice *)invoice providerId:(int32_t)providerId info:(TGPaymentRequestedInfo *)info shippingOption:(TGShippingOption *)shippingOption currency:(NSString *)currency totalAmount:(int64_t)totalAmount credentialsTitle:(NSString *)credentialsTitle;
 
 @end

@@ -1,5 +1,7 @@
 #import "TLRPCcontacts_resolveUsername.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xf93ccba3;
+    return (int32_t)0x725afbbc;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xfd586d9b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -79,6 +81,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeString:self.username == nil ? @"" : self.username];
+}
 
 @end
 

@@ -39,6 +39,49 @@
 
 @end
 
+/// Скрытая вьюха в окне: UIKit сообщает о смене системного оформления только
+/// через traitCollectionDidChange, отдельного уведомления для этого нет.
+@interface TGSystemAppearanceObserverView : UIView
+@end
+
+@implementation TGSystemAppearanceObserverView
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if (@available(iOS 13.0, *)) {
+        if (previousTraitCollection.userInterfaceStyle != self.traitCollection.userInterfaceStyle) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"TGSystemAppearanceChanged" object:nil];
+        }
+    }
+}
+
+@end
+
+static bool TGSystemAppearanceIsDark(void)
+{
+    if (@available(iOS 13.0, *)) {
+        return [UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark;
+    }
+    return false;
+}
+
+static void TGInstallSystemAppearanceObserver(void)
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UIWindow *window = [[UIApplication sharedApplication].windows firstObject];
+        if (window == nil) {
+            return;
+        }
+        TGSystemAppearanceObserverView *view = [[TGSystemAppearanceObserverView alloc] initWithFrame:CGRectZero];
+        view.userInteractionEnabled = false;
+        view.hidden = true;
+        [window addSubview:view];
+    });
+}
+
 @implementation TGPresentation
 
 - (TGNavigationBarPallete *)navigationBarPallete
@@ -334,6 +377,34 @@ static id<SDisposable> autoNightDisposable;
     return (int)secs;
 }
 
+/// Текущее оформление системы: true — тёмное. Обновляется при переключении.
++ (SSignal *)systemAppearanceSignal
+{
+    return [[SSignal alloc] initWithGenerator:^id<SDisposable>(SSubscriber *subscriber) {
+        __block id observer = nil;
+        
+        dispatch_block_t setup = ^{
+            TGInstallSystemAppearanceObserver();
+            [subscriber putNext:@(TGSystemAppearanceIsDark())];
+            observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"TGSystemAppearanceChanged" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(__unused NSNotification *notification) {
+                [subscriber putNext:@(TGSystemAppearanceIsDark())];
+            }];
+        };
+        
+        if ([NSThread isMainThread]) {
+            setup();
+        } else {
+            dispatch_async(dispatch_get_main_queue(), setup);
+        }
+        
+        return [[SBlockDisposable alloc] initWithBlock:^{
+            if (observer != nil) {
+                [[NSNotificationCenter defaultCenter] removeObserver:observer];
+            }
+        }];
+    }];
+}
+
 + (SSignal *)autoNightThemeSignal
 {
     return [[self autoNightPreferences] mapToSignal:^SSignal *(TGPresentationAutoNightPreferences *preferences)
@@ -380,7 +451,11 @@ static id<SDisposable> autoNightDisposable;
         }
         else
         {
-            return [SSignal single:@0];
+            // Автоматики не настроено — следуем оформлению системы.
+            int32_t nightPalette = preferences.preferredPalette != 0 ? preferences.preferredPalette : 2;
+            return [[self systemAppearanceSignal] map:^id(NSNumber *isDark) {
+                return @(isDark.boolValue ? nightPalette : 0);
+            }];
         }
     }];
 }

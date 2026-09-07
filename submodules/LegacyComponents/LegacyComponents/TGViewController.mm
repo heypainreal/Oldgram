@@ -1083,7 +1083,23 @@ static id<LegacyComponentsContext> _defaultContext = nil;
 
 + (UIEdgeInsets)safeAreaInsetForOrientation:(UIInterfaceOrientation)orientation
 {
-    if (TGIsPad() || (int)TGScreenSize().height != 812)
+    if (TGIsPad())
+        return UIEdgeInsetsZero;
+    
+    // Раньше вырез определялся единственной высотой экрана (iPhone X, 812pt),
+    // поэтому на устройствах с Dynamic Island отступы получались нулевыми и
+    // панели заезжали под вырез. Берём фактическую безопасную зону окна.
+    if (@available(iOS 11.0, *)) {
+        for (UIWindow *appWindow in [[LegacyComponentsGlobals provider] applicationWindows]) {
+            UIEdgeInsets insets = appWindow.safeAreaInsets;
+            if (insets.top > FLT_EPSILON || insets.bottom > FLT_EPSILON ||
+                insets.left > FLT_EPSILON || insets.right > FLT_EPSILON) {
+                return insets;
+            }
+        }
+    }
+    
+    if ((int)TGScreenSize().height != 812)
         return UIEdgeInsetsZero;
         
     switch (orientation)

@@ -69,7 +69,7 @@
             return [TGDatabaseInstance() modify:^id{
                 NSMutableArray *users = [[NSMutableArray alloc] init];
                 for (NSNumber *nUid in userIds) {
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                     if (user != nil) {
                         [users addObject:user];
                     }

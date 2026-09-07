@@ -14,7 +14,7 @@
 
 @implementation TGShareContext
 
-- (instancetype)initWithContainerUrl:(NSURL *)containerUrl mtContext:(MTContext *)mtContext mtProto:(MTProto *)mtProto mtRequestService:(MTRequestMessageService *)mtRequestService clientUserId:(int32_t)clientUserId legacyDatabase:(TGLegacyDatabase *)legacyDatabase
+- (instancetype)initWithContainerUrl:(NSURL *)containerUrl mtContext:(MTContext *)mtContext mtProto:(MTProto *)mtProto mtRequestService:(MTRequestMessageService *)mtRequestService clientUserId:(int64_t)clientUserId legacyDatabase:(TGLegacyDatabase *)legacyDatabase
 {
     self = [super init];
     if (self != nil)
@@ -58,7 +58,7 @@
         {
             MTRequest *request = [[MTRequest alloc] init];
 
-            [request setPayload:functionContext.payload metadata:functionContext.metadata responseParser:functionContext.responseParser];
+            [request setPayload:functionContext.payload metadata:functionContext.metadata shortMetadata:nil responseParser:functionContext.responseParser];
             
             [request setCompleted:^(id result, __unused NSTimeInterval timestamp, MTRpcError *error)
             {

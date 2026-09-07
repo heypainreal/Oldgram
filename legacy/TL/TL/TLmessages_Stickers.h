@@ -16,7 +16,7 @@
 
 @interface TLmessages_Stickers$messages_stickers : TLmessages_Stickers
 
-@property (nonatomic) int32_t n_hash;
+@property (nonatomic) int64_t n_hash;
 @property (nonatomic, retain) NSArray *stickers;
 
 @end

@@ -1,5 +1,7 @@
 #import "TLInputChannel.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -64,18 +66,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xafeb712e;
+    return (int32_t)0xf35aec28;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x59bec2a2;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLInputChannel$inputChannel *object = [[TLInputChannel$inputChannel alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.access_hash = metaObject->getInt64((int32_t)0x8f305224);
     return object;
 }
@@ -96,6 +98,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.channel_id];
+    [os writeInt64:(int64_t)self.access_hash];
+}
 
 @end
 

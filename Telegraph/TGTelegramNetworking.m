@@ -68,7 +68,7 @@ MTInternalIdClass(TGDownloadWorker)
 
 - (void)setBody:(TLMetaRpc *)body
 {
-    [self setPayload:[TGTLSerialization serializeMessage:body] metadata:body responseParser:^id(NSData *data)
+    [self setPayload:[TGTLSerialization serializeMessage:body] metadata:body shortMetadata:nil responseParser:^id(NSData *data)
     {
         return [TGTLSerialization parseResponse:data request:body];
     }];
@@ -722,8 +722,9 @@ static TGTelegramNetworking *singleton = nil;
     {
         [_context addAddressForDatacenterWithId:datacenterId address:address];
         
-        MTTransportScheme *scheme = [_context transportSchemeForDatacenterWithId:datacenterId media:false isProxy:false];
-        if (![scheme.address isEqualToAddress:address])
+        // В новом MtProtoKit схемы отдаются списком; берём первую подходящую.
+        MTTransportScheme *scheme = [[_context transportSchemesForDatacenterWithId:datacenterId media:false enforceMedia:false isProxy:false] firstObject];
+        if (scheme != nil && ![scheme.address isEqualToAddress:address])
         {
             scheme = [[MTTransportScheme alloc] initWithTransportClass:scheme.transportClass address:address media:false];
             [_context updateTransportSchemeForDatacenterWithId:datacenterId transportScheme:scheme media:false isProxy:false];

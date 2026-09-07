@@ -1,5 +1,7 @@
 #import "TLInputSecureValue.h"
 
+#import "TLMetaClassStore.h"
+
 @implementation TLInputSecureValue
 
 - (int32_t)TLconstructorSignature
@@ -33,12 +35,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x94fa65b;
+    return (int32_t)0xdb21d0a7;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x23663ab1;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -65,6 +67,27 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x0000002f)];
+    TLMetaClassStore::serializeObject(os, self.type, true);
+    if (self.flags & (1 << 0)) {
+        TLMetaClassStore::serializeObject(os, self.data, true);
+    }
+    if (self.flags & (1 << 1)) {
+        TLMetaClassStore::serializeObject(os, self.front_side, true);
+    }
+    if (self.flags & (1 << 2)) {
+        TLMetaClassStore::serializeObject(os, self.reverse_side, true);
+    }
+    if (self.flags & (1 << 3)) {
+        TLMetaClassStore::serializeObject(os, self.selfie, true);
+    }
+    if (self.flags & (1 << 5)) {
+        TLMetaClassStore::serializeObject(os, self.plain_data, true);
+    }
+}
 
 @end
 

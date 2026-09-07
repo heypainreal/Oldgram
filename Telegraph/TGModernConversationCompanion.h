@@ -191,15 +191,15 @@ typedef enum {
 - (void)controllerWantsToSendGame:(TGGameMediaAttachment *)gameMedia asReplyToMessageId:(int32_t)replyMessageId botContextResult:(TGBotContextResultAttachment *)botContextResult botReplyMarkup:(TGBotReplyMarkup *)botReplyMarkup;
 - (void)controllerWantsToResendMessages:(NSArray *)messageIds;
 - (void)controllerWantsToForwardMessages:(NSArray *)messageIndices;
-- (void)controllerWantsToCreateContact:(int32_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
-- (void)controllerWantsToAddContactToExisting:(int32_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
+- (void)controllerWantsToCreateContact:(int64_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
+- (void)controllerWantsToAddContactToExisting:(int64_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
 - (void)controllerWantsToApplyLocalization:(NSString *)filePath;
 - (void)controllerClearedConversation;
 - (void)systemClearedConversation;
 - (void)controllerDeletedMessages:(NSArray *)messageIds forEveryone:(bool)forEveryone completion:(void (^)())completion;
 - (void)controllerCanReadHistoryUpdated;
 - (void)controllerCanRegroupUnreadIncomingMessages;
-- (void)controllerRequestedNavigationToConversationWithUser:(int32_t)uid;
+- (void)controllerRequestedNavigationToConversationWithUser:(int64_t)uid;
 - (bool)controllerShouldStoreCapturedAssets;
 - (bool)controllerShouldCacheServerAssets;
 - (bool)controllerShouldLiveUploadVideo;

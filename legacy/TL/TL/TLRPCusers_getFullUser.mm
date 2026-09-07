@@ -1,5 +1,7 @@
 #import "TLRPCusers_getFullUser.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xca30a5b1;
+    return (int32_t)0xb60f5918;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xb6d156bf;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -80,6 +82,11 @@
     }
 }
 
+// users.getFullUser#b60f5918
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.n_id, true);
+}
 
 @end
 

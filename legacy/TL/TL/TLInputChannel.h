@@ -16,7 +16,7 @@
 
 @interface TLInputChannel$inputChannel : TLInputChannel
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic) int64_t access_hash;
 
 @end

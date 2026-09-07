@@ -30,7 +30,7 @@
 
 @interface TLDialog$dialogFeedMeta : TLDialog
 
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic, retain) NSArray *feed_other_channels;
 @property (nonatomic, retain) TLFeedPosition *read_max_position;
 @property (nonatomic) int32_t unread_count;

@@ -398,7 +398,7 @@ typedef enum {
                     [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeMention contents:[text substringWithRange:NSMakeRange(entity.range.location + 1, entity.range.length - 1)]]];
                 }
             } else if ([entity isKindOfClass:[TGMessageEntityMentionName class]]) {
-                [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeLink contents:[NSString stringWithFormat:@"tg-user://%d", ((TGMessageEntityMentionName *)entity).userId]]];
+                [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeLink contents:[NSString stringWithFormat:@"tg-user://%lld", (long long)((TGMessageEntityMentionName *)entity).userId]]];
             } else if ([entity isKindOfClass:[TGMessageEntityPre class]]) {
                 [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeCode contents:@""]];
             } else if ([entity isKindOfClass:[TGMessageEntityTextUrl class]]) {
@@ -864,7 +864,7 @@ typedef enum {
                             [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeMention contents:[_text substringWithRange:NSMakeRange(entity.range.location + 1, entity.range.length - 1)]]];
                         }
                     } else if ([entity isKindOfClass:[TGMessageEntityMentionName class]]) {
-                        [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeLink contents:[NSString stringWithFormat:@"tg-user://%d", ((TGMessageEntityMentionName *)entity).userId]]];
+                        [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeLink contents:[NSString stringWithFormat:@"tg-user://%lld", (long long)((TGMessageEntityMentionName *)entity).userId]]];
                     } else if ([entity isKindOfClass:[TGMessageEntityPre class]]) {
                         [textCheckingResults addObject:[[TGTextCheckingResult alloc] initWithRange:entity.range type:TGTextCheckingResultTypeCode contents:@""]];
                     } else if ([entity isKindOfClass:[TGMessageEntityTextUrl class]]) {

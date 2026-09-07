@@ -24,7 +24,10 @@ static void TGSimpleImageViewDidMoveFromWindow(__unused id self, __unused SEL _c
 
 - (UITraitCollection *)traitCollection
 {
-    return nil;
+    // Раньше здесь возвращался nil ради экономии на разрешении трейтов.
+    // Современный UIKit при установке картинки требует настоящую коллекцию
+    // и кидает исключение на nil.
+    return [super traitCollection];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)__unused previousTraitCollection

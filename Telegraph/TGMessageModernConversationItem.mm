@@ -44,9 +44,9 @@ typedef enum {
     TGCachedMessageTypeNotification = 3
 } TGCachedMessageType;
 
-int32_t TGMessageModernConversationItemLocalUserId = 0;
+int64_t TGMessageModernConversationItemLocalUserId = 0;
 
-static UIColor *coloredNameForUid(int uid, __unused int currentUserId)
+static UIColor *coloredNameForUid(int64_t uid, __unused int64_t currentUserId)
 {
     return [[TGInterfaceAssets instance] userColor:uid];
 }
@@ -674,7 +674,7 @@ static UIColor *coloredNameForUid(int uid, __unused int currentUserId)
     int webpageIndex = -1;
     int gameIndex = -1;
     int invoiceIndex = -1;
-    int32_t contactUid = 0;
+    int64_t contactUid = 0;
     bool unsupportedMessage = false;
     TGUser *viaUser = nil;
     
@@ -778,7 +778,7 @@ static UIColor *coloredNameForUid(int uid, __unused int currentUserId)
             else if (attachment.type == TGInvoiceMediaAttachmentType)
                 invoiceIndex = index;
             else if (attachment.type == TGViaUserAttachmentType) {
-                int32_t userId = ((TGViaUserAttachment *)attachment).userId;
+                int64_t userId = ((TGViaUserAttachment *)attachment).userId;
                 if (userId == 0) {
                     NSString *username = ((TGViaUserAttachment *)attachment).username;
                     if (username.length != 0) {
@@ -887,7 +887,7 @@ static UIColor *coloredNameForUid(int uid, __unused int currentUserId)
                         if (authorPeer == nil)
                         {
                             if (TGPeerIdIsUser(message.fromUid))
-                                authorPeer = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+                                authorPeer = [TGDatabaseInstance() loadUser:message.fromUid];
                             else
                                 authorPeer = [TGDatabaseInstance() loadConversationWithId:message.fromUid];
                         }

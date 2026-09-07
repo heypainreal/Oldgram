@@ -40,14 +40,14 @@
         NSMutableArray *users = [[NSMutableArray alloc] init];
         for (NSNumber *nUid in blockedList)
         {
-            TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+            TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
             if (user != nil)
                 [users addObject:user];
         }
         [ActionStageInstance() dispatchResource:@"/tg/blockedUsers" resource:[[SGraphObjectNode alloc] initWithObject:users]];
     }];
     
-    TGUser *user = [TGDatabaseInstance() loadUser:(int)peerId];
+    TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
     if (user != nil && block) {
         _resetPeerRatingDisposable = [[TGRecentPeersSignals resetGenericPeerRating:user.uid accessHash:user.phoneNumberHash] startWithNext:nil error:^(__unused id error) {
             [ActionStageInstance() actionCompleted:self.path result:nil];

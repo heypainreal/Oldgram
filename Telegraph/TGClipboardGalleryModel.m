@@ -77,7 +77,7 @@
             
             [strongSelf setCurrentItemWithIndex:index];
         };
-        _interfaceView.captionSet = ^(id<TGModernGalleryEditableItem> item, NSString *caption)
+        _interfaceView.captionSet = ^(id<TGModernGalleryItem> item, NSString *caption)
         {
             __strong TGMediaPickerGalleryModel *strongSelf = weakSelf;
             if (strongSelf == nil || strongSelf.saveItemCaption == nil)

@@ -12,7 +12,7 @@
 
 @interface TGAddToExistingContactController () <TGCreateContactControllerDelegate>
 {
-    int32_t _uid;
+    int64_t _uid;
     NSString *_phoneNumber;
     TGContactMediaAttachment *_contact;
 }
@@ -21,7 +21,7 @@
 
 @implementation TGAddToExistingContactController
 
-- (id)initWithUid:(int32_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
+- (id)initWithUid:(int64_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
 {
     self = [super initWithContactsMode:TGContactsModeRegistered | TGContactsModePhonebook | TGContactsModeSelectModal];
     if (self != nil)

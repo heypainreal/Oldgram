@@ -811,7 +811,7 @@ NSString *TGMentionBoldAttributeName = @"TGMentionBoldAttributeName";
     return string.string;
 }
 
-+ (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField username:(bool)username userId:(int32_t)userId
++ (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField username:(bool)username userId:(int64_t)userId
 {
     NSString *replacementText = [mention stringByAppendingString:@" "];
     

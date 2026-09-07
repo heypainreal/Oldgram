@@ -8,7 +8,7 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return 0x191ba9c5;
+    return (int32_t)0xa0f4cb4f;
 }
 
 - (int32_t)TLconstructorName
@@ -33,7 +33,10 @@
 
 - (void)TLserialize:(NSOutputStream *)os
 {
-    [os writeInt32:self.flags];
+    // layer 228: messages.getDialogs#a0f4cb4f flags:# exclude_pinned:flags.0?true
+    // folder_id:flags.1?int offset_date:int offset_id:int offset_peer:InputPeer
+    // limit:int hash:long. Ленты (feed_id) в новой схеме нет, поэтому флаги пустые.
+    [os writeInt32:0];
     
     [os writeInt32:self.offset_date];
     
@@ -42,6 +45,8 @@
     TLMetaClassStore::serializeObject(os, self.offset_peer, true);
 
     [os writeInt32:self.limit];
+    
+    [os writeInt64:0];
 }
 
 - (id<TLObject>)TLdeserialize:(NSInputStream *)__unused is signature:(int32_t)__unused signature environment:(id<TLSerializationEnvironment>)__unused environment context:(TLSerializationContext *)__unused context error:(__autoreleasing NSError **)__unused error

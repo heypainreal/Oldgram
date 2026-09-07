@@ -63,7 +63,7 @@
     }];
 }
 
-+ (void)addRecentBot:(int32_t)userId {
++ (void)addRecentBot:(int64_t)userId {
     if (userId == 0) {
         return;
     }

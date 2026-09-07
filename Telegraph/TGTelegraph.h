@@ -126,7 +126,7 @@ extern TGTelegraph *TGTelegraphInstance;
 @property (nonatomic, strong) NSString *apiHash;
 
 // Session Info
-@property (nonatomic) int clientUserId;
+@property (nonatomic) int64_t clientUserId;
 @property (nonatomic) bool clientIsActivated;
 
 @property (nonatomic, strong, readonly) SMulticastSignalManager *genericTasksSignalManager;
@@ -164,11 +164,11 @@ extern TGTelegraph *TGTelegraphInstance;
 - (void)dispatchUserDataChanges:(TGUser *)user changes:(int)changes;
 - (void)dispatchUserPresenceChanges:(int64_t)userId presence:(TGUserPresence)presence;
 #ifdef __cplusplus
-- (void)dispatchMultipleUserPresenceChanges:(std::shared_ptr<std::map<int, TGUserPresence> >)presenceMap;
+- (void)dispatchMultipleUserPresenceChanges:(std::shared_ptr<std::map<int64_t, TGUserPresence> >)presenceMap;
 #endif
-- (void)dispatchUserActivity:(int)uid inConversation:(int64_t)conversationId type:(NSString *)type;
+- (void)dispatchUserActivity:(int64_t)uid inConversation:(int64_t)conversationId type:(NSString *)type;
 - (NSDictionary *)typingUserActivitiesInConversationFromMainThread:(int64_t)conversationId;
-- (void)dispatchUserLinkChanged:(int)uid link:(int)link;
+- (void)dispatchUserLinkChanged:(int64_t)uid link:(int)link;
 
 - (void)subscribeToUserUpdates:(ASHandle *)watcherHandle;
 - (void)unsubscribeFromUserUpdates:(ASHandle *)watcherHandle;
@@ -190,7 +190,7 @@ extern TGTelegraph *TGTelegraphInstance;
 - (NSObject *)doSignUp:(NSString *)phoneNumber phoneHash:(NSString *)phoneHash phoneCode:(NSString *)phoneCode firstName:(NSString *)firstName lastName:(NSString *)lastName requestBuilder:(TGSignUpRequestBuilder *)requestBuilder;
 - (NSObject *)doSignIn:(NSString *)phoneNumber phoneHash:(NSString *)phoneHash phoneCode:(NSString *)phoneCode requestBuilder:(TGSignInRequestBuilder *)requestBuilder;
 - (void)processEncryptedPasscode;
-- (void)processAuthorizedWithUserId:(int)uid clientIsActivated:(bool)clientIsActivated;
+- (void)processAuthorizedWithUserId:(int64_t)uid clientIsActivated:(bool)clientIsActivated;
 - (void)processUnauthorized;
 - (NSObject *)doRequestLogout:(TGLogoutRequestBuilder *)actor;
 
@@ -203,15 +203,15 @@ extern TGTelegraph *TGTelegraphInstance;
 
 - (NSObject *)doUpdatePushSubscription:(bool)subscribe deviceToken:(NSString *)deviceToken requestBuilder:(TGPushActionsRequestBuilder *)requestBuilder;
 
-- (NSObject *)doRequestUserData:(int)uid requestBuilder:(TGUserDataRequestBuilder *)requestBuilder;
-- (NSObject *)doRequestExtendedUserData:(int)uid actor:(TGExtendedUserDataRequestActor *)actor;
+- (NSObject *)doRequestUserData:(int64_t)uid requestBuilder:(TGUserDataRequestBuilder *)requestBuilder;
+- (NSObject *)doRequestExtendedUserData:(int64_t)uid actor:(TGExtendedUserDataRequestActor *)actor;
 - (id)doRequestContactStatuses:(TGUpdateUserStatusesActor *)actor;
 
 - (NSObject *)doRequestState:(TGUpdateStateRequestBuilder *)requestBuilder;
 - (NSObject *)doRequestStateDelta:(int)pts date:(int)date qts:(int)qts requestBuilder:(TGUpdateStateRequestBuilder *)requestBuilder;
 
 - (NSObject *)doExportContacts:(NSArray *)users requestBuilder:(TGSynchronizeContactsActor *)requestBuilder;
-- (NSObject *)doRequestContactList:(int32_t)hash actor:(TGSynchronizeContactsActor *)actor;
+- (NSObject *)doRequestContactList:(int64_t)hash actor:(TGSynchronizeContactsActor *)actor;
 - (NSObject *)doRequestContactIdList:(TGSynchronizeContactsActor *)actor;
 - (NSObject *)doRequestSuggestedContacts:(int)limit actor:(TGSuggestedContactsRequestActor *)actor;
 - (NSObject *)doLocateContacts:(double)latitude longitude:(double)longitude radius:(int)radius discloseLocation:(bool)discloseLocation actor:(id<TGLocateContactsProtocol>)actor;
@@ -235,8 +235,8 @@ extern TGTelegraph *TGTelegraphInstance;
 - (NSObject *)doChangeConversationTitle:(int64_t)conversationId accessHash:(int64_t)accessHash title:(NSString *)title actor:(TGConversationChangeTitleRequestActor *)actor;
 - (NSObject *)doChangeConversationPhoto:(int64_t)conversationId accessHash:(int64_t)accessHash photo:(TLInputChatPhoto *)photo actor:(TGConversationChangePhotoActor *)actor;
 - (NSObject *)doCreateChat:(NSArray *)uidList title:(NSString *)title actor:(TGConversationCreateChatRequestActor *)actor;
-- (NSObject *)doAddConversationMember:(int64_t)conversationId uid:(int)uid actor:(TGConversationAddMemberRequestActor *)actor;
-- (NSObject *)doDeleteConversationMember:(int64_t)conversationId uid:(int)uid actor:(id<TGDeleteChatMemberProtocol>)actor;
+- (NSObject *)doAddConversationMember:(int64_t)conversationId uid:(int64_t)uid actor:(TGConversationAddMemberRequestActor *)actor;
+- (NSObject *)doDeleteConversationMember:(int64_t)conversationId uid:(int64_t)uid actor:(id<TGDeleteChatMemberProtocol>)actor;
 - (NSObject *)doDeleteMessages:(NSArray *)messageIds actor:(TGSynchronizeActionQueueActor *)actor;
 - (NSObject *)doDeleteConversation:(int64_t)conversationId onlyClear:(bool)onlyClear maxId:(int32_t)maxId accessHash:(int64_t)accessHash offset:(int)offset actor:(TGSynchronizeActionQueueActor *)actor;
 
@@ -261,7 +261,7 @@ extern TGTelegraph *TGTelegraphInstance;
 - (id)doRequestWallpaperList:(TGWallpaperListRequestActor *)actor;
 
 - (id)doRequestEncryptionConfig:(TGRequestEncryptedChatActor *)actor version:(int)version;
-- (id)doRequestEncryptedChat:(int)uid randomId:(int64_t)randomId gABytes:(NSData *)gABytes actor:(TGRequestEncryptedChatActor *)actor;
+- (id)doRequestEncryptedChat:(int64_t)uid randomId:(int64_t)randomId gABytes:(NSData *)gABytes actor:(TGRequestEncryptedChatActor *)actor;
 - (id)doAcceptEncryptedChat:(int64_t)encryptedChatId accessHash:(int64_t)accessHash gBBytes:(NSData *)gBBytes keyFingerprint:(int64_t)keyFingerprint actor:(TGEncryptedChatResponseActor *)actor;
 - (id)doRejectEncryptedChat:(int64_t)encryptedConversationId actor:(TGSynchronizeActionQueueActor *)actor;
 - (id)doReportEncryptedConversationTypingActivity:(int64_t)encryptedConversationId accessHash:(int64_t)accessHash actor:(TGConversationActivityRequestBuilder *)actor;
@@ -278,7 +278,7 @@ extern TGTelegraph *TGTelegraphInstance;
 - (id)doChangePasslockSettings:(bool)passlockEnabled completion:(void (^)(bool))completion;
 
 - (TLInputPeer *)createInputPeerForConversation:(int64_t)conversationId accessHash:(int64_t)accessHash;
-- (TLInputUser *)createInputUserForUid:(int)uid;
+- (TLInputUser *)createInputUserForUid:(int64_t)uid;
 
 - (NSString *)currentDeviceModel;
 - (NSString *)langCode;

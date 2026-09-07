@@ -28,6 +28,19 @@ NSString *const TGBridgeChatDeliveryErrorKey = @"deliveryError";
 NSString *const TGBridgeChatKey = @"chat";
 NSString *const TGBridgeChatsArrayKey = @"chats";
 
+
+/// Безопасное добавление идентификатора пользователя в индекс-множество.
+///
+/// NSMutableIndexSet принимает только неотрицательные значения, а usercode
+/// клал туда усечённый до 32 бит идентификатор: у современных аккаунтов он
+/// уходит в минус, и приложение падало с исключением.
+static inline void TGBridgeAddUserId(NSMutableIndexSet *set, int64_t uid)
+{
+    if (uid > 0 && uid <= (int64_t)NSIntegerMax) {
+        [set addIndex:(NSUInteger)uid];
+    }
+}
+
 @implementation TGBridgeChat
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -99,9 +112,9 @@ NSString *const TGBridgeChatsArrayKey = @"chats";
 {
     NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
     if (!self.isGroup && !self.isChannel && self.identifier != 0)
-        [userIds addIndex:(int32_t)self.identifier];
+        TGBridgeAddUserId(userIds, self.identifier);
     if ((!self.isChannel || self.isChannelGroup) && self.fromUid != self.identifier && self.fromUid != 0 && !TGPeerIdIsChannel(self.fromUid))
-        [userIds addIndex:self.fromUid];
+        TGBridgeAddUserId(userIds, self.fromUid);
     
     for (TGBridgeMediaAttachment *attachment in self.media)
     {
@@ -109,7 +122,7 @@ NSString *const TGBridgeChatsArrayKey = @"chats";
         {
             TGBridgeActionMediaAttachment *actionAttachment = (TGBridgeActionMediaAttachment *)attachment;
             if (actionAttachment.actionData[@"uid"] != nil)
-                [userIds addIndex:[actionAttachment.actionData[@"uid"] integerValue]];
+                TGBridgeAddUserId(userIds, [actionAttachment.actionData[@"uid"] longLongValue]);
         }
     }
     
@@ -121,7 +134,7 @@ NSString *const TGBridgeChatsArrayKey = @"chats";
     NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
     
     for (NSNumber *uid in self.participants)
-        [userIds addIndex:uid.unsignedIntegerValue];
+        TGBridgeAddUserId(userIds, uid.longLongValue);
     
     return userIds;
 }

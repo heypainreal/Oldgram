@@ -21,7 +21,7 @@
 
 @interface TLInputUser$inputUser : TLInputUser
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic) int64_t access_hash;
 
 @end

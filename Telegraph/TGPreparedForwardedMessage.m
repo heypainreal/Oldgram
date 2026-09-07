@@ -67,7 +67,7 @@
                 _forwardPeerId = innerMessage.cid;
                 _forwardPostId = innerMessage.mid;
                 if (!TGPeerIdIsChannel(innerMessage.fromUid) && innerMessage.fromUid != 0) {
-                    _forwardAuthorUserId = (int32_t)innerMessage.fromUid;
+                    _forwardAuthorUserId = innerMessage.fromUid;
                 }
                 _forwardAuthorSignature = innerMessage.authorSignature;
             } else {

@@ -23,6 +23,6 @@
 @property (nonatomic, weak) id<TGUserCollectionItemViewDelegate> delegate;
 
 - (void)setShowAvatar:(bool)setShowAvatar;
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int32_t)uidForPlaceholderCalculation avatarUri:(NSString *)avatarUri;
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int64_t)uidForPlaceholderCalculation avatarUri:(NSString *)avatarUri;
 
 @end

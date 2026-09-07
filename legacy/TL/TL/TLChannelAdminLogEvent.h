@@ -9,7 +9,7 @@
 
 @property (nonatomic) int64_t n_id;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic, retain) TLChannelAdminLogEventAction *action;
 
 @end

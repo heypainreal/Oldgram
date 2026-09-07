@@ -1,5 +1,7 @@
 #import "TLRPCauth_signUp.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x1b067634;
+    return (int32_t)0xaac7b717;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x82dec460;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -107,6 +109,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeString:self.phone_number == nil ? @"" : self.phone_number];
+    [os writeString:self.phone_code_hash == nil ? @"" : self.phone_code_hash];
+    [os writeString:self.first_name == nil ? @"" : self.first_name];
+    [os writeString:self.last_name == nil ? @"" : self.last_name];
+}
 
 @end
 

@@ -54,7 +54,7 @@
     UIActivityIndicatorView *_activityIndicator;
     bool _avatarPlaceholderDisabled;
     
-    int32_t _uidForPlaceholderCalculation;
+    int64_t _uidForPlaceholderCalculation;
     
     UIImageView *_verifiedIcon;
     UIImageView *_disclosureIndicator;
@@ -237,7 +237,7 @@
     }
 }
 
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int32_t)uidForPlaceholderCalculation
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int64_t)uidForPlaceholderCalculation
 {
     _uidForPlaceholderCalculation = uidForPlaceholderCalculation;
     
@@ -438,7 +438,7 @@
     
     if (avatarUri.length == 0)
     {
-        int uid = _avatarPlaceholderDisabled ? 0 : _uidForPlaceholderCalculation;
+        int64_t uid = _avatarPlaceholderDisabled ? 0 : _uidForPlaceholderCalculation;
         NSString *firstName = _avatarPlaceholderDisabled ? nil : _firstName;
         NSString *lastName = _avatarPlaceholderDisabled ? nil : _lastName;
         [_avatarView loadUserPlaceholderWithSize:CGSizeMake(64.0f, 64.0f) uid:uid firstName:firstName lastName:lastName placeholder:placeholder];

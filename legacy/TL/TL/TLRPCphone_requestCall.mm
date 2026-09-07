@@ -1,5 +1,7 @@
 #import "TLRPCphone_requestCall.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -56,12 +58,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x5b95b3d4;
+    return (int32_t)0x42ff96ed;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xc5eecdc9;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -102,6 +104,18 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.user_id, true);
+    [os writeInt32:(int32_t)self.random_id];
+    [os writeBytes:self.g_a_hash == nil ? [NSData data] : self.g_a_hash];
+    // protocol — обязательное поле. Генератор брал имена из swift-исходников,
+    // где оно записано как `protocol` в обратных кавычках, и молча его терял:
+    // сервер отвечал ошибкой, а приложение показывало «call failed».
+    TLMetaClassStore::serializeObject(os, self.protocol, true);
+}
 
 @end
 

@@ -1,5 +1,7 @@
 #import "TLRPCauth_importAuthorization.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,18 +56,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xe3ef9613;
+    return (int32_t)0xa57a7dad;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x8b783939;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCauth_importAuthorization$auth_importAuthorization *object = [[TLRPCauth_importAuthorization$auth_importAuthorization alloc] init];
-    object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
+    object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.bytes = metaObject->getBytes((int32_t)0xec5ef20a);
     return object;
 }
@@ -86,6 +88,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.n_id];
+    [os writeBytes:self.bytes == nil ? [NSData data] : self.bytes];
+}
 
 @end
 

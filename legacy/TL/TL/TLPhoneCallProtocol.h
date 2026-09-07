@@ -9,6 +9,8 @@
 @property (nonatomic) int32_t flags;
 @property (nonatomic) int32_t min_layer;
 @property (nonatomic) int32_t max_layer;
+/// Версии голосовой библиотеки, которые понимает клиент (схема 228).
+@property (nonatomic, retain) NSArray *library_versions;
 
 @end
 

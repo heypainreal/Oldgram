@@ -1,4 +1,4 @@
-TELEGRAM_APP_NAME=Telega
+TELEGRAM_APP_NAME=Oldgram
 TELEGRAPH_BUNDLE_ID=co.one.Teleapp
 
 #include "Common.xcconfig"

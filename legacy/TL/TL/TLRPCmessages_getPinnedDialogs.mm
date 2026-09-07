@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getPinnedDialogs.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xe254d64e;
+    return (int32_t)0xd6b94df2;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x32cd5d83;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
@@ -72,6 +74,11 @@
 {
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+}
 
 @end
 

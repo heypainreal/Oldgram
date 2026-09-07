@@ -115,7 +115,7 @@ static void TGShareLoggingFunction(NSString *format, va_list args)
                     NSNumber *nDatacenterId = authInfo[@"datacenterId"];
                     MTDatacenterAuthInfo *datacenterAuthInfo = authInfo[@"authInfo"];
                     NSDictionary *datacenterAddressSets = authInfo[@"addressSets"];
-                    int32_t clientUserId = (int32_t)[authInfo[@"clientUserId"] integerValue];
+                    int64_t clientUserId = (int32_t)[authInfo[@"clientUserId"] integerValue];
                     bool isTestingEnvironment = [authInfo[@"isTesting"] boolValue];
                     
                     if (nDatacenterId != nil && datacenterAuthInfo != nil)

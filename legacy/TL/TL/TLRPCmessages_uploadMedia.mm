@@ -1,5 +1,7 @@
 #import "TLRPCmessages_uploadMedia.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -56,12 +58,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x519bc2b1;
+    return (int32_t)0x14967978;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x5b1f536a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -88,6 +90,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    TLMetaClassStore::serializeObject(os, self.media, true);
+}
 
 @end
 

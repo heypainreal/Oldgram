@@ -54,18 +54,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xc023849f;
+    return (int32_t)0x5dd69e12;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x18ccaa08;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCcontacts_getContacts$contacts_getContacts *object = [[TLRPCcontacts_getContacts$contacts_getContacts alloc] init];
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     return object;
 }
 
@@ -73,12 +73,18 @@
 {
     {
         TLConstructedValue value;
-        value.type = TLConstructedValueTypePrimitiveInt32;
-        value.primitive.int32Value = self.n_hash;
+        value.type = TLConstructedValueTypePrimitiveInt64;
+        value.primitive.int64Value = self.n_hash;
         values->insert(std::pair<int32_t, TLConstructedValue>((int32_t)0xc152e470, value));
     }
 }
 
+// contacts.getContacts#5dd69e12
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // layer 228: hash стал long
+    [os writeInt64:self.n_hash];
+}
 
 @end
 

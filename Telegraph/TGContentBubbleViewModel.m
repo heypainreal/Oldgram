@@ -115,7 +115,10 @@ bool debugShowMessageIds = false;
         _message = message;
         _mid = message.mid;
         _incoming = !message.outgoing;
-        _incomingAppearance = _incoming || isChannel || _savedMessage;
+        // В супергруппе можно писать от имени самой группы: такое сообщение остаётся
+        // нашим исходящим. Слева всегда показываем только посты канала-ленты.
+        bool authorIsGroup = [authorPeer isKindOfClass:[TGConversation class]] && ((TGConversation *)authorPeer).isChannelGroup;
+        _incomingAppearance = _incoming || (isChannel && !(message.outgoing && authorIsGroup)) || _savedMessage;
         _deliveryState = message.deliveryState;
         
         _read = ![_context isMessageUnread:message];
@@ -1299,7 +1302,7 @@ bool debugShowMessageIds = false;
                 if (TGPeerIdIsChannel(_forwardedPeerId)) {
                     [_context.companionHandle requestAction:@"peerAvatarTapped" options:@{@"peerId": @(_forwardedPeerId), @"messageId": @(_forwardedMessageId)}];
                 } else {
-                    [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @((int32_t)_forwardedPeerId)}];
+                    [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @(_forwardedPeerId)}];
                 }
             }
             else if (_replyHeaderModel && CGRectContainsPoint(_replyHeaderModel.frame, point))

@@ -117,7 +117,7 @@
             if (concreteWallpaper.sizes.count == 0)
                 continue;
             
-            NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:concreteWallpaper.n_id], @"id", [[TGImageInfo alloc] initWithTelegraphSizesDescription:concreteWallpaper.sizes], @"imageInfo", [[NSNumber alloc] initWithInt:concreteWallpaper.color], @"color", nil];
+            NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@(concreteWallpaper.n_id), @"id", [[TGImageInfo alloc] initWithTelegraphSizesDescription:concreteWallpaper.sizes], @"imageInfo", [[NSNumber alloc] initWithInt:concreteWallpaper.color], @"color", nil];
             [parsedList addObject:dict];
         }
     }

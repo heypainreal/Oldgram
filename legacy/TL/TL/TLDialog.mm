@@ -151,7 +151,7 @@
     object.flags = metaObject->getInt32((int32_t)0x81915c23);
     object.peer = metaObject->getObject((int32_t)0x9344c37d);
     object.top_message = metaObject->getInt32((int32_t)0x8cecb775);
-    object.feed_id = metaObject->getInt32((int32_t)0xf204bed5);
+    object.feed_id = metaObject->getInt64((int32_t)0xf204bed5);
     object.feed_other_channels = metaObject->getObject((int32_t)0x9117449b);
     return object;
 }

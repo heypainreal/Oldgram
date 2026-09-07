@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getHistory.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xafa92846;
+    return (int32_t)0x4423e6c5;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xa186939b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -122,6 +124,18 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:(int32_t)self.offset_id];
+    [os writeInt32:(int32_t)self.offset_date];
+    [os writeInt32:(int32_t)self.add_offset];
+    [os writeInt32:(int32_t)self.limit];
+    [os writeInt32:(int32_t)self.max_id];
+    [os writeInt32:(int32_t)self.min_id];
+    [os writeInt64:0];
+}
 
 @end
 

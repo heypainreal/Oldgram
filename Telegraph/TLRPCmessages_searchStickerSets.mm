@@ -7,7 +7,7 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return 0xc2b7d08b;
+    return (int32_t)0x35705b8a;
 }
 
 - (int32_t)TLconstructorName
@@ -27,14 +27,15 @@
 
 - (int)layerVersion
 {
-    return 76;
+    return 228;
 }
 
 - (void)TLserialize:(NSOutputStream *)os
 {
+    // messages.searchStickerSets#35705b8a flags:# q:string hash:long
     [os writeInt32:_flags];
-    [os writeString:_q];
-    [os writeInt32:_n_hash];
+    [os writeString:_q == nil ? @"" : _q];
+    [os writeInt64:_n_hash];
 }
 
 - (id<TLObject>)TLdeserialize:(NSInputStream *)__unused is signature:(int32_t)__unused signature environment:(id<TLSerializationEnvironment>)__unused environment context:(TLSerializationContext *)__unused context error:(__autoreleasing NSError **)__unused error

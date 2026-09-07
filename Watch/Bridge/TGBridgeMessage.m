@@ -22,6 +22,19 @@ NSString *const TGBridgeMessagesArrayKey = @"messages";
 }
 @end
 
+
+/// Безопасное добавление идентификатора пользователя в индекс-множество.
+///
+/// NSMutableIndexSet принимает только неотрицательные значения, а usercode
+/// клал туда усечённый до 32 бит идентификатор: у современных аккаунтов он
+/// уходит в минус, и приложение падало с исключением.
+static inline void TGBridgeAddUserId(NSMutableIndexSet *set, int64_t uid)
+{
+    if (uid > 0 && uid <= (int64_t)NSIntegerMax) {
+        [set addIndex:(NSUInteger)uid];
+    }
+}
+
 @implementation TGBridgeMessage
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -63,7 +76,7 @@ NSString *const TGBridgeMessagesArrayKey = @"messages";
 {
     NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
     if (!TGPeerIdIsChannel(self.fromUid))
-        [userIds addIndex:(int32_t)self.fromUid];
+        TGBridgeAddUserId(userIds, self.fromUid);
     
     for (TGBridgeMediaAttachment *attachment in self.media)
     {
@@ -71,25 +84,25 @@ NSString *const TGBridgeMessagesArrayKey = @"messages";
         {
             TGBridgeContactMediaAttachment *contactAttachment = (TGBridgeContactMediaAttachment *)attachment;
             if (contactAttachment.uid != 0)
-                [userIds addIndex:contactAttachment.uid];
+                TGBridgeAddUserId(userIds, contactAttachment.uid);
         }
         else if ([attachment isKindOfClass:[TGBridgeForwardedMessageMediaAttachment class]])
         {
             TGBridgeForwardedMessageMediaAttachment *forwardAttachment = (TGBridgeForwardedMessageMediaAttachment *)attachment;
             if (forwardAttachment.peerId != 0 && !TGPeerIdIsChannel(forwardAttachment.peerId))
-                [userIds addIndex:(int32_t)forwardAttachment.peerId];
+                TGBridgeAddUserId(userIds, forwardAttachment.peerId);
         }
         else if ([attachment isKindOfClass:[TGBridgeReplyMessageMediaAttachment class]])
         {
             TGBridgeReplyMessageMediaAttachment *replyAttachment = (TGBridgeReplyMessageMediaAttachment *)attachment;
             if (replyAttachment.message != nil && !TGPeerIdIsChannel(replyAttachment.message.fromUid))
-                [userIds addIndex:(int32_t)replyAttachment.message.fromUid];
+                TGBridgeAddUserId(userIds, replyAttachment.message.fromUid);
         }
         else if ([attachment isKindOfClass:[TGBridgeActionMediaAttachment class]])
         {
             TGBridgeActionMediaAttachment *actionAttachment = (TGBridgeActionMediaAttachment *)attachment;
             if (actionAttachment.actionData[@"uid"] != nil)
-                [userIds addIndex:[actionAttachment.actionData[@"uid"] int32Value]];
+                TGBridgeAddUserId(userIds, [actionAttachment.actionData[@"uid"] longLongValue]);
         }
     }
     

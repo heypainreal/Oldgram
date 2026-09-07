@@ -169,17 +169,23 @@ typedef void (^TGAddressBookCreated)(ABAddressBookRef addressBook, bool denied);
 
 @end
 
-static int32_t hashForContactIds(int32_t nonRegisteredCount, std::vector<int32_t> const &contactIds) {
-    uint32_t acc = 0;
-    
-    uint32_t num = (uint32_t)nonRegisteredCount;
-    acc = (acc * 20261) + num;
-    
+/// Хеш списка контактов по правилам схемы 228: 64 бита и другой перемешиватель.
+/// Старый 32-битный вариант сервер уже не сопоставляет, и contacts.getContacts
+/// каждый раз возвращал полный список.
+static void combineInt64Hash(uint64_t &acc, uint64_t value) {
+    acc ^= (acc >> 21);
+    acc ^= (acc << 35);
+    acc ^= (acc >> 4);
+    acc = acc + value;
+}
+
+static int64_t hashForContactIds(int32_t nonRegisteredCount, std::vector<int64_t> const &contactIds) {
+    uint64_t acc = 0;
+    combineInt64Hash(acc, (uint64_t)(uint32_t)nonRegisteredCount);
     for (auto it : contactIds) {
-        uint32_t uid = (uint32_t)it;
-        acc = (acc * 20261) + uid;
+        combineInt64Hash(acc, (uint64_t)it);
     }
-    return acc % 0x7FFFFFFF;
+    return (int64_t)acc;
 }
 
 @implementation TGSynchronizeContactsManager
@@ -338,21 +344,21 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     TG_SYNCHRONIZED_END(_contactPhoneAdditionPending)
 }
 
-- (void)scheduleContactPhoneAddition:(int32_t)userId
+- (void)scheduleContactPhoneAddition:(int64_t)userId
 {
     TG_SYNCHRONIZED_BEGIN(_contactPhoneAdditionPending)
     _contactPhoneAdditionPending.insert(userId);
     TG_SYNCHRONIZED_END(_contactPhoneAdditionPending)
 }
 
-- (void)clearScheduledContactAddition:(int32_t)userId
+- (void)clearScheduledContactAddition:(int64_t)userId
 {
     TG_SYNCHRONIZED_BEGIN(_contactPhoneAdditionPending)
     _contactPhoneAdditionPending.erase(userId);
     TG_SYNCHRONIZED_END(_contactPhoneAdditionPending)
 }
 
-- (bool)isContactAdditionScheduled:(int32_t)userId
+- (bool)isContactAdditionScheduled:(int64_t)userId
 {
     TG_SYNCHRONIZED_BEGIN(_contactPhoneAdditionPending)
     bool result = _contactPhoneAdditionPending.find(userId) != _contactPhoneAdditionPending.end();
@@ -602,7 +608,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     }
     else if ([self.path hasSuffix:@"breakLink)"])
     {
-        int uid = [[options objectForKey:@"uid"] intValue];
+        int64_t uid = [[options objectForKey:@"uid"] longLongValue];
         int phoneId = [TGDatabaseInstance() loadCachedPhoneIdByUid:uid];
         
         if (uid != 0 && phoneId != 0)
@@ -614,8 +620,8 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     }
     else if ([self.path hasSuffix:@"breakLinkLocal)"])
     {
-        int uid = [[options objectForKey:@"uid"] intValue];
-        int nativeId = [[options objectForKey:@"nativeId"] intValue];
+        int64_t uid = [[options objectForKey:@"uid"] longLongValue];
+        int64_t nativeId = [[options objectForKey:@"nativeId"] intValue];
         
         if (uid != 0 && nativeId != 0)
             [self processRemoveContact:uid byNativeId:nativeId];
@@ -626,8 +632,8 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     }
     else if ([self.path hasSuffix:@"appendPhone)"])
     {
-        int uid = [[options objectForKey:@"uid"] intValue];
-        int nativeId = [[options objectForKey:@"nativeId"] intValue];
+        int64_t uid = [[options objectForKey:@"uid"] longLongValue];
+        int64_t nativeId = [[options objectForKey:@"nativeId"] intValue];
         
         [[TGSynchronizeContactsManager instance] clearScheduledContactAddition:uid];
         
@@ -640,8 +646,8 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     }
     else if ([self.path hasSuffix:@"changeNameLocal)"])
     {
-        int uid = [[options objectForKey:@"uid"] intValue];
-        int nativeId = [[options objectForKey:@"nativeId"] intValue];
+        int64_t uid = [[options objectForKey:@"uid"] longLongValue];
+        int64_t nativeId = [[options objectForKey:@"nativeId"] intValue];
         NSString *firstName = [options objectForKey:@"firstName"];
         NSString *lastName = [options objectForKey:@"lastName"];
         
@@ -654,8 +660,8 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     }
     else if ([self.path hasSuffix:@"changePhonesLocal)"])
     {
-        int uid = [[options objectForKey:@"uid"] intValue];
-        int nativeId = [[options objectForKey:@"nativeId"] intValue];
+        int64_t uid = [[options objectForKey:@"uid"] longLongValue];
+        int64_t nativeId = [[options objectForKey:@"nativeId"] intValue];
         NSArray *phones = [options objectForKey:@"phones"];
         int addingUid = [[options objectForKey:@"addingUid"] intValue];
         bool removedMainPhone = [[options objectForKey:@"removedMainPhone"] boolValue];
@@ -674,14 +680,14 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         NSString *vcard = [options objectForKey:@"vcard"];
         if (contact != nil)
         {
-            [self processCreateContact:contact uid:[[options objectForKey:@"uid"] intValue] vcard:vcard];
+            [self processCreateContact:contact uid:[[options objectForKey:@"uid"] longLongValue] vcard:vcard];
         }
         else
             [self completeAction:false];
     }
     else if ([self.path hasSuffix:@"loadRemote)"])
     {
-        std::vector<int> contactIds;
+        std::vector<int64_t> contactIds;
         NSData *countData = [TGDatabaseInstance() customProperty:@"contactRemoteNonRegisteredCount"];
         int32_t count = 0;
         if (countData.length == 4) {
@@ -837,7 +843,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         std::map<int, int> newExportIdToPhoneId;
         
         NSArray *users = [TGDatabaseInstance() loadContactUsers];
-        std::map<int, TGUser *> usersMap;
+        std::map<int64_t, TGUser *> usersMap;
         for (TGUser *user in users)
         {
             if (user.contactId != 0)
@@ -849,7 +855,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         for (CFIndex i = 0; i < count; i++)
         {
             ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-            int nativeId = ABRecordGetRecordID(person);
+            int64_t nativeId = ABRecordGetRecordID(person);
             
             NSString *firstName = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
             NSString *lastName = (__bridge_transfer NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
@@ -962,11 +968,11 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         
         NSMutableArray *userDataToDispatch = [[NSMutableArray alloc] init];
         
-        int clientUserId = TGTelegraphInstance.clientUserId;
+        int64_t clientUserId = TGTelegraphInstance.clientUserId;
         
-        std::map<int, TGUser *> usersToUpdate;
+        std::map<int64_t, TGUser *> usersToUpdate;
         [TGDatabaseInstance() loadCachedUsersWithContactIds:contactIdsToLoad resultMap:usersToUpdate];
-        for (std::map<int, TGUser *>::iterator it = usersToUpdate.begin(); it != usersToUpdate.end(); it++)
+        for (std::map<int64_t, TGUser *>::iterator it = usersToUpdate.begin(); it != usersToUpdate.end(); it++)
         {
             std::map<int, TGContactBinding *>::iterator contactIt = changedBindings.find(it->first);
             if (contactIt != changedBindings.end())
@@ -1010,16 +1016,16 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
             std::set_difference(lastPhonebookPhoneIdsSet.begin(), lastPhonebookPhoneIdsSet.end(), newPhonebookPhoneIdSet.begin(), newPhonebookPhoneIdSet.end(), std::inserter(deletedContactIdsSet, deletedContactIdsSet.end()));
             
             bool contactUidToContactIdLoaded = false;
-            std::map<int, int> contactUidToContactId;
+            std::map<int, int64_t> contactUidToContactId;
             
             NSMutableArray *removeContactUids = nil;
             NSMutableArray *newRemoveContactActions = [[NSMutableArray alloc] init];
             
             for (std::set<int>::iterator it = deletedContactIdsSet.begin(); it != deletedContactIdsSet.end(); it++)
             {
-                int uid = 0;
+                int64_t uid = 0;
                 
-                std::map<int, TGUser *>::iterator userIt = usersToUpdate.find(*it);
+                std::map<int64_t, TGUser *>::iterator userIt = usersToUpdate.find(*it);
                 if (userIt != usersToUpdate.end())
                     uid = userIt->second.uid;
                 else
@@ -1030,7 +1036,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                         [TGDatabaseInstance() loadRemoteContactUidsContactIds:contactUidToContactId];
                     }
                     
-                    std::map<int, int>::iterator contactIdIt = contactUidToContactId.find(*it);
+                    std::map<int, int64_t>::iterator contactIdIt = contactUidToContactId.find(*it);
                     if (contactIdIt != contactUidToContactId.end())
                         uid = contactIdIt->second;
                 }
@@ -1040,7 +1046,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                     if (removeContactUids == nil)
                         removeContactUids = [[NSMutableArray alloc] init];
                     
-                    [removeContactUids addObject:[[NSNumber alloc] initWithInt:uid]];
+                    [removeContactUids addObject:@(uid)];
                     [newRemoveContactActions addObject:[[TGRemoveContactFutureAction alloc] initWithUid:uid]];
                 }
                 else
@@ -1171,7 +1177,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     NSArray *removeContactActions = [TGDatabaseInstance() loadFutureActionsWithType:TGRemoveContactFutureActionType];
     for (TGRemoveContactFutureAction *action in removeContactActions)
     {
-        [removeUids addObject:[[NSNumber alloc] initWithInt:[action uid]]];
+        [removeUids addObject:@([action uid])];
     }
     
     if (removeUids.count != 0)
@@ -1247,10 +1253,10 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     _currentActionIds = nil;
     
     [TGUserDataRequestBuilder executeUserDataUpdate:users];
-    std::vector<int> remoteContactUids;
+    std::vector<int64_t> remoteContactUids;
     [TGDatabaseInstance() loadRemoteContactUids:remoteContactUids];
-    std::set<int> currentRemoteContactUidsSet;
-    for (std::vector<int>::iterator it = remoteContactUids.begin(); it != remoteContactUids.end(); it++)
+    std::set<int64_t> currentRemoteContactUidsSet;
+    for (std::vector<int64_t>::iterator it = remoteContactUids.begin(); it != remoteContactUids.end(); it++)
         currentRemoteContactUidsSet.insert(*it);
     
     NSMutableArray *addedRemoteUids = [[NSMutableArray alloc] init];
@@ -1259,7 +1265,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     {
         if (currentRemoteContactUidsSet.find(importedPhone.user_id) == currentRemoteContactUidsSet.end())
         {
-            [addedRemoteUids addObject:[[NSNumber alloc] initWithInt:importedPhone.user_id]];
+            [addedRemoteUids addObject:@(importedPhone.user_id)];
         }
     }
     
@@ -1284,7 +1290,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
 
 #pragma mark -
 
-- (void)processCreateContact:(TGPhonebookContact *)phonebookContact uid:(int)uid vcard:(NSString *)vcard
+- (void)processCreateContact:(TGPhonebookContact *)phonebookContact uid:(int64_t)uid vcard:(NSString *)vcard
 {
     CreateAddressBookAsync(^(ABAddressBookRef addressBook, bool denied)
     {
@@ -1422,11 +1428,11 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
             [TGDatabaseInstance() replacePhonebookContact:0 phonebookContact:newPhonebookContact generateContactBindings:true];
             if (uid != 0)
             {
-                [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], nil]];
+                [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:@(uid), nil]];
                 int link = [TGDatabaseInstance() loadUserLink:uid outdated:NULL];
                 link &= ~TGUserLinkMyRequested;
                 link |= TGUserLinkMyContact;
-                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], [[NSNumber alloc] initWithInt:link], nil]]];
+                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:@(uid), [[NSNumber alloc] initWithInt:link], nil]]];
             }
             
             [TGContactListRequestBuilder dispatchNewContactList];
@@ -1458,7 +1464,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         {
             [ActionStageInstance() dispatchOnStageQueue:^
             {
-                [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:user.uid], nil]];
+                [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:@(user.uid), nil]];
                 [TGContactListRequestBuilder dispatchNewContactList];
                 
                 [self completeAction:true];
@@ -1497,7 +1503,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         
         [ActionStageInstance() dispatchOnStageQueue:^
         {
-            [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:user.uid], nil]];
+            [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:@(user.uid), nil]];
             [TGContactListRequestBuilder dispatchNewContactList];
             if (imported)
                 [TGContactListRequestBuilder dispatchNewPhonebook];
@@ -1507,7 +1513,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     });
 }
 
-- (void)processChangeContactName:(int)uid nativeId:(int)nativeId changeFirstName:(NSString *)changeFirstName changeLastName:(NSString *)changeLastName
+- (void)processChangeContactName:(int64_t)uid nativeId:(int)nativeId changeFirstName:(NSString *)changeFirstName changeLastName:(NSString *)changeLastName
 {
     if (![TGDatabaseInstance() uidIsRemoteContact:uid])
     {
@@ -1579,7 +1585,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     });
 }
 
-- (void)processAppendContactPhone:(int)uid nativeId:(int)nativeId newPhone:(NSString *)newPhone
+- (void)processAppendContactPhone:(int64_t)uid nativeId:(int)nativeId newPhone:(NSString *)newPhone
 {
     if (![TGDatabaseInstance() uidIsRemoteContact:uid] || newPhone.length == 0)
     {
@@ -1676,7 +1682,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
 }
 
 
-- (void)processChangeContactPhones:(int)uid nativeId:(int)nativeId changePhones:(NSArray *)changePhones addingUid:(int)addingUid removedMainPhone:(bool)removedMainPhone vcard:(NSString *)vcard
+- (void)processChangeContactPhones:(int64_t)uid nativeId:(int)nativeId changePhones:(NSArray *)changePhones addingUid:(int)addingUid removedMainPhone:(bool)removedMainPhone vcard:(NSString *)vcard
 {
     CreateAddressBookAsync(^(ABAddressBookRef addressBook, bool denied)
     {
@@ -1785,11 +1791,11 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                 newUser.phonebookLastName = phonebookContact.lastName;
                 [TGUserDataRequestBuilder executeUserObjectsUpdate:[[NSArray alloc] initWithObjects:newUser, nil]];
                 
-                [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:addingUid], nil]];
+                [TGDatabaseInstance() addRemoteContactUids:[[NSArray alloc] initWithObjects:@(addingUid), nil]];
                 int link = [TGDatabaseInstance() loadUserLink:addingUid outdated:NULL];
                 link &= ~TGUserLinkMyRequested;
                 link |= TGUserLinkMyContact;
-                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:addingUid], [[NSNumber alloc] initWithInt:link], nil]]];
+                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:@(addingUid), [[NSNumber alloc] initWithInt:link], nil]]];
             }
             
             if (removedMainPhone && uid != 0)
@@ -1806,9 +1812,9 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                 link |= TGUserLinkForeignRequested;
                 link |= TGUserLinkMyRequested;
                 link |= TGUserLinkForeignHasPhone;
-                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], [[NSNumber alloc] initWithInt:link], nil]]];
+                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:@(uid), [[NSNumber alloc] initWithInt:link], nil]]];
                 
-                [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], nil]];
+                [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:@(uid), nil]];
                 
                 [TGDatabaseInstance() storeFutureActions:[[NSArray alloc] initWithObjects:[[TGRemoveContactFutureAction alloc] initWithUid:uid], nil]];
             }
@@ -1828,7 +1834,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     });
 }
 
-- (void)processRemoveContact:(int)uid byNativeId:(int)nativeId
+- (void)processRemoveContact:(int64_t)uid byNativeId:(int)nativeId
 {
     TGUser *user = [TGDatabaseInstance() loadUser:uid];
     if (user == nil || nativeId == 0)
@@ -1855,9 +1861,9 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                 link |= TGUserLinkForeignRequested;
                 link |= TGUserLinkMyRequested;
                 link |= TGUserLinkForeignHasPhone;
-                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], [[NSNumber alloc] initWithInt:link], nil]]];
+                [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:@(uid), [[NSNumber alloc] initWithInt:link], nil]]];
                 
-                [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], nil]];
+                [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:@(uid), nil]];
                 [TGDatabaseInstance() replacePhonebookContact:nativeId phonebookContact:nil generateContactBindings:true];
                 [TGContactListRequestBuilder dispatchNewContactList];
                 [TGContactListRequestBuilder dispatchNewPhonebook];
@@ -1890,9 +1896,9 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
             link |= TGUserLinkForeignRequested;
             link |= TGUserLinkMyRequested;
             link |= TGUserLinkForeignHasPhone;
-            [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], [[NSNumber alloc] initWithInt:link], nil]]];
+            [TGUserDataRequestBuilder executeUserLinkUpdates:[NSArray arrayWithObject:[[NSArray alloc] initWithObjects:@(uid), [[NSNumber alloc] initWithInt:link], nil]]];
             
-            [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], nil]];
+            [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:@(uid), nil]];
             [TGDatabaseInstance() replacePhonebookContact:nativeId phonebookContact:nil generateContactBindings:true];
             
             [TGContactListRequestBuilder dispatchNewContactList];
@@ -1908,7 +1914,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
     });
 }
 
-- (void)processRemoveContact:(int)uid byPhoneId:(int)phoneIdToRemove
+- (void)processRemoveContact:(int64_t)uid byPhoneId:(int)phoneIdToRemove
 {
     TGUser *user = [TGDatabaseInstance() loadUser:uid];
     if (user == nil || phoneIdToRemove == 0)
@@ -1927,7 +1933,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                 newUser.phonebookFirstName = nil;
                 newUser.phonebookLastName = nil;
                 [TGUserDataRequestBuilder executeUserObjectsUpdate:[[NSArray alloc] initWithObjects:newUser, nil]];
-                [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], nil]];
+                [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:@(uid), nil]];
                 [TGDatabaseInstance() deleteContactBinding:phoneIdToRemove];
                 [TGContactListRequestBuilder dispatchNewContactList];
                 [TGContactListRequestBuilder dispatchNewPhonebook];
@@ -2093,7 +2099,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
                 [TGDatabaseInstance() deleteContactBinding:phoneIdToRemove];
             }
             
-            [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:uid], nil]];
+            [TGDatabaseInstance() deleteRemoteContactUids:[[NSArray alloc] initWithObjects:@(uid), nil]];
             
             [TGContactListRequestBuilder dispatchNewContactList];
             [TGContactListRequestBuilder dispatchNewPhonebook];
@@ -2199,18 +2205,18 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
 
 - (void)contactIdsRequestSuccess:(NSArray *)contactIds
 {
-    std::vector<int> currentUidsVector;
+    std::vector<int64_t> currentUidsVector;
     [TGDatabaseInstance() loadRemoteContactUids:currentUidsVector];
-    std::set<int> currentUids;
-    for (std::vector<int>::iterator it = currentUidsVector.begin(); it != currentUidsVector.end(); it++)
+    std::set<int64_t> currentUids;
+    for (std::vector<int64_t>::iterator it = currentUidsVector.begin(); it != currentUidsVector.end(); it++)
     {
         currentUids.insert(*it);
     }
     
-    std::set<int> remoteUids;
+    std::set<int64_t> remoteUids;
     for (NSNumber *nUid in contactIds)
     {
-        remoteUids.insert([nUid intValue]);
+        remoteUids.insert([nUid longLongValue]);
     }
     
     if (remoteUids != currentUids)
@@ -2264,7 +2270,7 @@ static void CreateAddressBookAsync(TGAddressBookCreated createdBlock)
         for (TLContact *contact in concreteContacts.contacts)
         {
             if (contact.user_id != 0)
-                [contactUids addObject:[[NSNumber alloc] initWithInt:contact.user_id]];
+                [contactUids addObject:@(contact.user_id)];
         }
         
         [[TGSynchronizeContactsManager instance] dispatchOnAddressBookQueue:^

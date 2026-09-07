@@ -3,7 +3,7 @@
 @interface TGRecentContextBotsSignal : NSObject
 
 + (void)clearRecentBots;
-+ (void)addRecentBot:(int32_t)userId;
++ (void)addRecentBot:(int64_t)userId;
 + (SSignal *)recentBots;
 
 @end

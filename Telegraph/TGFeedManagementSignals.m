@@ -426,7 +426,7 @@
     return nil;
 }
 
-+ (SSignal *)createFeed:(int32_t)feedId peerIds:(NSSet *)peerIds {
++ (SSignal *)createFeed:(int64_t)feedId peerIds:(NSSet *)peerIds {
     return [self updateFeedChannels:feedId peerIds:peerIds alsoNewlyJoined:false];
 }
 
@@ -442,7 +442,7 @@
     }] switchToLatest];
 }
 
-+ (SSignal *)groupChannelWithPeerId:(int64_t)peerId feedId:(int32_t)feedId {
++ (SSignal *)groupChannelWithPeerId:(int64_t)peerId feedId:(int64_t)feedId {
     return [[TGDatabaseInstance() modify:^id{
         TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:peerId];
         if (conversation.feedId.intValue == feedId)
@@ -557,7 +557,7 @@
                     
                     NSMutableSet *peerIds = [[NSMutableSet alloc] init];
                     for (NSNumber *channelId in feedBroadcast.channels) {
-                        int64_t peerId = TGPeerIdFromChannelId(channelId.int32Value);
+                        int64_t peerId = TGPeerIdFromChannelId(channelId.longLongValue);
                         [peerIds addObject:@(peerId)];
                         
                         channelToFeedMap[@(peerId)] = @(feedBroadcast.feed_id);
@@ -588,7 +588,7 @@
 
 + (SSignal *)pollFeedMessages {
     return [[TGDatabaseInstance() enqueuedFeedMessagesPolls] mapToSignal:^SSignal *(TGQueuedPeerPoll *poll) {
-        int32_t feedId = TGAdminLogIdFromPeerId(poll.peerId);
+        int64_t feedId = TGAdminLogIdFromPeerId(poll.peerId);
         return [[self preloadedFeedId:feedId aroundPosition:poll.feedPosition unread:poll.feedPosition == nil] mapToSignal:^SSignal *(NSDictionary *dict) {
             NSArray *removedImportantHoles = dict[@"hole"] == nil ? nil : @[dict[@"hole"]];
             
@@ -632,7 +632,7 @@
 + (SSignal *)readFeedMessages {
     return [[TGDatabaseInstance() enqueuedReadFeedMessages] mapToQueue:^SSignal *(TGQueuedReadFeedMessages *queued) {
         if (TGPeerIdIsAdminLog(queued.feedPeerId)) {
-            int32_t feedId = TGAdminLogIdFromPeerId(queued.feedPeerId);
+            int64_t feedId = TGAdminLogIdFromPeerId(queued.feedPeerId);
             
             TLRPCchannels_readFeed *readFeed = [[TLRPCchannels_readFeed alloc] init];
             readFeed.feed_id = feedId;
@@ -672,7 +672,7 @@
 
 @implementation TGSynchronizeFeededChannelsAction
 
-- (instancetype)initWithType:(int32_t)type feedId:(int32_t)feedId peerIds:(NSSet *)peerIds alsoNewlyJoined:(bool)alsoNewlyJoined version:(int32_t)version {
+- (instancetype)initWithType:(int32_t)type feedId:(int64_t)feedId peerIds:(NSSet *)peerIds alsoNewlyJoined:(bool)alsoNewlyJoined version:(int32_t)version {
     self = [super init];
     if (self != nil) {
         _type = type;

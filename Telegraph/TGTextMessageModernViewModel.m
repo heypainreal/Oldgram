@@ -376,17 +376,17 @@ static NSString *expandedTextAndAttributes(NSString *text, NSArray *textChecking
                 [_context.companionHandle requestAction:@"openLinkRequested" options:@{@"url": linkCandidate, @"mid": @(_mid), @"hidden": @(hiddenLink)}];
             else if (_forwardedHeaderModel && CGRectContainsPoint(_forwardedHeaderModel.frame, point)) {
                 if (_viaUser != nil && [_forwardedHeaderModel linkAtPoint:CGPointMake(point.x - _forwardedHeaderModel.frame.origin.x, point.y - _forwardedHeaderModel.frame.origin.y) regionData:NULL]) {
-                    [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @((int32_t)_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
+                    [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @(_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
                 } else {
                     if (TGPeerIdIsChannel(_forwardedPeerId)) {
                         [_context.companionHandle requestAction:@"peerAvatarTapped" options:@{@"peerId": @(_forwardedPeerId), @"messageId": @(_forwardedMessageId)}];
                     } else {
-                        [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @((int32_t)_forwardedPeerId)}];
+                        [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @(_forwardedPeerId)}];
                     }
                 }
             }
             else if (_viaUserModel != nil && CGRectContainsPoint(_viaUserModel.frame, point)) {
-                [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @((int32_t)_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
+                [_context.companionHandle requestAction:@"useContextBot" options:@{@"uid": @(_viaUser.uid), @"username": _viaUser.userName == nil ? @"" : _viaUser.userName}];
             }
             else if (_replyHeaderModel && CGRectContainsPoint(_replyHeaderModel.frame, point))
                 [_context.companionHandle requestAction:@"navigateToMessage" options:@{@"mid": @(_replyMessageId), @"sourceMid": @(_mid)}];

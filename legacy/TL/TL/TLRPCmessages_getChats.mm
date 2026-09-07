@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getChats.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x3c6aa187;
+    return (int32_t)0x49e9528f;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xcba8d7ad;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -79,6 +81,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.n_id.count];
+    for (id item in self.n_id) {
+        [os writeInt64:[item longLongValue]];
+    }
+}
 
 @end
 

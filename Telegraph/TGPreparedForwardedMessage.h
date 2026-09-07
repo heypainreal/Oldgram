@@ -15,7 +15,7 @@
 @property (nonatomic) int32_t forwardMid;
 @property (nonatomic) int64_t forwardPeerId;
 
-@property (nonatomic) int32_t forwardAuthorUserId;
+@property (nonatomic) int64_t forwardAuthorUserId;
 @property (nonatomic) int32_t forwardPostId;
 
 @property (nonatomic) int64_t forwardSourcePeerId;

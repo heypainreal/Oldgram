@@ -45,9 +45,8 @@
         TGUser *selfUser = [originalUser copy];
         if (selfUser != nil)
         {
-            selfUser.photoUrlSmall = extractFileUrl(concretePhoto.photo_small);
-            selfUser.photoUrlMedium = nil;
-            selfUser.photoUrlBig = extractFileUrl(concretePhoto.photo_big);
+            // Схема 228 не отдаёт координаты файла — только photo_id и датацентр.
+            extractUserPhoto(concretePhoto, selfUser);
             
             [TGUserDataRequestBuilder executeUserObjectsUpdate:[NSArray arrayWithObject:selfUser]];
         }

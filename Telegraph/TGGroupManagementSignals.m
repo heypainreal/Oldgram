@@ -297,7 +297,7 @@
     }];
 }
 
-+ (SSignal *)inviteUserWithId:(int32_t)userId toGroupWithId:(int32_t)groupId
++ (SSignal *)inviteUserWithId:(int64_t)userId toGroupWithId:(int32_t)groupId
 {
     TLRPCmessages_addChatUser$messages_addChatUser *addChatUser = [[TLRPCmessages_addChatUser$messages_addChatUser alloc] init];
     addChatUser.chat_id = groupId;
@@ -530,7 +530,7 @@
         for (TGConversation *peer in peers) {
             int64_t accessHash = peer.accessHash;
             if (TGPeerIdIsUser(peer.conversationId)) {
-                accessHash = [TGDatabaseInstance() loadUser:(int)peer.conversationId].phoneNumberHash;
+                accessHash = [TGDatabaseInstance() loadUser:peer.conversationId].phoneNumberHash;
             }
             TLInputPeer *inputPeer = [TGTelegraphInstance createInputPeerForConversation:peer.conversationId accessHash:accessHash];
             if (inputPeer != nil) {
@@ -626,7 +626,7 @@
         if (TGPeerIdIsChannel(peerId)) {
             accessHash = [TGDatabaseInstance() loadConversationWithId:peerId].accessHash;
         } else if (TGPeerIdIsUser(peerId)) {
-            accessHash = [TGDatabaseInstance() loadUser:(int)peerId].phoneNumberHash;
+            accessHash = [TGDatabaseInstance() loadUser:(int64_t)peerId].phoneNumberHash;
         }
         
         saveDraft.peer = [TGTelegraphInstance createInputPeerForConversation:peerId accessHash:accessHash];
@@ -725,7 +725,7 @@
                 if (conversation.isChannel) {
                     channelItems[@(conversation.conversationId)] = conversation;
                 } else {
-                    [chatItems setObject:conversation forKey:[NSNumber numberWithInt:(int)conversation.conversationId]];
+                    [chatItems setObject:conversation forKey:@(conversation.conversationId)];
                 }
             }
         }
@@ -1072,7 +1072,7 @@
 
 + (TLInputPeer *)inputPeerWithPeerId:(int64_t)peerId {
     if (TGPeerIdIsUser(peerId)) {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+        TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
         if (user != nil) {
             TLInputPeer$inputPeerUser *inputPeerUser = [[TLInputPeer$inputPeerUser alloc] init];
             inputPeerUser.user_id = user.uid;

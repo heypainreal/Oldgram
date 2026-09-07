@@ -711,16 +711,19 @@
 
 + (SSignal *)_mapMessages:(NSArray *)messages
 {
-    NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
+    // NSMutableIndexSet хранит только неотрицательные значения: идентификатор
+    // пира туда класть нельзя — усечённый до 32 бит uid и пиры групп бывают
+    // отрицательными, и приложение падало с исключением при открытии звонков.
+    NSMutableSet<NSNumber *> *userIds = [[NSMutableSet alloc] init];
     for (TGMessage *message in messages)
-        [userIds addIndex:(int32_t)(message.outgoing ? message.toUid : message.fromUid)];
+        [userIds addObject:@(message.outgoing ? message.toUid : message.fromUid)];
     
     NSMutableArray *userSignals = [[NSMutableArray alloc] init];
-    [userIds enumerateIndexesUsingBlock:^(NSUInteger uid, __unused BOOL *stop)
+    for (NSNumber *nUid in userIds)
     {
-        if (uid != 0)
-            [userSignals addObject:[[TGUserSignal userWithUserId:(int32_t)uid] take:1]];
-    }];
+        if (nUid.longLongValue != 0)
+            [userSignals addObject:[[TGUserSignal userWithUserId:nUid.longLongValue] take:1]];
+    }
     
     return [[SSignal combineSignals:userSignals] map:^id(NSArray *users)
     {
@@ -883,9 +886,9 @@
             
             NSArray *listModel = [_listModel copy];
             
-            NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
+            NSMutableSet<NSNumber *> *userIds = [[NSMutableSet alloc] init];
             for (TGMessage *message in messages)
-                [userIds addIndex:(int32_t)(message.outgoing ? message.toUid : message.fromUid)];
+                [userIds addObject:@(message.outgoing ? message.toUid : message.fromUid)];
             
             NSMutableIndexSet *indexesToDelete = [[NSMutableIndexSet alloc] init];
             [messages enumerateObjectsUsingBlock:^(TGMessage *message, NSUInteger index, __unused BOOL *stop)
@@ -899,11 +902,11 @@
             [messages removeObjectsAtIndexes:indexesToDelete];
             
             NSMutableArray *userSignals = [[NSMutableArray alloc] init];
-            [userIds enumerateIndexesUsingBlock:^(NSUInteger uid, __unused BOOL *stop)
+            for (NSNumber *nUid in userIds)
             {
-                if (uid != 0)
-                    [userSignals addObject:[[TGUserSignal userWithUserId:(int32_t)uid] take:1]];
-            }];
+                if (nUid.longLongValue != 0)
+                    [userSignals addObject:[[TGUserSignal userWithUserId:nUid.longLongValue] take:1]];
+            }
             
             [[[SSignal combineSignals:userSignals] deliverOn:_queue] startWithNext:^(NSArray *users)
             {

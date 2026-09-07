@@ -1,5 +1,7 @@
 #import "TLRPCchannels_getMessages.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x93d7b347;
+    return (int32_t)0xad8c9a23;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x1c319037;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -87,6 +89,22 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.n_id.count];
+    for (id item in self.n_id) {
+        if ([item isKindOfClass:[NSNumber class]]) {
+            // layer 228: идентификаторы сообщений передаются объектами
+            [os writeInt32:(int32_t)0xa676a322];   // inputMessageID
+            [os writeInt32:[item intValue]];
+        } else {
+            TLMetaClassStore::serializeObject(os, item, true);
+        }
+    }
+}
 
 @end
 

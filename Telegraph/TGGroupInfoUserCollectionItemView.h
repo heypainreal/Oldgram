@@ -27,7 +27,7 @@
 @property (nonatomic, copy) void (^requestPromote)();
 @property (nonatomic, copy) void (^requestDelete)();
 
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int32_t)uidForPlaceholderCalculation canPromote:(bool)canPromote canRestrict:(bool)canRestrict canBan:(bool)canBan canDelete:(bool)canDelete;
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uidForPlaceholderCalculation:(int64_t)uidForPlaceholderCalculation canPromote:(bool)canPromote canRestrict:(bool)canRestrict canBan:(bool)canBan canDelete:(bool)canDelete;
 - (void)setStatus:(NSString *)status active:(bool)active;
 - (void)setAvatarUri:(NSString *)avatarUri;
 - (void)setIsSecretChat:(bool)isSecretChat;

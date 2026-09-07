@@ -717,7 +717,7 @@ static CGRect viewFrame(UIView *view)
     [self updateModeButtonVisibility:true reset:false];
 }
 
-- (void)replaceMention:(NSString *)mention username:(bool)username userId:(int32_t)userId {
+- (void)replaceMention:(NSString *)mention username:(bool)username userId:(int64_t)userId {
     [TGModernConversationInputTextPanel replaceMention:mention inputField:_inputField username:username userId:userId];
 }
 
@@ -725,7 +725,7 @@ static CGRect viewFrame(UIView *view)
     [self replaceMention:mention inputField:inputField username:true userId:0];
 }
 
-+ (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField username:(bool)username userId:(int32_t)userId
++ (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField username:(bool)username userId:(int64_t)userId
 {
     [HPGrowingTextView replaceMention:mention inputField:inputField username:username userId:userId];
 }
@@ -3390,7 +3390,7 @@ static CGRect viewFrame(UIView *view)
     commandKeyboardView.matchDefaultHeight = [self currentReplyMarkup].matchDefaultHeight;
     [commandKeyboardView setReplyMarkup:[self currentReplyMarkup]];
     __weak TGModernConversationInputTextPanel *weakSelf = self;
-    commandKeyboardView.commandActivated = ^(TGBotReplyMarkupButton *button, int32_t userId, int32_t messageId)
+    commandKeyboardView.commandActivated = ^(TGBotReplyMarkupButton *button, int64_t userId, int32_t messageId)
     {
         __strong TGModernConversationInputTextPanel *strongSelf = weakSelf;
         if (strongSelf != nil)

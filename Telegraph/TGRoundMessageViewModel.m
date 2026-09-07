@@ -207,7 +207,11 @@
         bool hasForwardPostId = forwardAttachment.forwardPostId != 0 || forwardAttachment.forwardMid != 0;
         
         _canDownload = video.videoId != 0;
-        _incomingAppearance = _incoming || [authorPeer isKindOfClass:[TGConversation class]] || _savedMessage;
+        // В супергруппе можно писать от имени самой группы: такое сообщение остаётся
+        // нашим исходящим. Слева всегда показываем только посты канала-ленты.
+        TGConversation *authorConversation = [authorPeer isKindOfClass:[TGConversation class]] ? authorPeer : nil;
+        bool authorIsChannel = authorConversation != nil && !(message.outgoing && authorConversation.isChannelGroup);
+        _incomingAppearance = _incoming || authorIsChannel || _savedMessage;
         
         CGFloat scale = [UIScreen mainScreen].scale;
         _backgroundModel = [[TGModernImageViewModel alloc] initWithImage:context.presentation.images.chatRoundMessageBackgroundImage];
@@ -1211,7 +1215,7 @@
             if (TGPeerIdIsChannel(_forwardedPeerId)) {
                 [_context.companionHandle requestAction:@"peerAvatarTapped" options:@{@"peerId": @(_forwardedPeerId), @"messageId": @(_forwardedMessageId)}];
             } else {
-                [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @((int32_t)_forwardedPeerId)}];
+                [_context.companionHandle requestAction:@"userAvatarTapped" options:@{@"uid": @(_forwardedPeerId)}];
             }
         }
     }

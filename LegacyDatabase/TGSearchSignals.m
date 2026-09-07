@@ -73,7 +73,7 @@ static void enumerateStringParts(NSString *string, void (^block)(NSString *, boo
         {
             if ([chatModel isKindOfClass:[TGPrivateChatModel class]])
             {
-                int32_t userId = ((TGPrivateChatModel *)chatModel).peerId.peerId;
+                int64_t userId = ((TGPrivateChatModel *)chatModel).peerId.peerId;
                 for (id model in users)
                 {
                     if ([model isKindOfClass:[TGUserModel class]] && ((TGUserModel *)model).userId == userId)
@@ -163,7 +163,7 @@ static void enumerateStringParts(NSString *string, void (^block)(NSString *, boo
         for (Api86_Peer *peerFound in result.myResults)
         {
             if ([peerFound isKindOfClass:[Api86_Peer_peerUser class]]) {
-                int32_t userId = [((Api86_Peer_peerUser *)peerFound).userId intValue];
+                int64_t userId = [((Api86_Peer_peerUser *)peerFound).userId intValue];
                 
                 for (TGUserModel *userModel in userModels)
                 {
@@ -179,7 +179,7 @@ static void enumerateStringParts(NSString *string, void (^block)(NSString *, boo
         for (Api86_Peer *peerFound in result.results)
         {
             if ([peerFound isKindOfClass:[Api86_Peer_peerUser class]]) {
-                int32_t userId = [((Api86_Peer_peerUser *)peerFound).userId intValue];
+                int64_t userId = [((Api86_Peer_peerUser *)peerFound).userId intValue];
                 
                 for (TGUserModel *userModel in userModels)
                 {

@@ -28,7 +28,10 @@
 
 - (void)serialize:(NSMutableData *)data
 {
-    int32_t magic = 0x72413fad;
+    // Версия 6: идентификатор автора пересылки стал 64-битным — у аккаунтов
+    // последних лет он не помещается в int32. Прошлые версии читаются как
+    // раньше, поэтому уже сохранённые сообщения не ломаются.
+    int32_t magic = 0x72413fae;
     [data appendBytes:&magic length:4];
     
     int dataLengthPtr = (int)data.length;
@@ -39,7 +42,7 @@
     [data appendBytes:&_forwardDate length:4];
     [data appendBytes:&_forwardMid length:4];
     
-    [data appendBytes:&_forwardAuthorUserId length:4];
+    [data appendBytes:&_forwardAuthorUserId length:8];
     [data appendBytes:&_forwardPostId length:4];
     
     [data appendBytes:&_forwardSourcePeerId length:8];
@@ -74,6 +77,9 @@
     } else if (magic == 0x72413fad) {
         version = 5;
         [is read:(uint8_t *)&dataLength maxLength:4];
+    } else if (magic == 0x72413fae) {
+        version = 6;
+        [is read:(uint8_t *)&dataLength maxLength:4];
     } else {
         dataLength = magic;
     }
@@ -98,7 +104,15 @@
     [is read:(uint8_t *)&forwardMid maxLength:4];
     messageAttachment.forwardMid = forwardMid;
     
-    if (version >= 3) {
+    if (version >= 6) {
+        int64_t forwardAuthorUserId = 0;
+        [is read:(uint8_t *)&forwardAuthorUserId maxLength:8];
+        messageAttachment.forwardAuthorUserId = forwardAuthorUserId;
+        
+        int32_t forwardPostId = 0;
+        [is read:(uint8_t *)&forwardPostId maxLength:4];
+        messageAttachment.forwardPostId = forwardPostId;
+    } else if (version >= 3) {
         int32_t forwardAuthorUserId = 0;
         [is read:(uint8_t *)&forwardAuthorUserId maxLength:4];
         messageAttachment.forwardAuthorUserId = forwardAuthorUserId;

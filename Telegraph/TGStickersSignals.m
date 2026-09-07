@@ -578,7 +578,13 @@ static OSSpinLock cachedPacksLock = 0;
                 }
                 
                 if (currentPack == nil || currentPack.packHash != resultPack.n_hash || currentPack.installedDate == 0)
-                    [missingPackSignals addObject:[self stickerPackInfo:resultPackReference packHash:resultPack.n_hash]];
+                {
+                    // Один недоступный набор раньше ронял загрузку всех
+                    // стикеров — панель оставалась пустой.
+                    [missingPackSignals addObject:[[self stickerPackInfo:resultPackReference packHash:resultPack.n_hash] catch:^SSignal *(__unused id error) {
+                        return [SSignal single:[NSNull null]];
+                    }]];
+                }
                 
                 [resultingPackReferences addObject:resultPackReference];
             }
@@ -593,6 +599,8 @@ static OSSpinLock cachedPacksLock = 0;
                     
                     for (TGStickerPack *pack in additionalPacks)
                     {
+                        if (![pack isKindOfClass:[TGStickerPack class]])
+                            continue;
                         if ([pack.packReference isEqual:reference])
                         {
                             foundPack = pack;
@@ -632,7 +640,12 @@ static OSSpinLock cachedPacksLock = 0;
     getArchivedStickers.offset_id = 0;
     getArchivedStickers.limit = 1;
     
-    SSignal *archivedStickers = [[[TGTelegramNetworking instance] requestSignal:getArchivedStickers] mapToSignal:^SSignal *(TLmessages_ArchivedStickers *result) {
+    SSignal *archivedStickers = [[[[TGTelegramNetworking instance] requestSignal:getArchivedStickers] catch:^SSignal *(__unused id error) {
+        return [SSignal single:[NSNull null]];
+    }] mapToSignal:^SSignal *(TLmessages_ArchivedStickers *result) {
+        if (result == nil || [(id)result isKindOfClass:[NSNull class]]) {
+            return [SSignal single:[NSNull null]];
+        }
         TGArchivedStickerPacksSummary *summary = [[TGArchivedStickerPacksSummary alloc] initWithCount:result.count];
         NSDictionary *dict = [self replaceArchivedStickerPacksSummary:summary];
         
@@ -690,7 +703,11 @@ static OSSpinLock cachedPacksLock = 0;
                 }
                 
                 if (currentPack == nil || currentPack.packHash != resultPack.n_hash)
-                    [missingPackSignals addObject:[self stickerPackInfo:resultPackReference packHash:resultPack.n_hash featured:true]];
+                {
+                    [missingPackSignals addObject:[[self stickerPackInfo:resultPackReference packHash:resultPack.n_hash featured:true] catch:^SSignal *(__unused id error) {
+                        return [SSignal single:[NSNull null]];
+                    }]];
+                }
                 
                 [resultingPackReferences addObject:resultPackReference];
             }
@@ -705,6 +722,8 @@ static OSSpinLock cachedPacksLock = 0;
                     
                     for (TGStickerPack *pack in additionalPacks)
                     {
+                        if (![pack isKindOfClass:[TGStickerPack class]])
+                            continue;
                         if ([pack.packReference isEqual:reference])
                         {
                             foundPack = pack;

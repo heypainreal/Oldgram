@@ -506,7 +506,7 @@
     TLMessageEntity$messageEntityMentionName *object = [[TLMessageEntity$messageEntityMentionName alloc] init];
     object.offset = metaObject->getInt32((int32_t)0xfc56269);
     object.length = metaObject->getInt32((int32_t)0x18492126);
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     return object;
 }
 

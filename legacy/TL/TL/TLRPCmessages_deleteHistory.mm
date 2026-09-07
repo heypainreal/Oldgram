@@ -1,5 +1,7 @@
 #import "TLRPCmessages_deleteHistory.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x1c015b09;
+    return (int32_t)0xb08f922a;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x90004f94;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -94,6 +96,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // Биты, которые выставляет приложение, в схеме 228 значат то же самое.
+    [os writeInt32:self.flags];
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:(int32_t)self.max_id];
+}
 
 @end
 

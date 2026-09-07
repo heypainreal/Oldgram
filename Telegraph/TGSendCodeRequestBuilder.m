@@ -13,6 +13,7 @@
 #import "TGTermsOfService.h"
 
 #import "TLauth_SentCode$auth_sentCode.h"
+#import "ModernTL.h"
 
 @interface TGSendCodeRequestBuilder ()
 {
@@ -94,7 +95,7 @@
     }
 }
 
-- (void)sendCodeRequestSuccess:(TLauth_SentCode$auth_sentCode *)sendCode
+- (void)sendCodeRequestSuccess:(id)sendCode
 {
     if (_timer != nil)
     {
@@ -102,28 +103,25 @@
         _timer = nil;
     }
     
+    // Ответ приходит современным auth.sentCode (layer 228): phone_registered
+    // из схемы убрали, а способ доставки кода определяется классом type.
+    id codeType = [sendCode valueForKey:@"type"];
+    bool sentToTelegram = [codeType isKindOfClass:[ModernTL_auth_sentCodeTypeApp class]];
+    bool sentViaPhone = [codeType isKindOfClass:[ModernTL_auth_sentCodeTypeCall class]]
+        || [codeType isKindOfClass:[ModernTL_auth_sentCodeTypeFlashCall class]]
+        || [codeType isKindOfClass:[ModernTL_auth_sentCodeTypeMissedCall class]];
+    
+    int32_t timeout = [[sendCode valueForKey:@"timeout"] intValue];
+    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"phoneCodeHash"] = [sendCode valueForKey:@"phone_code_hash"];
+    dict[@"phoneRegistered"] = @YES;
+    dict[@"callTimeout"] = @(timeout > 0 ? timeout : 60);
+    dict[@"messageSentToTelegram"] = @(sentToTelegram);
+    if (sentViaPhone)
+        dict[@"messageSentViaPhone"] = @YES;
     
-    if ([sendCode.type isKindOfClass:[TLauth_SentCodeType$auth_sentCodeTypeApp class]]) {
-        [dict setObject:sendCode.phone_code_hash forKey:@"phoneCodeHash"];
-        [dict setObject:[NSNumber numberWithBool:sendCode.phone_registered] forKey:@"phoneRegistered"];
-        dict[@"callTimeout"] = @(sendCode.timeout);
-        dict[@"messageSentToTelegram"] = @true;
-    } else {
-        [dict setObject:sendCode.phone_code_hash forKey:@"phoneCodeHash"];
-        [dict setObject:[NSNumber numberWithBool:sendCode.phone_registered] forKey:@"phoneRegistered"];
-        dict[@"callTimeout"] = @(sendCode.timeout);
-        if ([sendCode.type isKindOfClass:[TLauth_SentCodeType$auth_sentCodeTypeCall class]]) {
-            dict[@"messageSentViaPhone"] = @true;
-        }
-    }
-    
-    if (sendCode.terms_of_service != nil)
-    {
-        TGTermsOfService *tos = [[TGTermsOfService alloc] initWithTL:sendCode.terms_of_service];
-        if (tos != nil)
-            dict[@"termsOfService"] = tos;
-    }
+    // Контроллер входа ждёт узел графа, а не сам словарь.
     [ActionStageInstance() actionCompleted:self.path result:[[SGraphObjectNode alloc] initWithObject:dict]];
 }
 

@@ -4,6 +4,7 @@
 #import "../NSOutputStream+TL.h"
 
 #import "TLFileLocation.h"
+#import "../TLMetaClassStore.h"
 
 @implementation TLPhotoSize
 
@@ -189,3 +190,38 @@
 
 @end
 
+@implementation TLPhotoSize$photoSizeProgressive
+
+- (int32_t)TLconstructorSignature
+{
+    return (int32_t)0xfa3efb95;
+}
+
+- (int32_t)TLconstructorName
+{
+    return -1;
+}
+
+- (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
+{
+    return nil;
+}
+
+- (void)TLfillFieldsWithValues:(std::map<int32_t, TLConstructedValue> *)__unused values
+{
+}
+
+// photoSizeProgressive#fa3efb95 type:string w:int h:int sizes:Vector<int>
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeString:self.type == nil ? @"" : self.type];
+    [os writeInt32:self.w];
+    [os writeInt32:self.h];
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.sizes.count];
+    for (id item in self.sizes) {
+        [os writeInt32:[item intValue]];
+    }
+}
+
+@end

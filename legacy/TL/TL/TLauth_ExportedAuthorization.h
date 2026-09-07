@@ -6,7 +6,7 @@
 
 @interface TLauth_ExportedAuthorization : NSObject <TLObject>
 
-@property (nonatomic) int32_t n_id;
+@property (nonatomic) int64_t n_id;
 @property (nonatomic, retain) NSData *bytes;
 
 @end

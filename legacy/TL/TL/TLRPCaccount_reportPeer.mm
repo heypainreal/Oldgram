@@ -1,5 +1,7 @@
 #import "TLRPCaccount_reportPeer.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xae189d5f;
+    return (int32_t)0xc5ba3d86;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x5f0c50e6;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -87,6 +89,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    TLMetaClassStore::serializeObject(os, self.reason, true);
+    [os writeString:@""];
+}
 
 @end
 

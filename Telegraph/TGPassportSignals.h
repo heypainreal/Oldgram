@@ -14,8 +14,8 @@
 
 + (SSignal *)allSecureValuesWithSecret:(NSData *)secret;
 
-+ (SSignal *)authorizationFormForBotId:(int32_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey;
-+ (SSignal *)acceptAuthorizationForBotId:(int32_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey finalForm:(TGPassportDecryptedForm *)finalForm payload:(NSString *)payload nonce:(NSString *)nonce;
++ (SSignal *)authorizationFormForBotId:(int64_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey;
++ (SSignal *)acceptAuthorizationForBotId:(int64_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey finalForm:(TGPassportDecryptedForm *)finalForm payload:(NSString *)payload nonce:(NSString *)nonce;
 
 + (SSignal *)sendPhoneVerificationCode:(NSString *)phoneNumber;
 + (SSignal *)verifyPhone:(NSString *)phoneNumber code:(NSString *)code hash:(NSString *)hash;

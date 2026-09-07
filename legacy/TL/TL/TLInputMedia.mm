@@ -1,5 +1,7 @@
 #import "TLInputMedia.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -156,12 +158,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xe9bfb4f3;
+    return (int32_t)0xe3af4434;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x813364f2;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -181,6 +183,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000001)];
+    TLMetaClassStore::serializeObject(os, self.n_id, true);
+    if (self.flags & (1 << 0)) {
+        [os writeInt32:(int32_t)self.ttl_seconds];
+    }
+}
 
 @end
 
@@ -229,12 +240,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x23ab23d2;
+    return (int32_t)0xa8763ab5;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xe8c5765a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -254,6 +265,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000001)];
+    TLMetaClassStore::serializeObject(os, self.n_id, true);
+    if (self.flags & (1 << 0)) {
+        [os writeInt32:(int32_t)self.ttl_seconds];
+    }
+}
 
 @end
 
@@ -262,12 +282,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x3b7c62be;
+    return (int32_t)0xe5bbfe1a;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x37524dc0;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -287,6 +307,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000001)];
+    [os writeString:self.url == nil ? @"" : self.url];
+    if (self.flags & (1 << 0)) {
+        [os writeInt32:(int32_t)self.ttl_seconds];
+    }
+}
 
 @end
 
@@ -295,12 +324,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x7477f92c;
+    return (int32_t)0x779600f9;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xb14ffa16;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -320,6 +349,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000001)];
+    [os writeString:self.url == nil ? @"" : self.url];
+    if (self.flags & (1 << 0)) {
+        [os writeInt32:(int32_t)self.ttl_seconds];
+    }
+}
 
 @end
 
@@ -361,12 +399,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x1e287d04;
+    return (int32_t)0x7d8375da;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xcc1a5a1f;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -407,6 +445,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000002)];
+    TLMetaClassStore::serializeObject(os, self.file, true);
+    if (self.flags & (1 << 1)) {
+        [os writeInt32:(int32_t)self.ttl_seconds];
+    }
+}
 
 @end
 
@@ -415,12 +462,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xf285c726;
+    return (int32_t)0x037c9330;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xf6ef5e25;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -482,6 +529,24 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000006)];
+    TLMetaClassStore::serializeObject(os, self.file, true);
+    if (self.flags & (1 << 2)) {
+        TLMetaClassStore::serializeObject(os, self.thumb, true);
+    }
+    [os writeString:self.mime_type == nil ? @"" : self.mime_type];
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.attributes.count];
+    for (id item in self.attributes) {
+        TLMetaClassStore::serializeObject(os, item, true);
+    }
+    if (self.flags & (1 << 1)) {
+        [os writeInt32:(int32_t)self.ttl_seconds];
+    }
+}
 
 @end
 
@@ -490,12 +555,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x7b1a118f;
+    return (int32_t)0x971fa843;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x8ab41d1e;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -522,6 +587,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.geo_point, true);
+}
 
 @end
 

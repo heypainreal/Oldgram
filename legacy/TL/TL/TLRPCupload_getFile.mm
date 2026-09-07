@@ -1,5 +1,7 @@
 #import "TLRPCupload_getFile.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,19 +57,19 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xe3a6cfb5;
+    return (int32_t)0xbe5335be;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x446d2c15;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCupload_getFile$upload_getFile *object = [[TLRPCupload_getFile$upload_getFile alloc] init];
     object.location = metaObject->getObject((int32_t)0x504a1f06);
-    object.offset = metaObject->getInt32((int32_t)0xfc56269);
+    object.offset = metaObject->getInt64((int32_t)0xfc56269);
     object.limit = metaObject->getInt32((int32_t)0xb8433fca);
     return object;
 }
@@ -94,6 +96,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.location, true);
+    [os writeInt64:(int64_t)self.offset];
+    [os writeInt32:(int32_t)self.limit];
+}
 
 @end
 

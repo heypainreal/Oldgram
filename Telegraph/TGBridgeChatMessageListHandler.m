@@ -16,6 +16,19 @@
 NSString *const TGBridgeUserIdsKey = @"userIds";
 NSString *const TGBridgeChannelIdsKey = @"channelIds";
 
+
+/// Безопасное добавление идентификатора пользователя в индекс-множество.
+///
+/// NSMutableIndexSet принимает только неотрицательные значения, а usercode
+/// клал туда усечённый до 32 бит идентификатор: у современных аккаунтов он
+/// уходит в минус, и приложение падало с исключением.
+static inline void TGBridgeAddUserId(NSMutableIndexSet *set, int64_t uid)
+{
+    if (uid > 0 && uid <= (int64_t)NSIntegerMax) {
+        [set addIndex:(NSUInteger)uid];
+    }
+}
+
 @implementation TGBridgeChatMessageListHandler
 
 + (SSignal *)handlingSignalForSubscription:(TGBridgeSubscription *)subscription server:(TGBridgeServer *)__unused server
@@ -28,7 +41,7 @@ NSString *const TGBridgeChannelIdsKey = @"channelIds";
         {
             NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
             if (messagesListSubscription.peerId > 0 && !TGPeerIdIsChannel(messagesListSubscription.peerId))
-                [userIds addIndex:(int32_t)messagesListSubscription.peerId];
+                TGBridgeAddUserId(userIds, messagesListSubscription.peerId);
             
             NSMutableArray *channelIds = [[NSMutableArray alloc] init];
             for (TGMessage *message in messageListView.messages)
@@ -109,7 +122,7 @@ NSString *const TGBridgeChannelIdsKey = @"channelIds";
             
             NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
             if (messageSubscription.peerId > 0 && !TGPeerIdIsChannel(messageSubscription.peerId))
-                [userIds addIndex:(int32_t)messageSubscription.peerId];
+                TGBridgeAddUserId(userIds, messageSubscription.peerId);
             
             NSMutableArray *channelIds = [[NSMutableArray alloc] init];
 
@@ -191,9 +204,9 @@ NSString *const TGBridgeChannelIdsKey = @"channelIds";
 {
     NSMutableIndexSet *userIds = [[NSMutableIndexSet alloc] init];
     if (message.fromUid == 0)
-        [userIds addIndex:TGTelegraphInstance.clientUserId];
+        TGBridgeAddUserId(userIds, TGTelegraphInstance.clientUserId);
     else if (!TGPeerIdIsChannel(message.fromUid))
-        [userIds addIndex:(int32_t)message.fromUid];
+        TGBridgeAddUserId(userIds, message.fromUid);
     
     NSMutableArray *channelIds = [[NSMutableArray alloc] init];
     
@@ -205,7 +218,7 @@ NSString *const TGBridgeChannelIdsKey = @"channelIds";
         {
             TGContactMediaAttachment *contactAttachment = (TGContactMediaAttachment *)attachment;
             if (contactAttachment.uid != 0)
-                [userIds addIndex:contactAttachment.uid];
+                TGBridgeAddUserId(userIds, contactAttachment.uid);
         }
         else if ([attachment isKindOfClass:[TGForwardedMessageMediaAttachment class]])
         {
@@ -215,7 +228,7 @@ NSString *const TGBridgeChannelIdsKey = @"channelIds";
                 if (TGPeerIdIsChannel(forwardAttachment.forwardPeerId))
                     [channelIds addObject:@(forwardAttachment.forwardPeerId)];
                 else
-                    [userIds addIndex:(int32_t)forwardAttachment.forwardPeerId];
+                    TGBridgeAddUserId(userIds, forwardAttachment.forwardPeerId);
             }
         }
         else if ([attachment isKindOfClass:[TGReplyMessageMediaAttachment class]])
@@ -226,14 +239,14 @@ NSString *const TGBridgeChannelIdsKey = @"channelIds";
                 if (TGPeerIdIsChannel(replyAttachment.replyMessage.fromUid))
                     [channelIds addObject:@(replyAttachment.replyMessage.fromUid)];
                 else
-                    [userIds addIndex:(int32_t)replyAttachment.replyMessage.fromUid];
+                    TGBridgeAddUserId(userIds, replyAttachment.replyMessage.fromUid);
             }
         }
         else if ([attachment isKindOfClass:[TGActionMediaAttachment class]])
         {
             TGActionMediaAttachment *actionAttachment = (TGActionMediaAttachment *)attachment;
             if (actionAttachment.actionData[@"uid"] != nil)
-                [userIds addIndex:[actionAttachment.actionData[@"uid"] int32Value]];
+                TGBridgeAddUserId(userIds, [actionAttachment.actionData[@"uid"] longLongValue]);
         }
     }
     

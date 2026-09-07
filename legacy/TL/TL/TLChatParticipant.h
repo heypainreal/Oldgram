@@ -6,13 +6,13 @@
 
 @interface TLChatParticipant : NSObject <TLObject>
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 
 @end
 
 @interface TLChatParticipant$chatParticipant : TLChatParticipant
 
-@property (nonatomic) int32_t inviter_id;
+@property (nonatomic) int64_t inviter_id;
 @property (nonatomic) int32_t date;
 
 @end
@@ -24,7 +24,7 @@
 
 @interface TLChatParticipant$chatParticipantAdmin : TLChatParticipant
 
-@property (nonatomic) int32_t inviter_id;
+@property (nonatomic) int64_t inviter_id;
 @property (nonatomic) int32_t date;
 
 @end

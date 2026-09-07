@@ -1,5 +1,7 @@
 #import "TLRPChelp_getInviteText.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xa4a95186;
+    return (int32_t)0x4d392343;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x35425749;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -79,6 +81,10 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+}
 
 @end
 

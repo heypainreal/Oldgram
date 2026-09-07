@@ -4143,6 +4143,16 @@
 		D098418A19CB9BE200CE5BB0 /* TLFutureSalts.mm in Sources */ = {isa = PBXBuildFile; fileRef = D098403419CB9BE200CE5BB0 /* TLFutureSalts.mm */; };
 		D098418B19CB9BE200CE5BB0 /* TLMessageContainer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D098403619CB9BE200CE5BB0 /* TLMessageContainer.mm */; };
 		D098418C19CB9BE200CE5BB0 /* TLMetaClassStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = D098403819CB9BE200CE5BB0 /* TLMetaClassStore.mm */; };
+		D0AA00000000000000000103 /* ModernBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000102 /* ModernBridge.mm */; };
+		D0AA00000000000000000003 /* ModernTLRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000002 /* ModernTLRegistry.mm */; };
+		D0AA00000000000000000005 /* ModernTL_0.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000004 /* ModernTL_0.mm */; };
+		D0AA00000000000000000007 /* ModernTL_1.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000006 /* ModernTL_1.mm */; };
+		D0AA00000000000000000009 /* ModernTL_2.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000008 /* ModernTL_2.mm */; };
+		D0AA0000000000000000000B /* ModernTL_3.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA0000000000000000000A /* ModernTL_3.mm */; };
+		D0AA0000000000000000000D /* ModernTL_4.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA0000000000000000000C /* ModernTL_4.mm */; };
+		D0AA0000000000000000000F /* ModernTL_5.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA0000000000000000000E /* ModernTL_5.mm */; };
+		D0AA00000000000000000011 /* ModernTL_6.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000010 /* ModernTL_6.mm */; };
+		D0AA00000000000000000013 /* ModernTL_7.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0AA00000000000000000012 /* ModernTL_7.mm */; };
 		D098418D19CB9BE200CE5BB0 /* TLMetaConstructor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D098403A19CB9BE200CE5BB0 /* TLMetaConstructor.mm */; };
 		D098418E19CB9BE200CE5BB0 /* TLMetaObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = D098403D19CB9BE200CE5BB0 /* TLMetaObject.mm */; };
 		D098418F19CB9BE200CE5BB0 /* TLMetaRpc.mm in Sources */ = {isa = PBXBuildFile; fileRef = D098403F19CB9BE200CE5BB0 /* TLMetaRpc.mm */; };
@@ -5119,7 +5129,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				68744C2E1BB1A9F800FE6542 /* watchkitapp.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10775,6 +10784,17 @@
 		D098403619CB9BE200CE5BB0 /* TLMessageContainer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TLMessageContainer.mm; sourceTree = "<group>"; };
 		D098403719CB9BE200CE5BB0 /* TLMetaClassStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLMetaClassStore.h; sourceTree = "<group>"; };
 		D098403819CB9BE200CE5BB0 /* TLMetaClassStore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TLMetaClassStore.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000102 /* ModernBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernBridge.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000002 /* ModernTLRegistry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTLRegistry.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000004 /* ModernTL_0.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_0.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000006 /* ModernTL_1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_1.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000008 /* ModernTL_2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_2.mm; sourceTree = "<group>"; };
+		D0AA0000000000000000000A /* ModernTL_3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_3.mm; sourceTree = "<group>"; };
+		D0AA0000000000000000000C /* ModernTL_4.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_4.mm; sourceTree = "<group>"; };
+		D0AA0000000000000000000E /* ModernTL_5.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_5.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000010 /* ModernTL_6.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_6.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000012 /* ModernTL_7.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ModernTL_7.mm; sourceTree = "<group>"; };
+		D0AA00000000000000000014 /* ModernTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModernTL.h; sourceTree = "<group>"; };
 		D098403919CB9BE200CE5BB0 /* TLMetaConstructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLMetaConstructor.h; sourceTree = "<group>"; };
 		D098403A19CB9BE200CE5BB0 /* TLMetaConstructor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TLMetaConstructor.mm; sourceTree = "<group>"; };
 		D098403B19CB9BE200CE5BB0 /* TLMetaField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLMetaField.h; sourceTree = "<group>"; };
@@ -21438,6 +21458,17 @@
 				D098403619CB9BE200CE5BB0 /* TLMessageContainer.mm */,
 				D098403719CB9BE200CE5BB0 /* TLMetaClassStore.h */,
 				D098403819CB9BE200CE5BB0 /* TLMetaClassStore.mm */,
+				D0AA00000000000000000102 /* ModernBridge.mm */,
+				D0AA00000000000000000002 /* ModernTLRegistry.mm */,
+				D0AA00000000000000000004 /* ModernTL_0.mm */,
+				D0AA00000000000000000006 /* ModernTL_1.mm */,
+				D0AA00000000000000000008 /* ModernTL_2.mm */,
+				D0AA0000000000000000000A /* ModernTL_3.mm */,
+				D0AA0000000000000000000C /* ModernTL_4.mm */,
+				D0AA0000000000000000000E /* ModernTL_5.mm */,
+				D0AA00000000000000000010 /* ModernTL_6.mm */,
+				D0AA00000000000000000012 /* ModernTL_7.mm */,
+				D0AA00000000000000000014 /* ModernTL.h */,
 				D098403919CB9BE200CE5BB0 /* TLMetaConstructor.h */,
 				D098403A19CB9BE200CE5BB0 /* TLMetaConstructor.mm */,
 				D098403B19CB9BE200CE5BB0 /* TLMetaField.h */,
@@ -24762,7 +24793,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				68744C1C1BB1A9F700FE6542 /* PBXTargetDependency */,
+				
 			);
 			name = watchkitapp;
 			productName = watchkitapp;
@@ -24862,7 +24893,7 @@
 				D020FB011D99509500F279AA /* PBXTargetDependency */,
 				D0CB068C1ADC8DC6005E298F /* PBXTargetDependency */,
 				D061F3011A9290F80031BCBE /* PBXTargetDependency */,
-				68744C2D1BB1A9F800FE6542 /* PBXTargetDependency */,
+				
 				D020FAE41D99466A00F279AA /* PBXTargetDependency */,
 				D020FB101D99637200F279AA /* PBXTargetDependency */,
 				099120CB1EEAA63400F1366E /* PBXTargetDependency */,
@@ -25893,7 +25924,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#/usr/bin/perl -pe 's/(BUILD_NUMBER = )(\\d+)/$1.($2+1)/eg' -i buildnumber.xcconfig\nsh ${PROJECT_DIR}/tools/bump_build_number.sh \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\nsh ${PROJECT_DIR}/tools/sync_watch_version.sh \"${PROJECT_DIR}/${INFOPLIST_FILE}\" \"${PROJECT_DIR}/Watch/App/Info.plist\"\n";
+			shellScript = "#/usr/bin/perl -pe 's/(BUILD_NUMBER = )(\\d+)/$1.($2+1)/eg' -i buildnumber.xcconfig\nsh \"${PROJECT_DIR}/tools/bump_build_number.sh\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\nsh \"${PROJECT_DIR}/tools/sync_watch_version.sh\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\" \"${PROJECT_DIR}/Watch/App/Info.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -26782,6 +26813,16 @@
 				D0115F0B1F41F12F0039383E /* TLRPCaccount_getWallPapers.mm in Sources */,
 				D01161831F41F1330039383E /* NSArray_TopPeerCategoryPeers.mm in Sources */,
 				D098418C19CB9BE200CE5BB0 /* TLMetaClassStore.mm in Sources */,
+				D0AA00000000000000000103 /* ModernBridge.mm in Sources */,
+				D0AA00000000000000000003 /* ModernTLRegistry.mm in Sources */,
+				D0AA00000000000000000005 /* ModernTL_0.mm in Sources */,
+				D0AA00000000000000000007 /* ModernTL_1.mm in Sources */,
+				D0AA00000000000000000009 /* ModernTL_2.mm in Sources */,
+				D0AA0000000000000000000B /* ModernTL_3.mm in Sources */,
+				D0AA0000000000000000000D /* ModernTL_4.mm in Sources */,
+				D0AA0000000000000000000F /* ModernTL_5.mm in Sources */,
+				D0AA00000000000000000011 /* ModernTL_6.mm in Sources */,
+				D0AA00000000000000000013 /* ModernTL_7.mm in Sources */,
 				6804D8AF1D1D624E0082E71F /* TGGifGalleryAddAccessoryView.m in Sources */,
 				D01161FF1F41F1340039383E /* TLcontacts_SentLink.mm in Sources */,
 				D01161911F41F1330039383E /* TLaccount_PasswordSettings.mm in Sources */,
@@ -28894,7 +28935,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Widget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -28928,7 +28969,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Widget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -28963,7 +29004,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Widget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -28998,7 +29039,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Widget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -29170,7 +29211,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ilya Laktyushin (L583WTN9J2)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -29188,7 +29234,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -29223,7 +29269,9 @@
 				DEVELOPMENT_TEAM = C67CF9S4VU;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
 					"\"$(SRCROOT)/Telegraph/thirdparty/HockeySDK-iOS-3\"",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/Telegraph/thirdparty/HockeySDK-iOS-3/HockeySDK.embeddedframework",
@@ -29258,7 +29306,7 @@
 					"thirdparty/Lottie/lottie-ios/Classes/PublicHeaders",
 				);
 				INFOPLIST_FILE = "Telegraph/Telegraph-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -29314,7 +29362,12 @@
 				DEVELOPMENT_TEAM = C67CF9S4VU;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -29326,7 +29379,7 @@
 					thirdparty/pop,
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -29435,7 +29488,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SiriIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(TELEGRAPH_INTENTS_BUNDLE_ID)";
@@ -29471,13 +29524,18 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = LegacyDatabase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = (
@@ -29521,7 +29579,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SiriIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(TELEGRAPH_INTENTS_BUNDLE_ID)";
@@ -29555,7 +29613,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SiriIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(TELEGRAPH_INTENTS_BUNDLE_ID)";
@@ -29591,13 +29649,18 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = LegacyDatabase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = (
@@ -29644,13 +29707,18 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = LegacyDatabase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
@@ -29694,7 +29762,12 @@
 				DEVELOPMENT_TEAM = X834Q8SBVP;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -29706,7 +29779,7 @@
 					thirdparty/pop,
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -29743,7 +29816,12 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -29754,7 +29832,7 @@
 					thirdparty/pop,
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
@@ -29787,7 +29865,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -29802,7 +29885,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "3d288e61-4eb7-41c0-87cc-4cb24f2b7517";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3d288e61-4eb7-41c0-87cc-4cb24f2b7517";
@@ -29838,7 +29921,9 @@
 				DEVELOPMENT_TEAM = X834Q8SBVP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
 					"\"$(SRCROOT)/Telegraph/Third-Party/HockeySDK-iOS-3/HockeySDK.embeddedframework\"",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/Telegraph/thirdparty/HockeySDK-iOS-3/HockeySDK.embeddedframework",
@@ -29872,7 +29957,7 @@
 					"thirdparty/Lottie/lottie-ios/Classes/PublicHeaders",
 				);
 				INFOPLIST_FILE = "Telegraph/Telegraph-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -29929,7 +30014,12 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -29940,7 +30030,7 @@
 					thirdparty/pop,
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
@@ -30052,7 +30142,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SiriIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(TELEGRAPH_INTENTS_BUNDLE_ID)";
@@ -30088,13 +30178,18 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = LegacyDatabase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
@@ -30135,7 +30230,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ilya Laktyushin (L583WTN9J2)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -30153,7 +30253,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -30188,7 +30288,9 @@
 				DEVELOPMENT_TEAM = DJ7L5686KL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
 					"\"$(SRCROOT)/Telegraph/thirdparty/HockeySDK-iOS-3\"",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/Telegraph/thirdparty/HockeySDK-iOS-3/HockeySDK.embeddedframework",
@@ -30223,7 +30325,7 @@
 					"thirdparty/Lottie/lottie-ios/Classes/PublicHeaders",
 				);
 				INFOPLIST_FILE = "Telegraph/Telegraph-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -30279,7 +30381,12 @@
 				DEVELOPMENT_TEAM = DJ7L5686KL;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -30291,7 +30398,7 @@
 					thirdparty/pop,
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -30400,7 +30507,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SiriIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(TELEGRAPH_INTENTS_BUNDLE_ID)";
@@ -30435,13 +30542,18 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = LegacyDatabase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = (
@@ -30486,7 +30598,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Widget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -30514,7 +30626,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -30529,7 +30646,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "3d288e61-4eb7-41c0-87cc-4cb24f2b7517";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3d288e61-4eb7-41c0-87cc-4cb24f2b7517";
@@ -30565,7 +30682,9 @@
 				DEVELOPMENT_TEAM = DJ7L5686KL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
 					"\"$(SRCROOT)/Telegraph/Third-Party/HockeySDK-iOS-3/HockeySDK.embeddedframework\"",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/Telegraph/thirdparty/HockeySDK-iOS-3/HockeySDK.embeddedframework",
@@ -30599,7 +30718,7 @@
 					"thirdparty/Lottie/lottie-ios/Classes/PublicHeaders",
 				);
 				INFOPLIST_FILE = "Telegraph/Telegraph-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -30655,7 +30774,12 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -30666,7 +30790,7 @@
 					thirdparty/pop,
 				);
 				INFOPLIST_FILE = Share/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
@@ -30778,7 +30902,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SiriIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(TELEGRAPH_INTENTS_BUNDLE_ID)";
@@ -30815,13 +30939,18 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = LegacyDatabase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
@@ -30869,7 +30998,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = Widget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -30897,7 +31026,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ilya Laktyushin (L583WTN9J2)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -30915,7 +31049,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -30946,7 +31080,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Digital Fortress LLC (C67CF9S4VU)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
+);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -30961,7 +31100,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "3d288e61-4eb7-41c0-87cc-4cb24f2b7517";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3d288e61-4eb7-41c0-87cc-4cb24f2b7517";
@@ -30997,7 +31136,9 @@
 				DEVELOPMENT_TEAM = X834Q8SBVP;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
 					"\"$(SRCROOT)/Telegraph/thirdparty/HockeySDK-iOS-3\"",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/Telegraph/thirdparty/HockeySDK-iOS-3/HockeySDK.embeddedframework",
@@ -31032,7 +31173,7 @@
 					"thirdparty/Lottie/lottie-ios/Classes/PublicHeaders",
 				);
 				INFOPLIST_FILE = "Telegraph/Telegraph-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -31089,7 +31230,9 @@
 				DEVELOPMENT_TEAM = C67CF9S4VU;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
+"$(inherited)",
+"$(SYMROOT)/Release-iphoneos",
+"$(SYMROOT)/Release-iphoneos",
 					"\"$(SRCROOT)/Telegraph/Third-Party/HockeySDK-iOS-3/HockeySDK.embeddedframework\"",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)/Telegraph/thirdparty/HockeySDK-iOS-3/HockeySDK.embeddedframework",
@@ -31123,7 +31266,7 @@
 					"thirdparty/Lottie/lottie-ios/Classes/PublicHeaders",
 				);
 				INFOPLIST_FILE = "Telegraph/Telegraph-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

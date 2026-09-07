@@ -2,7 +2,7 @@
 
 @implementation TGChannelChatModel
 
-- (instancetype)initWithChannelId:(int32_t)channelId title:(NSString *)title avatarLocation:(TGFileLocation *)avatarLocation isGroup:(bool)isGroup accessHash:(int64_t)accessHash
+- (instancetype)initWithChannelId:(int64_t)channelId title:(NSString *)title avatarLocation:(TGFileLocation *)avatarLocation isGroup:(bool)isGroup accessHash:(int64_t)accessHash
 {
     self = [super initWithPeerId:TGPeerIdChannelMake(channelId)];
     if (self != nil)

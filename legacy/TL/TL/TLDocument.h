@@ -21,8 +21,10 @@
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
 @property (nonatomic, retain) NSString *mime_type;
-@property (nonatomic) int32_t size;
+@property (nonatomic) int64_t size;
 @property (nonatomic, retain) TLPhotoSize *thumb;
+/// Все превью схемы 228: первое из них бывает photoStrippedSize без размеров.
+@property (nonatomic, retain) NSArray *thumbs;
 @property (nonatomic) int32_t dc_id;
 @property (nonatomic) int32_t version;
 @property (nonatomic, retain) NSArray *attributes;

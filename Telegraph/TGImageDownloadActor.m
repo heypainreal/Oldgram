@@ -300,13 +300,18 @@ static inline double imageProcessingPriority()
     else
         url = [actualPath substringWithRange:NSMakeRange(6, actualPath.length - 6 - 1)];
     
+    // Путь актора собирается через stringByEscapingForActorURL, и двоеточие в
+    // адресах схемы 228 («peerphoto:», «photofile:», «docthumb:») превращается
+    // в %3A — префикс переставал узнаваться и файл не скачивался. Возвращаем
+    // адресу исходный вид: в старом формате процентов не бывает.
+    NSString *unescapedUrl = [url stringByRemovingPercentEncoding];
+    if (unescapedUrl != nil)
+        url = unescapedUrl;
+    
     NSString *rewrittenUrl = [TGImageDownloadActor possiblyRewrittenUrl:url];
     url = rewrittenUrl;
     
-    NSString *storeUrl = url;
-    NSArray *components = [storeUrl componentsSeparatedByString:@"_"];
-    if (components.count >= 5)
-        storeUrl = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+    NSString *storeUrl = TGTrimmedImageCacheUrl(url);
     
     if (processor != nil)
         storeUrl = [[NSString alloc] initWithFormat:@"{filter:%@}%@", processorName, storeUrl];
@@ -365,7 +370,7 @@ static inline double imageProcessingPriority()
     {
         int64_t conversationId = [[url substringFromIndex:@"dialogListPlaceholder:".length] longLongValue];
         
-        UIImage *image = conversationId < 0 ? [[TGInterfaceAssets instance] groupAvatarPlaceholder:conversationId] : [[TGInterfaceAssets instance] avatarPlaceholder:(int)conversationId];
+        UIImage *image = conversationId < 0 ? [[TGInterfaceAssets instance] groupAvatarPlaceholder:conversationId] : [[TGInterfaceAssets instance] avatarPlaceholder:(int64_t)conversationId];
         
         if (image != nil && allowMemoryCache && (!TG_CACHE_INPLACE || forceMemoryCache))
             [cache cacheImage:image withData:nil url:storeUrl availability:TGCacheMemory];
@@ -384,15 +389,8 @@ static inline double imageProcessingPriority()
         url2 = url;
     }
     
-    NSString *trimmedUrl1 = url1;
-    components = [url1 componentsSeparatedByString:@"_"];
-    if (components.count >= 5)
-        trimmedUrl1 = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
-    
-    NSString *trimmedUrl2 = url2;
-    components = [url2 componentsSeparatedByString:@"_"];
-    if (components.count >= 5)
-        trimmedUrl2 = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+    NSString *trimmedUrl1 = TGTrimmedImageCacheUrl(url1);
+    NSString *trimmedUrl2 = TGTrimmedImageCacheUrl(url2);
     
     NSString *trimmedUrl = cacheFiltered ? trimmedUrl2 : trimmedUrl1;
     
@@ -700,6 +698,13 @@ static inline double imageProcessingPriority()
                     }
                     
                     _requestedActors = true;
+                    
+                    // Адреса схемы 228 (фото пиров, фотографии, превью документов)
+                    // качаются только через upload.getFile, поэтому ведём их по
+                    // многочастному пути независимо от размера.
+                    if ([trimmedUrl hasPrefix:@"peerphoto:"] || [trimmedUrl hasPrefix:@"photofile:"] || [trimmedUrl hasPrefix:@"docthumb:"])
+                        _multipart = true;
+                    
                     if (_multipart)
                     {
                         static NSString *filesDirectory = nil;
@@ -709,7 +714,9 @@ static inline double imageProcessingPriority()
                             filesDirectory = [[TGAppDelegate documentsPath] stringByAppendingPathComponent:@"temp"];
                         });
                         
-                        NSString *fileDirectoryName = trimmedUrl;
+                        // Двоеточие и слэш в имени каталога недопустимы: адреса
+                        // схемы 228 их содержат, поэтому приводим к безопасному виду.
+                        NSString *fileDirectoryName = [[trimmedUrl stringByReplacingOccurrencesOfString:@":" withString:@"-"] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
                         NSString *fileDirectory = [filesDirectory stringByAppendingPathComponent:fileDirectoryName];
                         
                         if ([[NSFileManager defaultManager] fileExistsAtPath:fileDirectory])
@@ -723,6 +730,106 @@ static inline double imageProcessingPriority()
                         int64_t volumeId = 0;
                         int localId = 0;
                         int64_t secret = 0;
+                        
+                        // Фото пиров (схема 228): адрес несёт пир и photo_id.
+                        int32_t peerPhotoDatacenterId = 0;
+                        int64_t peerPhotoPeerId = 0;
+                        int64_t peerPhotoAccessHash = 0;
+                        int64_t peerPhotoId = 0;
+                        bool peerPhotoBig = false;
+                        if (TGExtractPeerPhotoUrl(trimmedUrl, &peerPhotoDatacenterId, &peerPhotoPeerId, &peerPhotoAccessHash, &peerPhotoId, &peerPhotoBig))
+                        {
+                            TLInputFileLocation$inputPeerPhotoFileLocation *fileLocation = [[TLInputFileLocation$inputPeerPhotoFileLocation alloc] init];
+                            fileLocation.big = peerPhotoBig;
+                            fileLocation.photo_id = peerPhotoId;
+                            fileLocation.peer = [TGTelegraphInstance createInputPeerForConversation:peerPhotoPeerId accessHash:peerPhotoAccessHash];
+                            
+                            NSMutableDictionary *multiPartOptions = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                @"identifier": @(_imageId),
+                                @"fileLocation": fileLocation,
+                                @"storeFilePath": _multipartFilePath,
+                                @"datacenterId": @(peerPhotoDatacenterId != 0 ? peerPhotoDatacenterId : 2),
+                                @"encryptionArgs": @{},
+                                @"mediaTypeTag": @(TGNetworkMediaTypeTagImage),
+                                @"completeWithData": @true
+                            }];
+                            
+                            if (options[@"originInfo"] != nil)
+                                multiPartOptions[@"originInfo"] = options[@"originInfo"];
+                            
+                            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/multipart-file/(peerphoto:%" PRId64 ":%" PRId64 ":%d)", peerPhotoPeerId, peerPhotoId, peerPhotoBig ? 1 : 0] options:multiPartOptions watcher:self];
+                            
+                            return;
+                        }
+                        
+                        // Превью документов и стикеров.
+                        int32_t docThumbDatacenterId = 0;
+                        int64_t docThumbDocumentId = 0;
+                        int64_t docThumbAccessHash = 0;
+                        NSData *docThumbFileReference = nil;
+                        NSString *docThumbType = nil;
+                        if (TGExtractDocumentThumbUrl(trimmedUrl, &docThumbDatacenterId, &docThumbDocumentId, &docThumbAccessHash, &docThumbFileReference, &docThumbType))
+                        {
+                            TLInputFileLocation$inputDocumentFileLocation *fileLocation = [[TLInputFileLocation$inputDocumentFileLocation alloc] init];
+                            fileLocation.n_id = docThumbDocumentId;
+                            fileLocation.access_hash = docThumbAccessHash;
+                            // Ссылка из адреса протухает через час; актуальную держит
+                            // origin info, которую обновляет перезапрос сообщения.
+                            NSData *docThumbFreshReference = [options[@"originInfo"] fileReferenceForDocumentId:docThumbDocumentId accessHash:docThumbAccessHash];
+                            fileLocation.file_reference = docThumbFreshReference ?: (docThumbFileReference ?: [NSData data]);
+                            fileLocation.thumb_size = docThumbType;
+                            
+                            NSMutableDictionary *multiPartOptions = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                @"identifier": @(_imageId),
+                                @"fileLocation": fileLocation,
+                                @"storeFilePath": _multipartFilePath,
+                                @"datacenterId": @(docThumbDatacenterId != 0 ? docThumbDatacenterId : 2),
+                                @"encryptionArgs": @{},
+                                @"mediaTypeTag": @(TGNetworkMediaTypeTagImage),
+                                @"completeWithData": @true
+                            }];
+                            
+                            if (options[@"originInfo"] != nil)
+                                multiPartOptions[@"originInfo"] = options[@"originInfo"];
+                            
+                            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/multipart-file/(docthumb:%" PRId64 ":%@)", docThumbDocumentId, docThumbType.length == 0 ? @"x" : docThumbType] options:multiPartOptions watcher:self];
+                            
+                            return;
+                        }
+                        
+                        // Фотографии (схема 228): адрес несёт id фото и тип размера.
+                        int32_t photoDatacenterId = 0;
+                        int64_t photoIdentifier = 0;
+                        int64_t photoAccessHash = 0;
+                        NSData *photoFileReference = nil;
+                        NSString *photoThumbType = nil;
+                        if (TGExtractPhotoFileUrl(trimmedUrl, &photoDatacenterId, &photoIdentifier, &photoAccessHash, &photoFileReference, &photoThumbType))
+                        {
+                            TLInputFileLocation$inputPhotoFileLocation *fileLocation = [[TLInputFileLocation$inputPhotoFileLocation alloc] init];
+                            fileLocation.n_id = photoIdentifier;
+                            fileLocation.access_hash = photoAccessHash;
+                            NSData *photoFreshReference = [options[@"originInfo"] fileReferenceForPhotoId:photoIdentifier accessHash:photoAccessHash];
+                            fileLocation.file_reference = photoFreshReference ?: photoFileReference;
+                            fileLocation.thumb_size = photoThumbType;
+                            
+                            NSMutableDictionary *multiPartOptions = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                @"identifier": @(_imageId),
+                                @"fileLocation": fileLocation,
+                                @"storeFilePath": _multipartFilePath,
+                                @"datacenterId": @(photoDatacenterId != 0 ? photoDatacenterId : 2),
+                                @"encryptionArgs": @{},
+                                @"mediaTypeTag": @(TGNetworkMediaTypeTagImage),
+                                @"completeWithData": @true
+                            }];
+                            
+                            if (options[@"originInfo"] != nil)
+                                multiPartOptions[@"originInfo"] = options[@"originInfo"];
+                            
+                            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/multipart-file/(photo:%" PRId64 ":%@)", photoIdentifier, photoThumbType.length == 0 ? @"x" : photoThumbType] options:multiPartOptions watcher:self];
+                            
+                            return;
+                        }
+                        
                         if (extractFileUrlComponents(trimmedUrl, &datacenterId, &volumeId, &localId, &secret))
                         {
                             TLInputFileLocation$inputFileLocation *fileLocation = [[TLInputFileLocation$inputFileLocation alloc] init];

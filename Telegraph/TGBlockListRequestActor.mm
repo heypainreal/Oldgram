@@ -30,14 +30,14 @@ static int cachedBlockListVersion = -1;
     {
         [TGDatabaseInstance() loadBlockedList:^(NSArray *blockedList)
         {
-            std::vector<int> userIds;
+            std::vector<int64_t> userIds;
             for (NSNumber *nPeerId in blockedList)
             {
                 int64_t peerId = [nPeerId longLongValue];
                 if (peerId > 0)
-                    userIds.push_back((int)peerId);
+                    userIds.push_back(peerId);
             }
-            std::shared_ptr<std::map<int, TGUser *> > userMap = [TGDatabaseInstance() loadUsers:userIds];
+            std::shared_ptr<std::map<int64_t, TGUser *> > userMap = [TGDatabaseInstance() loadUsers:userIds];
             
             NSMutableArray *users = [[NSMutableArray alloc] initWithCapacity:userMap->size()];
             for (NSNumber *nPeerId in blockedList)
@@ -45,7 +45,7 @@ static int cachedBlockListVersion = -1;
                 int64_t peerId = [nPeerId longLongValue];
                 if (peerId > 0)
                 {
-                    std::map<int, TGUser *>::iterator it = userMap->find((int)peerId);
+                    std::map<int64_t, TGUser *>::iterator it = userMap->find(peerId);
                     if (it != userMap->end())
                         [users addObject:it->second];
                 }
@@ -72,7 +72,7 @@ static int cachedBlockListVersion = -1;
     }
     else
     {
-        int uid = [[options objectForKey:@"uid"] intValue];
+        int64_t uid = [[options objectForKey:@"uid"] longLongValue];
         if (uid != 0)
         {
             [TGDatabaseInstance() loadPeerIsBlocked:uid completion:^(bool blocked)
@@ -84,14 +84,14 @@ static int cachedBlockListVersion = -1;
         {
             [TGDatabaseInstance() loadBlockedList:^(NSArray *blockedList)
             {
-                std::vector<int> userIds;
+                std::vector<int64_t> userIds;
                 for (NSNumber *nPeerId in blockedList)
                 {
                     int64_t peerId = [nPeerId longLongValue];
                     if (peerId > 0)
-                        userIds.push_back((int)peerId);
+                        userIds.push_back(peerId);
                 }
-                std::shared_ptr<std::map<int, TGUser *> > userMap = [TGDatabaseInstance() loadUsers:userIds];
+                std::shared_ptr<std::map<int64_t, TGUser *> > userMap = [TGDatabaseInstance() loadUsers:userIds];
                 
                 NSMutableArray *users = [[NSMutableArray alloc] initWithCapacity:userMap->size()];
                 for (NSNumber *nPeerId in blockedList)
@@ -99,7 +99,7 @@ static int cachedBlockListVersion = -1;
                     int64_t peerId = [nPeerId longLongValue];
                     if (peerId > 0)
                     {
-                        std::map<int, TGUser *>::iterator it = userMap->find((int)peerId);
+                        std::map<int64_t, TGUser *>::iterator it = userMap->find(peerId);
                         if (it != userMap->end())
                             [users addObject:it->second];
                     }
@@ -143,7 +143,7 @@ static int cachedBlockListVersion = -1;
         if (it->second)
         {
             TLContactBlocked$contactBlocked *contactBlocked = [[TLContactBlocked$contactBlocked alloc] init];
-            contactBlocked.user_id = (int)it->first;
+            contactBlocked.user_id = it->first;
             contactBlocked.date = [TGDatabaseInstance() loadBlockedDate:it->first];
             [filteredBlocked addObject:contactBlocked];
         }

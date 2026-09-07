@@ -44,7 +44,7 @@
             TGUser *user = options;
             if (user != nil)
             {
-                int32_t uid = user.uid;
+                int64_t uid = user.uid;
                 if (_completion)
                     _completion(@[@(uid)]);
             }
@@ -204,7 +204,7 @@
     
     for (NSNumber *nUserId in userIds)
     {
-        TGUser *user = [TGDatabaseInstance() loadUser:[nUserId intValue]];
+        TGUser *user = [TGDatabaseInstance() loadUser:[nUserId longLongValue]];
         if (user != nil)
             [users addObject:user];
     }
@@ -276,7 +276,7 @@
     }
 }
 
-- (void)_deleteUserWithUid:(int32_t)uid
+- (void)_deleteUserWithUid:(int64_t)uid
 {
     bool wasEmpty = ((TGCollectionMenuSection *)self.menuSections.sections[0]).items.count <= 1;
     
@@ -331,13 +331,13 @@
 {
     if ([action isEqualToString:@"userItemDeleteRequested"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
             [self _deleteUserWithUid:uid];
     }
     else if ([action isEqualToString:@"userItemSelected"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)

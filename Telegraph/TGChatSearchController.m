@@ -170,21 +170,21 @@ extern NSString *authorNameYou;
     
     if (!conversation.isChat || conversation.isEncrypted)
     {
-        int32_t userId = 0;
+        int64_t userId = 0;
         if (conversation.isEncrypted)
         {
             if (conversation.chatParticipants.chatParticipantUids.count != 0)
                 userId = [conversation.chatParticipants.chatParticipantUids[0] intValue];
         }
         else
-            userId = (int)conversation.conversationId;
+            userId = conversation.conversationId;
         mutePeerId = userId;
         
         TGUser *user = nil;
         if (customUser != nil && customUser.uid == userId)
             user = customUser;
         else
-            user = [[TGDatabase instance] loadUser:(int)userId];
+            user = [[TGDatabase instance] loadUser:(int64_t)userId];
         
         NSString *title = nil;
         NSArray *titleLetters = nil;
@@ -220,7 +220,7 @@ extern NSString *authorNameYou;
             if (user.lastName != nil)
                 dict[@"lastName"] = user.lastName;
         }
-        dict[@"encryptedUserId"] = [[NSNumber alloc] initWithInt:userId];
+        dict[@"encryptedUserId"] = @(userId);
         
         if (user.photoUrlSmall != nil)
             [dict setObject:user.photoUrlSmall forKey:@"avatarUrl"];
@@ -316,7 +316,7 @@ extern NSString *authorNameYou;
                 NSArray *uids = actionAttachment.actionData[@"uids"];
                 if (uids != nil) {
                     for (NSNumber *nUid in uids) {
-                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                         if (user != nil)
                             [messageUsers setObject:user forKey:nUid];
                     }
@@ -324,17 +324,17 @@ extern NSString *authorNameYou;
                     NSNumber *nUid = [actionAttachment.actionData objectForKey:@"uid"];
                     if (nUid != nil)
                     {
-                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                         if (user != nil)
                             [messageUsers setObject:user forKey:nUid];
                     }
                 }
             }
             
-            TGUser *user = conversation.fromUid == selfUser.uid ? selfUser : [TGDatabaseInstance() loadUser:(int)conversation.fromUid];
+            TGUser *user = conversation.fromUid == selfUser.uid ? selfUser : [TGDatabaseInstance() loadUser:conversation.fromUid];
             if (user != nil)
             {
-                [messageUsers setObject:user forKey:[[NSNumber alloc] initWithInt:user.uid]];
+                [messageUsers setObject:user forKey:@(user.uid)];
                 [messageUsers setObject:user forKey:@"author"];
             }
         }

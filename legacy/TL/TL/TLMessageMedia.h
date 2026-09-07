@@ -32,7 +32,7 @@
 @property (nonatomic, retain) NSString *first_name;
 @property (nonatomic, retain) NSString *last_name;
 @property (nonatomic, retain) NSString *vcard;
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 
 @end
 

@@ -1,5 +1,7 @@
 #import "TLInputPeerNotifySettings.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -38,12 +40,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x38935eb2;
+    return (int32_t)0xcacb6ae2;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x2acbe3d5;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -77,6 +79,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:(int32_t)(self.flags & 0x00000004)];
+    if (self.flags & (1 << 2)) {
+        [os writeInt32:(int32_t)self.mute_until];
+    }
+}
 
 @end
 

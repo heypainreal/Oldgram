@@ -12,7 +12,7 @@
 @interface TGModernLetteredAvatarView : TGLetteredAvatarView <TGModernView>
 
 - (void)setAvatarUri:(NSString *)avatarUri filter:(NSString *)filter placeholder:(UIImage *)placeholder;
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int32_t)uid placeholder:(UIImage *)placeholder;
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int64_t)uid placeholder:(UIImage *)placeholder;
 - (void)setTitle:(NSString *)title groupId:(int64_t)groupId placeholder:(UIImage *)placeholder;
 
 @end

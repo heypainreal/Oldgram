@@ -457,7 +457,7 @@ static void signalBarsCallback(tgvoip::VoIPController *controller, int bars)
                 switch (p2pMode)
                 {
                     case 0:
-                        allowP2P = [TGDatabaseInstance() uidIsRemoteContact:(int32_t)state.peerId];
+                        allowP2P = [TGDatabaseInstance() uidIsRemoteContact:state.peerId];
                         break;
                         
                     case 2:
@@ -719,7 +719,7 @@ static void signalBarsCallback(tgvoip::VoIPController *controller, int bars)
     {
         UILocalNotification *notification = [[UILocalNotification alloc] init];
 
-        TGUser *peer = [TGDatabaseInstance() loadUser:(int)peerId];
+        TGUser *peer = [TGDatabaseInstance() loadUser:(int64_t)peerId];
         NSString *text = [NSString stringWithFormat:TGLocalized(@"PHONE_CALL_REQUEST"), peer.displayName];
 
         NSNumber *globalMessageSoundIdVal = nil;
@@ -1049,7 +1049,7 @@ static id<SDisposable> audioSession;
 {
     _internalId = state.internalId;
     if (_peer == nil && state.peerId != 0)
-        _peer = [TGDatabaseInstance() loadUser:(int32_t)state.peerId];
+        _peer = [TGDatabaseInstance() loadUser:state.peerId];
 
     if (_callId == 0 && state.callId != 0)
         _callId = state.callId;

@@ -1281,7 +1281,7 @@ static const NSUInteger loadMoreMemberCount = 100;
 
 - (NSArray *)sortedUsers:(NSArray *)users {
     if (_sortUsersByPresence) {
-        int32_t selfUid = TGTelegraphInstance.clientUserId;
+        int64_t selfUid = TGTelegraphInstance.clientUserId;
         return [users sortedArrayUsingComparator:^NSComparisonResult(TGUser *user1, TGUser *user2) {
             if (user1.botKind != user2.botKind)
             {
@@ -1554,7 +1554,7 @@ static const NSUInteger loadMoreMemberCount = 100;
 {
     if ([action isEqualToString:@"openUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             TGUser *user = [TGDatabaseInstance() loadUser:uid];
@@ -1572,7 +1572,7 @@ static const NSUInteger loadMoreMemberCount = 100;
     }
     else if ([action isEqualToString:@"deleteUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
             [self _commitDeleteParticipant:uid tryRestrict:false];
     }
@@ -1937,7 +1937,7 @@ static const NSUInteger loadMoreMemberCount = 100;
     [self presentViewController:navigationController animated:true completion:nil];
 }
 
-- (void)updateParticipant:(int32_t)uid member:(TGCachedConversationMember *)member {
+- (void)updateParticipant:(int64_t)uid member:(TGCachedConversationMember *)member {
     NSMutableDictionary *updatedMemberDatas = [[NSMutableDictionary alloc] initWithDictionary:_memberDatas];
     
     if (member != nil) {
@@ -1998,7 +1998,7 @@ static const NSUInteger loadMoreMemberCount = 100;
     _memberDatas = updatedMemberDatas;
 }
 
-- (void)removeParticipantFromList:(int32_t)uid {
+- (void)removeParticipantFromList:(int64_t)uid {
     TGChannelGroupInfoController *strongSelf = self;
     NSUInteger index = 0;
     for (TGUser *user in strongSelf->_users) {
@@ -2070,7 +2070,7 @@ static const NSUInteger loadMoreMemberCount = 100;
     }
 }
 
-- (void)_commitDeleteParticipant:(int32_t)uid tryRestrict:(bool)tryRestrict {
+- (void)_commitDeleteParticipant:(int64_t)uid tryRestrict:(bool)tryRestrict {
     for (id item in _usersSection.items)
     {
         if ([item isKindOfClass:[TGGroupInfoUserCollectionItem class]] && ((TGGroupInfoUserCollectionItem *)item).user.uid == uid)

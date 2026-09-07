@@ -1,5 +1,7 @@
 #import "TLRPCmessages_discardEncryption.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -53,12 +55,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xedd923c5;
+    return (int32_t)0xf393aea0;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x9a9ceef6;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -78,6 +80,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeInt32:(int32_t)self.chat_id];
+}
 
 @end
 

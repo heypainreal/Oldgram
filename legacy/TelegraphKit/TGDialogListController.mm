@@ -1558,7 +1558,7 @@ NSString *authorNameYou = @"  __TGLocalized__YOU";
     NSString *query = [searchString lowercaseString];
     bool inhibitSavedMessages = self.dialogListCompanion.showGroupsOnly || self.dialogListCompanion.showPrivateOnly || self.dialogListCompanion.showGroupsAndChannelsOnly;
     bool addSavedMessages = !inhibitSavedMessages && [savedMessagesString hasPrefix:query];
-    int32_t ownUid = TGTelegraphInstance.clientUserId;
+    int64_t ownUid = TGTelegraphInstance.clientUserId;
     
     if ([(NSArray *)items[@"dialogs"] count] != 0)
     {
@@ -3018,7 +3018,7 @@ NSString *authorNameYou = @"  __TGLocalized__YOU";
             
             NSMutableArray *actions = [[NSMutableArray alloc] init];
             
-            TGUser *user = conversation.conversationId > 0 ? [TGDatabaseInstance() loadUser:(int)conversation.conversationId] : nil;
+            TGUser *user = conversation.conversationId > 0 ? [TGDatabaseInstance() loadUser:conversation.conversationId] : nil;
 
             if ([conversation isKindOfClass:[TGFeed class]])
             {

@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getPeerSettings.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x3672e09c;
+    return (int32_t)0xefd9a6a2;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xe85e363e;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -80,6 +82,11 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+}
 
 @end
 

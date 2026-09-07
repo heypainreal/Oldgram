@@ -191,7 +191,7 @@ const NSInteger TGRecentSearchLimit = 20;
     }
 }
 
-+ (SSignal *)searchMessages:(NSString *)query peerId:(int64_t)peerId accessHash:(int64_t)accessHash userId:(int32_t)userId maxId:(int32_t)maxId limit:(int32_t)limit itemMapping:(id (^)(id))itemMapping
++ (SSignal *)searchMessages:(NSString *)query peerId:(int64_t)peerId accessHash:(int64_t)accessHash userId:(int64_t)userId maxId:(int32_t)maxId limit:(int32_t)limit itemMapping:(id (^)(id))itemMapping
 {
     return [[[self searchMessages:query peerId:peerId accessHash:accessHash userId:userId maxId:maxId limit:limit] deliverOn:[SQueue wrapConcurrentNativeQueue:[TGDatabaseInstance() databaseQueue]]] map:^id (NSArray *conversations)
     {
@@ -322,7 +322,7 @@ const NSInteger TGRecentSearchLimit = 20;
         return [[SSignal single:@{@"myPeers": @[], @"peers": @[]}] then:remoteSignal];
 }
 
-+ (SSignal *)searchMessages:(NSString *)query peerId:(int64_t)peerId accessHash:(int64_t)accessHash userId:(int32_t)userId maxId:(int32_t)maxId limit:(int32_t)limit
++ (SSignal *)searchMessages:(NSString *)query peerId:(int64_t)peerId accessHash:(int64_t)accessHash userId:(int64_t)userId maxId:(int32_t)maxId limit:(int32_t)limit
 {
     SSignal *(^remoteSignalGenerator)(NSSet *) = ^SSignal *(NSSet *currentMessageIds)
     {
@@ -603,7 +603,7 @@ const NSInteger TGRecentSearchLimit = 20;
             
             if (conversation == nil)
             {
-                TGUser *user = [TGDatabaseInstance() loadUser:(int)peerId];
+                TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
                 if (user != nil)
                     [peers addObject:user];
             }
@@ -634,7 +634,7 @@ const NSInteger TGRecentSearchLimit = 20;
                                 id item = itemMapping(conversation, false);
                                 if (item != nil) {
                                     if (TGPeerIdIsUser(conversation.conversationId)) {
-                                        TGUser *user = [TGDatabaseInstance() loadUser:(int)conversation.conversationId];
+                                        TGUser *user = [TGDatabaseInstance() loadUser:conversation.conversationId];
                                         if (user != nil) {
                                             [parsedPeers addObject:user];
                                         }
@@ -645,7 +645,7 @@ const NSInteger TGRecentSearchLimit = 20;
                             }
                             
                             if (conversation == nil) {
-                                TGUser *user = [TGDatabaseInstance() loadUser:(int)peer.peerId];
+                                TGUser *user = [TGDatabaseInstance() loadUser:peer.peerId];
                                 if (user != nil) {
                                     [parsedPeers addObject:user];
                                 }
@@ -724,9 +724,9 @@ const NSInteger TGRecentSearchLimit = 20;
                     bool isCreator = false;
                     TGChannelAdminRights *adminRights = nil;
                     TGChannelBannedRights *bannedRights = nil;
-                    int32_t inviterId = 0;
-                    int32_t adminInviterId = 0;
-                    int32_t kickedById = 0;
+                    int64_t inviterId = 0;
+                    int64_t adminInviterId = 0;
+                    int64_t kickedById = 0;
                     bool adminCanManage = false;
                     
                     if ([participant isKindOfClass:[TLChannelParticipant$channelParticipant class]]) {

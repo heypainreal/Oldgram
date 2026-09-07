@@ -209,7 +209,7 @@
 
 #pragma mark - 
 
-- (void)setAuthorized:(bool)authorized userId:(int32_t)userId
+- (void)setAuthorized:(bool)authorized userId:(int64_t)userId
 {
     [[TGBridgeServer queue] dispatch:^{
         _activeContext.authorized = authorized;

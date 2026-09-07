@@ -201,7 +201,7 @@
     {
         if (!_isChat || _isEncrypted)
         {
-            [_avatarView loadUserPlaceholderWithSize:CGSizeMake(40.0f, 40.0f) uid:_isEncrypted ? _encryptedUserId : (int32_t)_conversationId firstName:_titleTextFirst lastName:_titleTextSecond placeholder:placeholder];
+            [_avatarView loadUserPlaceholderWithSize:CGSizeMake(40.0f, 40.0f) uid:_isEncrypted ? _encryptedUserId : _conversationId firstName:_titleTextFirst lastName:_titleTextSecond placeholder:placeholder];
         }
         else
         {

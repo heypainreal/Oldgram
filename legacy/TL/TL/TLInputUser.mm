@@ -56,7 +56,6 @@
 {
 }
 
-
 @end
 
 @implementation TLInputUser$inputUserSelf : TLInputUser
@@ -90,18 +89,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xd8292816;
+    return (int32_t)0xf21158c6;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x6d912019;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLInputUser$inputUser *object = [[TLInputUser$inputUser alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.access_hash = metaObject->getInt64((int32_t)0x8f305224);
     return object;
 }
@@ -122,6 +121,12 @@
     }
 }
 
+// layer 228: inputUser#f21158c6, идентификатор стал 64-битным
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.user_id];
+    [os writeInt64:self.access_hash];
+}
 
 @end
 

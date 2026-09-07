@@ -6,7 +6,7 @@
 
 @interface TLBotInfo : NSObject <TLObject>
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic, retain) NSString *n_description;
 @property (nonatomic, retain) NSArray *commands;
 

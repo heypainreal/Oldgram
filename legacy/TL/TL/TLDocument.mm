@@ -88,7 +88,7 @@
     object.file_reference = metaObject->getBytes((int32_t)0x8bad663c);
     object.date = metaObject->getInt32((int32_t)0xb76958ba);
     object.mime_type = metaObject->getString((int32_t)0xcd8e470b);
-    object.size = metaObject->getInt32((int32_t)0x5a228f5e);
+    object.size = metaObject->getInt64((int32_t)0x5a228f5e);
     object.thumb = metaObject->getObject((int32_t)0x712c4d9);
     object.dc_id = metaObject->getInt32((int32_t)0xae973dc4);
     object.attributes = metaObject->getArray((int32_t)0xb339a07a);

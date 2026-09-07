@@ -1,5 +1,7 @@
 #import "TLInputContact.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -38,12 +40,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xf392b7f4;
+    return (int32_t)0x6a1dc4be;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xa4294ea;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -84,6 +86,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeInt64:(int64_t)self.client_id];
+    [os writeString:self.phone == nil ? @"" : self.phone];
+    [os writeString:self.first_name == nil ? @"" : self.first_name];
+    [os writeString:self.last_name == nil ? @"" : self.last_name];
+}
 
 @end
 

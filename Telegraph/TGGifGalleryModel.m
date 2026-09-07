@@ -70,7 +70,7 @@
     if (TGPeerIdIsChannel(peerId)) {
         return [TGDatabaseInstance() loadChannels:@[@(peerId)]][@(peerId)];
     } else {
-        return [TGDatabaseInstance() loadUser:(int32_t)peerId];
+        return [TGDatabaseInstance() loadUser:(int64_t)peerId];
     }
 }
 

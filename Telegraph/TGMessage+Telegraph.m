@@ -483,7 +483,7 @@
                 bool hidePreviousMarkup = false;
                 bool forceReply = false;
                 bool onlyIfRelevantToUser = false;
-                TGBotReplyMarkup *replyMarkup = [TGBotSignals botReplyMarkupForMarkup:((TLMessage$modernMessage *)desc).reply_markup userId:(int32_t)self.fromUid messageId:self.mid hidePreviousMarkup:&hidePreviousMarkup forceReply:&forceReply onlyIfRelevantToUser:&onlyIfRelevantToUser];
+                TGBotReplyMarkup *replyMarkup = [TGBotSignals botReplyMarkupForMarkup:((TLMessage$modernMessage *)desc).reply_markup userId:self.fromUid messageId:self.mid hidePreviousMarkup:&hidePreviousMarkup forceReply:&forceReply onlyIfRelevantToUser:&onlyIfRelevantToUser];
                 
                 if (!onlyIfRelevantToUser || ((TLMessage$modernMessage *)desc).flags & (1 << 4))
                 {
@@ -647,7 +647,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc1:(Secret1_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date
+- (instancetype)initWithDecryptedMessageDesc1:(Secret1_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date
 {
     self = [super init];
     if (self != nil)
@@ -894,7 +894,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     
@@ -941,7 +941,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc17:(Secret17_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date
+- (instancetype)initWithDecryptedMessageDesc17:(Secret17_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date
 {
     self = [super init];
     if (self != nil)
@@ -1189,7 +1189,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     
@@ -1255,7 +1255,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc20:(Secret20_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date
+- (instancetype)initWithDecryptedMessageDesc20:(Secret20_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date
 {
     self = [super init];
     if (self != nil)
@@ -1503,7 +1503,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     
@@ -1569,7 +1569,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc23:(Secret23_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date
+- (instancetype)initWithDecryptedMessageDesc23:(Secret23_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date
 {
     self = [super init];
     if (self != nil)
@@ -1817,7 +1817,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     
@@ -1901,7 +1901,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc45:(Secret46_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date {
+- (instancetype)initWithDecryptedMessageDesc45:(Secret46_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date {
     self = [super init];
     if (self != nil)
     {
@@ -2257,7 +2257,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     
@@ -2398,7 +2398,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc66:(Secret66_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date {
+- (instancetype)initWithDecryptedMessageDesc66:(Secret66_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date {
     self = [super init];
     if (self != nil)
     {
@@ -2785,7 +2785,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     
@@ -2926,7 +2926,7 @@
     return self;
 }
 
-- (instancetype)initWithDecryptedMessageDesc73:(Secret73_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int)fromUid date:(int)date {
+- (instancetype)initWithDecryptedMessageDesc73:(Secret73_DecryptedMessage *)desc encryptedFile:(TGStoredIncomingMessageFileInfo *)encryptedFile conversationId:(int64_t)conversationId fromUid:(int64_t)fromUid date:(int)date {
     self = [super init];
     if (self != nil)
     {
@@ -3315,7 +3315,7 @@
                     convertedContact.phone_number = mediaContact.phoneNumber;
                     convertedContact.first_name = mediaContact.firstName;
                     convertedContact.last_name = mediaContact.lastName;
-                    convertedContact.user_id = [mediaContact.userId intValue];
+                    convertedContact.user_id = [mediaContact.userId longLongValue];
                     
                     TGContactMediaAttachment *contactAttachment = [[TGContactMediaAttachment alloc] initWithTelegraphContactDesc:convertedContact];
                     

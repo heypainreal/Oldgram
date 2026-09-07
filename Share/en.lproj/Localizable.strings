@@ -17,8 +17,8 @@
 "Share.Select" = "Select";
 "Share.Done" = "Done";
 
-"Share.AuthTitle" = "Log in to Telegram";
-"Share.AuthText" = "Open Telegram and log in to share.";
+"Share.AuthTitle" = "Log in to Oldgram";
+"Share.AuthText" = "Open Oldgram and log in to share.";
 
 "Share.ChoosePhoneNumber" = "Choose a phone number to share";
 

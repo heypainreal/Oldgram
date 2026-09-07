@@ -75,6 +75,19 @@
     return attributes;
 }
 
+/// Стикер или анимированный стикер — документ, который рисуется картинкой,
+/// а не строкой файла.
+- (bool)isStickerLikeDocument
+{
+    if (self.isSticker)
+        return true;
+
+    NSString *mimeType = [self.mimeType lowercaseString];
+    return [mimeType isEqualToString:@"image/webp"]
+        || [mimeType isEqualToString:@"application/x-tgsticker"]
+        || [mimeType isEqualToString:@"video/webm"];
+}
+
 - (instancetype)initWithTelegraphDocumentDesc:(TLDocument *)desc
 {
     self = [super init];
@@ -95,10 +108,47 @@
             
             self.attributes = [TGDocumentMediaAttachment parseAttribtues:concreteDocument.attributes];
             self.mimeType = concreteDocument.mime_type;
-            self.size = concreteDocument.size;
+            self.size = (int)MIN(concreteDocument.size, (int64_t)INT_MAX);
             
             NSData *cachedData = nil;
-            TGImageInfo *thumbmailInfo = concreteDocument.thumb == nil ? nil : [[TGImageInfo alloc] initWithTelegraphSizesDescription:@[concreteDocument.thumb] cachedData:&cachedData];
+            int32_t documentDatacenterId = concreteDocument.dc_id;
+            int64_t documentIdentifier = concreteDocument.n_id;
+            int64_t documentAccessHash = concreteDocument.access_hash;
+            NSData *documentFileReference = concreteDocument.file_reference;
+            // Схема 228 отдаёт вектор превью, и первым в нём обычно идёт
+            // photoStrippedSize без габаритов — берём весь список, иначе у
+            // стикеров и файлов не остаётся ни одного пригодного размера.
+            NSArray *thumbnailSizes = concreteDocument.thumbs;
+            if (thumbnailSizes.count == 0)
+                thumbnailSizes = concreteDocument.thumb == nil ? nil : @[concreteDocument.thumb];
+            TGImageInfo *thumbmailInfo = thumbnailSizes.count == 0 ? nil : [[TGImageInfo alloc] initWithTelegraphSizesDescription:thumbnailSizes cachedData:&cachedData photoFileUrlBuilder:^NSString *(NSString *thumbType) {
+                return TGDocumentThumbUrl(documentDatacenterId, documentIdentifier, documentAccessHash, documentFileReference, thumbType);
+            }];
+            // Стикер может приехать вообще без пригодного превью: в схеме 228
+            // в thumbs лежат только вектор-контур и «полосатая» заглушка без
+            // адреса. Тогда адресуем сам документ — upload.getFile с пустым
+            // thumb_size отдаёт файл целиком, а webp стикера весит десятки
+            // килобайт. Иначе в панели и в чате оставались пустые квадраты.
+            if ((thumbmailInfo == nil || thumbmailInfo.empty) && documentIdentifier != 0 && [self isStickerLikeDocument])
+            {
+                CGSize stickerSize = CGSizeMake(512.0f, 512.0f);
+                for (id attribute in self.attributes)
+                {
+                    if ([attribute isKindOfClass:[TGDocumentAttributeImageSize class]])
+                    {
+                        CGSize declaredSize = ((TGDocumentAttributeImageSize *)attribute).size;
+                        if (declaredSize.width > FLT_EPSILON && declaredSize.height > FLT_EPSILON)
+                            stickerSize = declaredSize;
+                        break;
+                    }
+                }
+
+                thumbmailInfo = [[TGImageInfo alloc] init];
+                [thumbmailInfo addImageWithSize:stickerSize
+                                            url:TGDocumentThumbUrl(documentDatacenterId, documentIdentifier, documentAccessHash, documentFileReference, @"")
+                                       fileSize:(int32_t)MIN(concreteDocument.size, (int64_t)INT_MAX)];
+            }
+
             if (thumbmailInfo != nil && !thumbmailInfo.empty)
             {
                 self.thumbnailInfo = thumbmailInfo;

@@ -82,7 +82,7 @@ typedef enum {
 
 - (void)contactActionButtonPressed:(TGUser *)user;
 
-- (void)deleteUserFromList:(int)uid;
+- (void)deleteUserFromList:(int64_t)uid;
 
 - (CGFloat)itemHeightForFirstSection;
 - (NSInteger)numberOfRowsInFirstSection;

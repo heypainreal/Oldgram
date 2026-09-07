@@ -4,7 +4,7 @@
 
 @implementation TGBotReplyMarkup
 
-- (instancetype)initWithUserId:(int32_t)userId messageId:(int32_t)messageId rows:(NSArray *)rows matchDefaultHeight:(bool)matchDefaultHeight hideKeyboardOnActivation:(bool)hideKeyboardOnActivation alreadyActivated:(bool)alreadyActivated manuallyHidden:(bool)manuallyHidden isInline:(bool)isInline
+- (instancetype)initWithUserId:(int64_t)userId messageId:(int32_t)messageId rows:(NSArray *)rows matchDefaultHeight:(bool)matchDefaultHeight hideKeyboardOnActivation:(bool)hideKeyboardOnActivation alreadyActivated:(bool)alreadyActivated manuallyHidden:(bool)manuallyHidden isInline:(bool)isInline
 {
     self = [super init];
     if (self != nil)
@@ -23,12 +23,12 @@
 
 - (instancetype)initWithKeyValueCoder:(PSKeyValueCoder *)coder
 {
-    return [self initWithUserId:[coder decodeInt32ForCKey:"userId"] messageId:[coder decodeInt32ForCKey:"messageId"] rows:[coder decodeArrayForCKey:"rows"] matchDefaultHeight:[coder decodeInt32ForCKey:"matchDefaultHeight"] hideKeyboardOnActivation:[coder decodeInt32ForCKey:"hideKeyboardOnActivation"] alreadyActivated:[coder decodeInt32ForCKey:"alreadyActivated"] manuallyHidden:[coder decodeInt32ForCKey:"manuallyHidden"] isInline:[coder decodeInt32ForCKey:"isInline"]];
+    return [self initWithUserId:([coder decodeInt64ForCKey:"userId64"] ?: [coder decodeInt32ForCKey:"userId"]) messageId:[coder decodeInt32ForCKey:"messageId"] rows:[coder decodeArrayForCKey:"rows"] matchDefaultHeight:[coder decodeInt32ForCKey:"matchDefaultHeight"] hideKeyboardOnActivation:[coder decodeInt32ForCKey:"hideKeyboardOnActivation"] alreadyActivated:[coder decodeInt32ForCKey:"alreadyActivated"] manuallyHidden:[coder decodeInt32ForCKey:"manuallyHidden"] isInline:[coder decodeInt32ForCKey:"isInline"]];
 }
 
 - (void)encodeWithKeyValueCoder:(PSKeyValueCoder *)coder
 {
-    [coder encodeInt32:_userId forCKey:"userId"];
+    [coder encodeInt64:_userId forCKey:"userId64"];
     [coder encodeInt32:_messageId forCKey:"messageId"];
     [coder encodeArray:_rows forCKey:"rows"];
     [coder encodeInt32:_matchDefaultHeight forCKey:"matchDefaultHeight"];
@@ -39,11 +39,11 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    return [self initWithUserId:[aDecoder decodeInt32ForKey:@"userId"] messageId:[aDecoder decodeInt32ForKey:@"messageId"] rows:[aDecoder decodeObjectForKey:@"rows"] matchDefaultHeight:[aDecoder decodeBoolForKey:@"matchDefaultHeight"] hideKeyboardOnActivation:[aDecoder decodeBoolForKey:@"hideKeyboardOnDeactivation"] alreadyActivated:[aDecoder decodeBoolForKey:@"alreadyActivated"] manuallyHidden:[aDecoder decodeBoolForKey:@"manuallyHidden"] isInline:[aDecoder decodeBoolForKey:@"isInline"]];
+    return [self initWithUserId:([aDecoder containsValueForKey:@"userId64"] ? [aDecoder decodeInt64ForKey:@"userId64"] : [aDecoder decodeInt32ForKey:@"userId"]) messageId:[aDecoder decodeInt32ForKey:@"messageId"] rows:[aDecoder decodeObjectForKey:@"rows"] matchDefaultHeight:[aDecoder decodeBoolForKey:@"matchDefaultHeight"] hideKeyboardOnActivation:[aDecoder decodeBoolForKey:@"hideKeyboardOnDeactivation"] alreadyActivated:[aDecoder decodeBoolForKey:@"alreadyActivated"] manuallyHidden:[aDecoder decodeBoolForKey:@"manuallyHidden"] isInline:[aDecoder decodeBoolForKey:@"isInline"]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeInt32:_userId forKey:@"userId"];
+    [aCoder encodeInt64:_userId forKey:@"userId64"];
     [aCoder encodeInt32:_messageId forKey:@"messageId"];
     [aCoder encodeObject:_rows forKey:@"rows"];
     [aCoder encodeBool:_matchDefaultHeight forKey:@"matchDefaultHeight"];

@@ -307,7 +307,7 @@
 "Contacts.AccessDeniedHelpLandscape" = "الرجاء الذهاب إلى إعدادات الـ %@ — الخصوصية — جهات الاتصال.\nثم قم بتفعيل تيليجرام.";
 "Contacts.AccessDeniedHelpPortrait" = "الرجاء الذهاب إلى إعدادات الـ %@ — الخصوصية — جهات الاتصال. ثم قم بتفعيل تيليجرام.";
 "Contacts.AccessDeniedHelpON" = "مفعل";
-"Contacts.InviteToTelegram" = "قم بدعوة صديق لتيليجرام";
+"Contacts.InviteToOldgram" = "قم بدعوة صديق لتيليجرام";
 "Contacts.InviteFriends" = "قم بدعوة صديق";
 "Contacts.SelectAll" = "اختر الكل";
 
@@ -575,7 +575,7 @@
 "Preview.LoadingImages" = "جاري تحميل الصور كاملة...";
 "Preview.DeletePhoto" = "حذف الصورة";
 "Preview.DeleteVideo" = "حذف المقطع المرئي";
-"Preview.ForwardViaTelegram" = "تحويل من خلال تيليجرام";
+"Preview.ForwardViaOldgram" = "تحويل من خلال تيليجرام";
 "Preview.SaveToCameraRoll" = "حفظ في ألبوم الصور";
 
 // Map
@@ -586,7 +586,7 @@
 "Map.Satellite" = "قمر صناعي";
 "Map.Hybrid" = "مهجن";
 "Map.AccessDeniedError" = "لجعل هذه الخاصية تعمل, الرجاء الذهاب لـ إعدادات الآيفون — الخصوصية— خدمات المواقع ثم قم بتفعيل تيليجرام.";
-"Map.ForwardViaTelegram" = "تحويل من خلال تيليجرام";
+"Map.ForwardViaOldgram" = "تحويل من خلال تيليجرام";
 "Map.GetDirections" = "تعليمات الإتجاه إلى الموقع";
 "Map.OpenInGoogleMaps" = "فتح في خرائط جوجل";
 
@@ -2471,7 +2471,7 @@
 "Conversation.HoldForAudio" = "اضغط باستمرار لتسجيل صوتي. اضغط مرة واحدة للتحويل للفيديو.";
 "Conversation.HoldForVideo" = "اضغط باستمرار لتسجيل فيديو. اضغط مرة واحدة للتحويل للصوتي.";
 
-"UserInfo.TelegramCall" = "مكالمة تيليجرام";
+"UserInfo.OldgramCall" = "مكالمة تيليجرام";
 "UserInfo.PhoneCall" = "مكالمة هاتفية";
 
 "SharedMedia.CategoryMedia" = "الوسائط";

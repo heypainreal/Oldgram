@@ -651,7 +651,7 @@
                     [_watcherHandle requestAction:@"conversationSelected" options:conversation];
                 else
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)conversation.conversationId];
+                    TGUser *user = [TGDatabaseInstance() loadUser:conversation.conversationId];
                     if (user != nil)
                         [_watcherHandle requestAction:@"userSelected" options:user];
                 }
@@ -703,7 +703,7 @@
                 }
                 else
                 {
-                    int uid = 0;
+                    int64_t uid = 0;
                     
                     if (conversation.isChat)
                     {
@@ -711,7 +711,7 @@
                             uid = [conversation.chatParticipants.chatParticipantUids[0] intValue];
                     }
                     else
-                        uid = (int)conversation.conversationId;
+                        uid = conversation.conversationId;
                     
                     TGUser *user = [TGDatabaseInstance() loadUser:uid];
                     if (user != nil)

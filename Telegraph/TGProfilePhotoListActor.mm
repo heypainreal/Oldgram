@@ -81,7 +81,7 @@
                     }
                 }
                 
-                origin = [TGMediaOriginInfo mediaOriginInfoWithFileReference:photo.file_reference fileReferences:fileReferences userId:(int32_t)self.peerId offset:0];
+                origin = [TGMediaOriginInfo mediaOriginInfoWithFileReference:photo.file_reference fileReferences:fileReferences userId:self.peerId offset:0];
                 imageAttachment.originInfo = origin;
             }
             [array addObject:imageAttachment];

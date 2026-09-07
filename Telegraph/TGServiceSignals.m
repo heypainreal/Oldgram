@@ -78,7 +78,7 @@
         TLInputPeer *inputPeer = nil;
         
         TLInputPeer$inputPeerUser *inputPeerUser = [[TLInputPeer$inputPeerUser alloc] init];
-        inputPeerUser.user_id = (int32_t)peerId;
+        inputPeerUser.user_id = peerId;
         inputPeerUser.access_hash = accessHash;
         inputPeer = inputPeerUser;
         
@@ -91,7 +91,7 @@
         
         TLRPCcontacts_block$contacts_block *block = [[TLRPCcontacts_block$contacts_block alloc] init];
         TLInputUser$inputUser *inputUser = [[TLInputUser$inputUser alloc] init];
-        inputUser.user_id = (int32_t)peerId;
+        inputUser.user_id = peerId;
         inputUser.access_hash = accessHash;
         block.n_id = inputUser;
         

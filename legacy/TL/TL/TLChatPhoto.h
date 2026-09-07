@@ -12,10 +12,16 @@
 
 @interface TLChatPhoto$chatPhotoEmpty : TLChatPhoto
 
+@property (nonatomic) int64_t photo_id;
+@property (nonatomic) int32_t dc_id;
+
 
 @end
 
 @interface TLChatPhoto$chatPhoto : TLChatPhoto
+
+@property (nonatomic) int64_t photo_id;
+@property (nonatomic) int32_t dc_id;
 
 @property (nonatomic, retain) TLFileLocation *photo_small;
 @property (nonatomic, retain) TLFileLocation *photo_big;

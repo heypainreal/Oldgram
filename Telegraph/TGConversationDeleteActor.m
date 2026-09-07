@@ -47,7 +47,7 @@
         [TGDatabaseInstance() enqueueLeaveChannel:conversationId];
         [TGDatabaseInstance() transactionRemoveConversationsWithPeerIds:@[@(conversationId)]];
     } else {
-        TGUser *user = conversationId > 0 ? [TGDatabaseInstance() loadUser:(int)conversationId] : nil;
+        TGUser *user = conversationId > 0 ? [TGDatabaseInstance() loadUser:(int64_t)conversationId] : nil;
         if ([options[@"block"] boolValue] && user != nil && (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot))
         {
             static int actionId = 0;
@@ -78,7 +78,7 @@
     if (conversation != nil) {
         int64_t accessHash = conversation.accessHash;
         if (TGPeerIdIsUser(conversationId)) {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int)conversationId];
+            TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
             accessHash = user.phoneNumberHash;
         }
         _resetPeerRatingDisposable = [[TGRecentPeersSignals resetGenericPeerRating:conversation.conversationId accessHash:accessHash] startWithNext:nil error:^(__unused id error) {

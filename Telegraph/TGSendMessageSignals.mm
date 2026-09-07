@@ -521,7 +521,7 @@ NSString *const TGChannelGroupKey = @"channelGroup";
         if (keepForwarded)
         {
             forwardAttachment = [[TGForwardedMessageMediaAttachment alloc] init];
-            forwardAttachment.forwardPeerId = (int32_t)forwardedMessage.fromUid;
+            forwardAttachment.forwardPeerId = forwardedMessage.fromUid;
             forwardAttachment.forwardDate = (int32_t)forwardedMessage.date;
             forwardAttachment.forwardMid = forwardMid;
         }

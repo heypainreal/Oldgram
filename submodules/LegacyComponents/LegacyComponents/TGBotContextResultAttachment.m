@@ -4,7 +4,7 @@
 
 @implementation TGBotContextResultAttachment
 
-- (instancetype)initWithUserId:(int32_t)userId resultId:(NSString *)resultId queryId:(int64_t)queryId {
+- (instancetype)initWithUserId:(int64_t)userId resultId:(NSString *)resultId queryId:(int64_t)queryId {
     self = [super init];
     if (self != nil) {
         self.type = TGBotContextResultAttachmentType;
@@ -16,11 +16,11 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    return [self initWithUserId:[aDecoder decodeInt32ForKey:@"userId"] resultId:[aDecoder decodeObjectForKey:@"resultId"] queryId:[aDecoder decodeInt64ForKey:@"queryId"]];
+    return [self initWithUserId:([aDecoder containsValueForKey:@"userId64"] ? [aDecoder decodeInt64ForKey:@"userId64"] : [aDecoder decodeInt32ForKey:@"userId"]) resultId:[aDecoder decodeObjectForKey:@"resultId"] queryId:[aDecoder decodeInt64ForKey:@"queryId"]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeInt32:_userId forKey:@"userId"];
+    [aCoder encodeInt64:_userId forKey:@"userId64"];
     [aCoder encodeObject:_resultId forKey:@"resultId"];
     [aCoder encodeInt64:_queryId forKey:@"queryId"];
 }

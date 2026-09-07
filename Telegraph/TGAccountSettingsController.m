@@ -83,7 +83,7 @@
 
 @interface TGAccountSettingsController ()
 {
-    int32_t _uid;
+    int64_t _uid;
     
     bool _editing;
     
@@ -129,7 +129,7 @@
 
 @implementation TGAccountSettingsController
 
-- (id)initWithUid:(int32_t)uid
+- (id)initWithUid:(int64_t)uid
 {
     self = [super init];
     if (self)
@@ -642,7 +642,7 @@
     
     static int actionId = 0;
     
-    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:_uid], @"uid", nil];
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:@(_uid), @"uid", nil];
     NSString *action = [[NSString alloc] initWithFormat:@"/tg/timeline/(%" PRId32 ")/deleteAvatar/(%d)", _uid, actionId++];
     [ActionStageInstance() requestActor:action options:options watcher:self];
     [ActionStageInstance() requestActor:action options:options watcher:TGTelegraphInstance];
@@ -765,7 +765,7 @@
             }
             /*else
              {
-             int32_t uid = 0;
+             int64_t uid = 0;
              [data getBytes:&uid];
              [[TGInterfaceManager instance] navigateToConversationWithId:uid conversation:nil performActions:nil atMessage:nil clearStack:true openKeyboard:true animated:true];
              }*/

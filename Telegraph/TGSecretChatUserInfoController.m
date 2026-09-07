@@ -29,7 +29,7 @@
 
 @implementation TGSecretChatUserInfoController
 
-- (instancetype)initWithUid:(int32_t)uid encryptedConversationId:(int64_t)encryptedConversationId
+- (instancetype)initWithUid:(int64_t)uid encryptedConversationId:(int64_t)encryptedConversationId
 {
     int64_t peerId = [TGDatabaseInstance() peerIdForEncryptedConversationId:encryptedConversationId createIfNecessary:false];
     

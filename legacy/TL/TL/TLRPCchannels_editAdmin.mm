@@ -1,5 +1,7 @@
 #import "TLRPCchannels_editAdmin.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -57,12 +59,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x20b88214;
+    return (int32_t)0x9a98ad68;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xcdb8de75;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -96,6 +98,14 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    TLMetaClassStore::serializeObject(os, self.user_id, true);
+    TLMetaClassStore::serializeObject(os, self.admin_rights, true);
+}
 
 @end
 

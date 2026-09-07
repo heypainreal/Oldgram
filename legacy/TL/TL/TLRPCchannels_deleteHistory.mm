@@ -1,5 +1,7 @@
 #import "TLRPCchannels_deleteHistory.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xaf369d42;
+    return (int32_t)0x9baa9647;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x550c1a6e;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -86,6 +88,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    [os writeInt32:(int32_t)self.max_id];
+}
 
 @end
 

@@ -1,5 +1,7 @@
 #import "TLRPCphone_discardCall.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -56,12 +58,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x78d413a6;
+    return (int32_t)0xb2cbc1c0;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xf204e6fb;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -102,6 +104,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    [os writeInt32:(int32_t)self.duration];
+    TLMetaClassStore::serializeObject(os, self.reason, true);
+    [os writeInt64:(int64_t)self.connection_id];
+}
 
 @end
 

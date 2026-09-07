@@ -138,7 +138,7 @@
         {
             id peer = nil;
             if (TGPeerIdIsUser(session.peerId))
-                peer = [TGDatabaseInstance() loadUser:(int32_t)session.peerId];
+                peer = [TGDatabaseInstance() loadUser:session.peerId];
             else
                 peer = [TGDatabaseInstance() loadConversationWithId:session.peerId];
             
@@ -575,7 +575,7 @@
             {
                 [self.conversationList removeObjectAtIndex:i];
                 
-                TGUser *user = conversation.conversationId > 0 ? [TGDatabaseInstance() loadUser:(int)conversation.conversationId] : nil;
+                TGUser *user = conversation.conversationId > 0 ? [TGDatabaseInstance() loadUser:conversation.conversationId] : nil;
                 if (user != nil && (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot))
                 {
                     NSNumber *removedIndex = [[NSNumber alloc] initWithInt:i];
@@ -823,21 +823,21 @@
     }
     else if (!conversation.isChat || conversation.isEncrypted)
     {
-        int32_t userId = 0;
+        int64_t userId = 0;
         if (conversation.isEncrypted)
         {
             if (conversation.chatParticipants.chatParticipantUids.count != 0)
-                userId = [conversation.chatParticipants.chatParticipantUids[0] intValue];
+                userId = [conversation.chatParticipants.chatParticipantUids[0] longLongValue];
         }
         else
-            userId = (int)conversation.conversationId;
+            userId = conversation.conversationId;
         mutePeerId = userId;
         
         TGUser *user = nil;
         if (customUser != nil && customUser.uid == userId)
             user = customUser;
         else
-            user = [[TGDatabase instance] loadUser:(int)userId];
+            user = [[TGDatabase instance] loadUser:(int64_t)userId];
         
         dict[@"isVerified"] = @(user.isVerified);
         
@@ -881,7 +881,7 @@
             if (user.lastName != nil)
                 dict[@"lastName"] = user.lastName;
         }
-        dict[@"encryptedUserId"] = [[NSNumber alloc] initWithInt:userId];
+        dict[@"encryptedUserId"] = @(userId);
         
         if (user.photoUrlSmall != nil)
             [dict setObject:user.photoFullUrlSmall forKey:@"avatarUrl"];
@@ -982,7 +982,7 @@
                 NSArray *uids = actionAttachment.actionData[@"uids"];
                 if (uids != nil) {
                     for (NSNumber *nUid in uids) {
-                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                         if (user != nil)
                             [messageUsers setObject:user forKey:nUid];
                     }
@@ -990,7 +990,7 @@
                     NSNumber *nUid = [actionAttachment.actionData objectForKey:@"uid"];
                     if (nUid != nil)
                     {
-                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                         if (user != nil)
                             [messageUsers setObject:user forKey:nUid];
                     }
@@ -998,14 +998,14 @@
             }
             if (actionAttachment.actionType == TGMessageActionSecureValuesSent)
             {
-                TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)conversation.conversationId];
+                TGUser *user = [TGDatabaseInstance() loadUser:conversation.conversationId];
                 if (user != nil)
-                    [messageUsers setObject:user forKey:@((int32_t)conversation.conversationId)];
+                    [messageUsers setObject:user forKey:@(conversation.conversationId)];
             }
-            TGUser *user = conversation.fromUid == selfUser.uid ? selfUser : [TGDatabaseInstance() loadUser:(int)conversation.fromUid];
+            TGUser *user = conversation.fromUid == selfUser.uid ? selfUser : [TGDatabaseInstance() loadUser:conversation.fromUid];
             if (user != nil)
             {
-                [messageUsers setObject:user forKey:[[NSNumber alloc] initWithInt:user.uid]];
+                [messageUsers setObject:user forKey:@(user.uid)];
                 [messageUsers setObject:user forKey:@"author"];
             }
         }
@@ -1138,14 +1138,14 @@
             if (TGPeerIdIsChannel(peerId))
                 peer = [TGDatabaseInstance() loadChannels:@[@(peerId)]][@(peerId)];
             else
-                peer = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+                peer = [TGDatabaseInstance() loadUser:(int64_t)peerId];
             
             TGLiveLocation *liveLocation = [[TGLiveLocation alloc] initWithMessage:message peer:peer hasOwnSession:liveLocationToOpen.message.mid == message.mid isOwnLocation:[liveLocationToOpen peerId] == message.fromUid isExpired:currentTime > expires];
             [liveLocations addObject:liveLocation];
         }
         return liveLocations;
     }]];
-    controller.receivingPeer = TGPeerIdIsUser(liveLocationToOpen.message.cid) ? [TGDatabaseInstance() loadUser:(int32_t)liveLocationToOpen.message.cid] : [TGDatabaseInstance() loadConversationWithId:liveLocationToOpen.message.cid];
+    controller.receivingPeer = TGPeerIdIsUser(liveLocationToOpen.message.cid) ? [TGDatabaseInstance() loadUser:liveLocationToOpen.message.cid] : [TGDatabaseInstance() loadConversationWithId:liveLocationToOpen.message.cid];
     
     __weak TGTelegraphDialogListCompanion *weakSelf = self;
     controller.openLocation = ^(TGMessage *message)
@@ -1976,7 +1976,7 @@
             if (![conversation isKindOfClass:[TGConversation class]])
                 continue;
             
-            int userId = 0;
+            int64_t userId = 0;
             if (conversation.isEncrypted)
             {
                 if (conversation.chatParticipants.chatParticipantUids.count != 0)
@@ -1985,7 +1985,7 @@
             else if (conversation.isChat)
                 userId = conversation.outgoing ? TGTelegraphInstance.clientUserId : conversation.fromUid;
             else
-                userId = (int)conversation.conversationId;
+                userId = conversation.conversationId;
 
             std::map<int, int>::iterator it = userIdToIndex.find(userId);
             if (it != userIdToIndex.end() || (updateAllOutgoing && conversation.outgoing))
@@ -2023,7 +2023,7 @@
                 NSMutableArray *userNamesArray = [[NSMutableArray alloc] init];
                 for (NSNumber *nUid in typingUsers)
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                     if (userNames.length != 0)
                         [userNames appendString:@", "];
                     [userNames appendString:user.displayFirstName == nil ? @"" : user.displayFirstName];
@@ -2046,7 +2046,7 @@
                 NSMutableString *userNames = [[NSMutableString alloc] init];
                 for (NSNumber *nUid in typingUsers)
                 {
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                     if (userNames.length != 0)
                         [userNames appendString:@", "];
                     [userNames appendString:user.displayFirstName];
@@ -2184,7 +2184,7 @@
             
             if (!conversation.isChat)
             {
-                TGUser *user = [TGDatabaseInstance() loadUser:(int)conversation.conversationId];
+                TGUser *user = [TGDatabaseInstance() loadUser:conversation.conversationId];
                 if (user == nil)
                     continue;
                 

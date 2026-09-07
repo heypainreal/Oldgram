@@ -681,7 +681,22 @@ typedef enum {
     [pinVar set:_pinPipe.signalProducer()];
     _pinPipe.sink(@true);
     
-    SSignal *combinedSignal = [SSignal combineSignals:@[(iosMajorVersion() >= 8 && _style == TGStickerKeyboardViewDefaultStyle) ? [TGRecentGifsSignal recentGifs] : [SSignal single:@[]], [[TGStickersSignals stickerPacks] startOn:[SQueue concurrentDefaultQueue]], [TGRecentStickersSignal recentStickers], [TGFavoriteStickersSignal favoriteStickers], groupStickersSignal, pinVar.signal]];
+    // combineSignals роняет весь набор, если упал хотя бы один источник:
+    // одна неудачная загрузка недавних стикеров оставляла панель пустой.
+    // Подставляем пустое значение вместо ошибки — остальные разделы остаются.
+    SSignal *(^orEmpty)(SSignal *, id) = ^SSignal *(SSignal *signal, id fallback) {
+        return [signal catch:^SSignal *(__unused id error) {
+            return [SSignal single:fallback];
+        }];
+    };
+
+    SSignal *combinedSignal = [SSignal combineSignals:@[
+        orEmpty((iosMajorVersion() >= 8 && _style == TGStickerKeyboardViewDefaultStyle) ? [TGRecentGifsSignal recentGifs] : [SSignal single:@[]], @[]),
+        orEmpty([[TGStickersSignals stickerPacks] startOn:[SQueue concurrentDefaultQueue]], @{}),
+        orEmpty([TGRecentStickersSignal recentStickers], @{}),
+        orEmpty([TGFavoriteStickersSignal favoriteStickers], @{}),
+        orEmpty(groupStickersSignal, @{}),
+        pinVar.signal]];
     
     __weak TGStickerKeyboardView *weakSelf = self;
     _stickerPacksDisposable = [[combinedSignal deliverOn:[SQueue mainQueue]] startWithNext:^(NSArray *combinedResult)

@@ -1,4 +1,6 @@
 #import "TLRPCchannels_reportSpam.h"
+#import "TLMetaClassStore.h"
+#import "TLInputPeer.h"
 
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xfe087810;
+    return (int32_t)0xf44a8315;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x25a5d9e7;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -94,6 +96,17 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    TLSerializeInputUserAsPeer(os, self.user_id);
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.n_id.count];
+    for (NSNumber *item in self.n_id) {
+        [os writeInt32:[item intValue]];
+    }
+}
 
 @end
 

@@ -17,12 +17,12 @@ typedef enum {
 @interface TGSynchronizeFeededChannelsAction : NSObject <NSCoding>
 
 @property (nonatomic, readonly) int32_t type;
-@property (nonatomic, readonly) int32_t feedId;
+@property (nonatomic, readonly) int64_t feedId;
 @property (nonatomic, readonly) NSSet *peerIds;
 @property (nonatomic, readonly) bool alsoNewlyJoined;
 @property (nonatomic, readonly) int32_t version;
 
-- (instancetype)initWithType:(int32_t)type feedId:(int32_t)feedId peerIds:(NSSet *)peerIds alsoNewlyJoined:(bool)alsoNewlyJoined version:(int32_t)version;
+- (instancetype)initWithType:(int32_t)type feedId:(int64_t)feedId peerIds:(NSSet *)peerIds alsoNewlyJoined:(bool)alsoNewlyJoined version:(int32_t)version;
 
 @end
 
@@ -33,12 +33,12 @@ typedef enum {
 
 + (bool)_containsPreloadedHistoryForFeedId:(int32_t)feedId aroundMessageId:(int32_t)messageId peerId:(int64_t)peerId;
 
-+ (SSignal *)createFeed:(int32_t)feedId peerIds:(NSSet *)peerIds;
++ (SSignal *)createFeed:(int64_t)feedId peerIds:(NSSet *)peerIds;
 
 + (SSignal *)synchronizeFeededChannels;
 + (SSignal *)pullFeededChannels;
 
-+ (SSignal *)groupChannelWithPeerId:(int64_t)peerId feedId:(int32_t)feedId;
++ (SSignal *)groupChannelWithPeerId:(int64_t)peerId feedId:(int64_t)feedId;
 + (SSignal *)ungroupChannelWithPeerId:(int64_t)peerId;
 + (SSignal *)updateFeedChannels:(int32_t)feedId peerIds:(NSSet *)peerIds alsoNewlyJoined:(bool)alsoNewlyJoined;
 

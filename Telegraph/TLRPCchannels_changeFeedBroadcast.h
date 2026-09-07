@@ -6,6 +6,6 @@
 
 @property (nonatomic) int32_t flags;
 @property (nonatomic, strong) TLInputChannel *channel;
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 
 @end

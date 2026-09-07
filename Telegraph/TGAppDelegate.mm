@@ -280,6 +280,13 @@ TGTelegraph *telegraph = nil;
         _loginNavigationController = [TGNavigationController navigationControllerWithControllers:@[rootController] navigationBarClass:[TGTransparentNavigationBar class] inhibitPresentation:true];
         _loginNavigationController.restrictLandscape = !TGIsPad();
         _loginNavigationController.disableInteractiveKeyboardTransition = true;
+
+        // С iOS 13 модальные экраны по умолчанию показываются карточкой: под ней
+        // виден список чатов, а свайп вниз закрывает авторизацию и пускает в
+        // приложение без аккаунта. Возвращаем полноэкранный неснимаемый режим.
+        _loginNavigationController.modalPresentationStyle = UIModalPresentationFullScreen;
+        if ([_loginNavigationController respondsToSelector:@selector(setModalInPresentation:)])
+            _loginNavigationController.modalInPresentation = true;
     }
     
     return _loginNavigationController;
@@ -296,6 +303,10 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
 
 - (bool)enableLogging
 {
+    // Логи нужны всегда: это единственный способ разобрать поведение на
+    // устройстве при переезде на схему 228.
+    return true;
+    
     NSNumber *logsEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:@"__logsEnabled"];
 #if (defined(DEBUG) || defined(INTERNAL_RELEASE)) && !defined(DISABLE_LOGGING)
     if (logsEnabled == nil)
@@ -1770,13 +1781,15 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
     NSUserDefaults *legacyUserDefaults = [NSUserDefaults standardUserDefaults];
     TGUserDefaults *userDefaults = [TGUserDefaults standard];
     
-    int32_t userId = [[userDefaults objectForKey:@"telegraphUserId"] int32Value];
+    // Идентификаторы пользователей давно вышли за 2^31: int32Value обнулял
+    // собственный uid, из-за чего «Избранное» переставало быть своим чатом.
+    int64_t userId = [[userDefaults objectForKey:@"telegraphUserId"] longLongValue];
     int32_t legacyUserId = [[legacyUserDefaults objectForKey:@"telegraphUserId"] intValue];
     
     if (userId == 0 && legacyUserId != 0)
         [self migrateSettings];
 
-    TGTelegraphInstance.clientUserId = [[userDefaults objectForKey:@"telegraphUserId"] int32Value];
+    TGTelegraphInstance.clientUserId = [[userDefaults objectForKey:@"telegraphUserId"] longLongValue];
     TGTelegraphInstance.clientIsActivated = [[userDefaults objectForKey:@"telegraphUserActivated"] boolValue];
     
     TGLog(@"Activated = %d", TGTelegraphInstance.clientIsActivated ? 1 : 0);
@@ -1962,7 +1975,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
     
     TGUserDefaults *userDefaults = [TGUserDefaults standard];
     
-    [userDefaults setObject:[[NSNumber alloc] initWithInt:TGTelegraphInstance.clientUserId] forKey:@"telegraphUserId"];
+    [userDefaults setObject:[[NSNumber alloc] initWithLongLong:TGTelegraphInstance.clientUserId] forKey:@"telegraphUserId"];
     [userDefaults setObject:[[NSNumber alloc] initWithBool:TGTelegraphInstance.clientIsActivated] forKey:@"telegraphUserActivated"];
     
     [userDefaults setObject:[NSNumber numberWithBool:_soundEnabled] forKey:@"soundEnabled"];
@@ -2616,7 +2629,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
             NSString *alert = aps[@"alert"];
             int32_t timestamp = (int32_t)[[NSDate date] timeIntervalSince1970];
             
-            int uid = [TGTelegraphInstance createServiceUserIfNeeded];
+            int64_t uid = [TGTelegraphInstance createServiceUserIfNeeded];
             int32_t uniqueId = [dict[@"announcement"] intValue];
             
             [TGDatabaseInstance() loadMessagesFromConversation:uid maxMid:INT32_MAX maxDate:INT32_MAX maxLocalMid:INT32_MAX atMessageId:0 limit:20 extraUnread:false completion:^(NSArray *messages, __unused bool historyExistsBelow) {
@@ -2665,7 +2678,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
                         }
                         else if (message.cid > 0)
                         {
-                            user = [TGDatabaseInstance() loadUser:(int)message.cid];
+                            user = [TGDatabaseInstance() loadUser:message.cid];
                             notificationPeerId = message.cid;
                         }
                         else
@@ -2674,7 +2687,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
                                 notificationPeerId = message.fromUid;
                             else
                                 notificationPeerId = message.cid;
-                            user = [TGDatabaseInstance() loadUser:(int)message.fromUid];
+                            user = [TGDatabaseInstance() loadUser:message.fromUid];
                             TGConversation *conversation = [TGDatabaseInstance() loadConversationWithIdCached:message.cid];
                             if (conversation != nil)
                                 chatName = conversation.chatTitle;
@@ -2900,7 +2913,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
     return nil;
 }
 
-- (void)reloadSettingsController:(int)uid
+- (void)reloadSettingsController:(int64_t)uid
 {
     TGAccountSettingsController *accountSettingsController = [[TGAccountSettingsController alloc] initWithUid:uid];
     
@@ -3102,7 +3115,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
             }
             else if ([url.host isEqualToString:@"msg"])
             {
-                std::map<int, int> phoneIdToUid;
+                std::map<int, int64_t> phoneIdToUid;
                 [TGDatabaseInstance() loadRemoteContactUidsContactIds:phoneIdToUid];
                 
                 if ([dict[@"to"] respondsToSelector:@selector(characterAtIndex:)] && [(NSString *)dict[@"to"] length] != 0)
@@ -3156,7 +3169,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
             }
             else if (isPassport)
             {
-                int32_t botId = [dict[@"bot_id"] respondsToSelector:@selector(intValue)] ? [dict[@"bot_id"] intValue] : 0;
+                int64_t botId = [dict[@"bot_id"] respondsToSelector:@selector(intValue)] ? [dict[@"bot_id"] intValue] : 0;
                 NSString *scope = [dict[@"scope"] respondsToSelector:@selector(characterAtIndex:)] ? dict[@"scope"] : nil;
                 
                 NSString *callbackUrl = dict[@"callback_url"];
@@ -3704,7 +3717,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
                 handle = person.personHandle.value;
             }
             
-            int32_t peerId = 0;
+            int64_t peerId = 0;
             if ([handle hasPrefix:@"TGCA"])
             {
                 peerId = [[handle substringFromIndex:@"TGCA".length] intValue];
@@ -4625,7 +4638,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
     else if ([action isEqualToString:@"willForwardMessages"])
     {
         if (_currentInviteBot != nil) {
-            int32_t uid = _currentInviteBot.uid;
+            int64_t uid = _currentInviteBot.uid;
             NSString *payload = _currentInviteBotPayload;
             _currentInviteBot = nil;
             _currentInviteBotPayload = nil;
@@ -4688,7 +4701,7 @@ static unsigned int overrideIndexAbove(__unused id self, __unused SEL _cmd)
         appTitle = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
     }
     if (appTitle == nil) {
-        appTitle = @"Telegram";
+        appTitle = @"Oldgram";
     }
     return appTitle;
 }

@@ -97,7 +97,7 @@
                 TGDatabaseAction action;
                 [(NSValue *)[readConversationActions objectAtIndex:0] getValue:&action];
                 _currentReadConversationId = action.subject;
-                _currentReadMaxMid = action.arg0;
+                _currentReadMaxMid = (int32_t)action.arg0;
                 
                 if (_currentReadConversationId <= INT_MIN)
                 {
@@ -110,7 +110,7 @@
                         [self readMessagesSuccess:nil];
                 }
                 else
-                    self.cancelToken = [TGTelegraphInstance doConversationReadHistory:action.subject accessHash:0 maxMid:action.arg0 offset:0 actor:self];
+                    self.cancelToken = [TGTelegraphInstance doConversationReadHistory:action.subject accessHash:0 maxMid:(int32_t)action.arg0 offset:0 actor:self];
             }
             else if (deleteMessageActions.count != 0)
             {
@@ -213,8 +213,9 @@
                     [value getValue:&action];
                     
                     int64_t conversationId = 0;
-                    ((int32_t *)&conversationId)[0] = action.arg0;
-                    ((int32_t *)&conversationId)[1] = action.arg1;
+                    // arg0/arg1 хранят половинки идентификатора чата.
+                    ((int32_t *)&conversationId)[0] = (int32_t)action.arg0;
+                    ((int32_t *)&conversationId)[1] = (int32_t)action.arg1;
                     
                     if (currentConversationId == 0 || conversationId == currentConversationId)
                     {
@@ -259,7 +260,7 @@
                 TGDatabaseAction action;
                 [(NSValue *)[deleteConversationActions objectAtIndex:0] getValue:&action];
                 _currentDeleteConversationId = action.subject;
-                _currentDeleteConversationTopMessageId = action.arg0;
+                _currentDeleteConversationTopMessageId = (int32_t)action.arg0;
                 
                 _currentClearConversation = false;
                 
@@ -295,7 +296,7 @@
                 TGDatabaseAction action;
                 [(NSValue *)[clearConversationActions objectAtIndex:0] getValue:&action];
                 _currentDeleteConversationId = action.subject;
-                _currentDeleteConversationTopMessageId = action.arg0;
+                _currentDeleteConversationTopMessageId = (int32_t)action.arg0;
                 
                 _currentClearConversation = true;
                 
@@ -445,7 +446,7 @@
                 arc4random_buf(&messageRandomId, 8);
                 sendScreenshotNotification.random_id = messageRandomId;
                 
-                sendScreenshotNotification.reply_to_msg_id = action.arg0;
+                sendScreenshotNotification.reply_to_msg_id = (int32_t)action.arg0;
                 
                 sendScreenshotNotification.peer = [TGTelegraphInstance createInputPeerForConversation:action.subject accessHash:0];
                 

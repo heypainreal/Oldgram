@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getStickers.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x43d4f2c;
+    return (int32_t)0xd5a5d3a1;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x76470753;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -86,6 +88,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeString:self.emoticon == nil ? @"" : self.emoticon];
+    [os writeInt64:(int64_t)self.n_hash];
+}
 
 @end
 

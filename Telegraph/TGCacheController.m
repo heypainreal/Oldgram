@@ -167,7 +167,7 @@
                     if (conversation != nil) {
                         if (conversation.isEncrypted) {
                             conversation = [conversation copy];
-                            int32_t userId = 0;
+                            int64_t userId = 0;
                             if (conversation.chatParticipants.chatParticipantUids.count != 0)
                                 userId = [conversation.chatParticipants.chatParticipantUids[0] intValue];
                             TGUser *user = [TGDatabaseInstance() loadUser:userId];
@@ -189,7 +189,7 @@
                         }
                     }
                 } else {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+                    TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
                     if (user != nil) {
                         peer = user;
                     }

@@ -144,7 +144,7 @@ extern NSString *TGDeviceProximityStateChangedNotification;
 
 - (void)requestDeviceToken:(id<TGDeviceTokenListener>)listener;
 
-- (void)reloadSettingsController:(int)uid;
+- (void)reloadSettingsController:(int64_t)uid;
 
 - (void)readyToApplyLocalizationFromFile:(NSString *)filePath warnings:(NSString *)warnings;
 

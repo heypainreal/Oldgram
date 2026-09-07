@@ -22,7 +22,7 @@
 @interface TLMessage$message : TLMessage
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t from_id;
+@property (nonatomic) int64_t from_id;
 @property (nonatomic, retain) TLPeer *to_id;
 @property (nonatomic) int32_t date;
 @property (nonatomic, retain) NSString *message;
@@ -33,10 +33,10 @@
 @interface TLMessage$messageMeta : TLMessage
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t from_id;
+@property (nonatomic) int64_t from_id;
 @property (nonatomic, retain) TLPeer *to_id;
 @property (nonatomic, retain) TLMessageFwdHeader *fwd_from;
-@property (nonatomic) int32_t via_bot_id;
+@property (nonatomic) int64_t via_bot_id;
 @property (nonatomic) int32_t reply_to_msg_id;
 @property (nonatomic) int32_t date;
 @property (nonatomic, retain) NSString *message;

@@ -75,7 +75,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLmessages_AllStickers$messages_allStickers *object = [[TLmessages_AllStickers$messages_allStickers alloc] init];
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     object.sets = metaObject->getArray((int32_t)0xc535ffc6);
     return object;
 }

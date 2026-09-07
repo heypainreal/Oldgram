@@ -161,7 +161,7 @@
             return [TGDatabaseInstance() loadChannels:@[@(peerId)]][@(peerId)];
         }
     } else {
-        return [TGDatabaseInstance() loadUser:(int32_t)peerId];
+        return [TGDatabaseInstance() loadUser:(int64_t)peerId];
     }
 }
 
@@ -1086,7 +1086,7 @@
                 if (!TGPeerIdIsSecretChat(conversationId) && !TGPeerIdIsChannel(conversationId) && conversationId != TGTelegraphInstance.clientUserId && canDeleteForEveryone) {
                     NSString *title = TGLocalized(@"Conversation.DeleteMessagesForEveryone");
                     if (TGPeerIdIsUser(conversationId)) {
-                        TGUser *user = [TGDatabaseInstance() loadUser:(int)conversationId];
+                        TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
                         if (user != nil) {
                             title = [NSString stringWithFormat:TGLocalized(@"Conversation.DeleteMessagesFor"), user.displayFirstName];
                         }

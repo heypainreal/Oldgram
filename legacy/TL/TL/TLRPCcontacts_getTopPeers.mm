@@ -1,5 +1,7 @@
 #import "TLRPCcontacts_getTopPeers.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xd4982db5;
+    return (int32_t)0x973478b6;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xfd983c3a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -68,7 +70,7 @@
     object.flags = metaObject->getInt32((int32_t)0x81915c23);
     object.offset = metaObject->getInt32((int32_t)0xfc56269);
     object.limit = metaObject->getInt32((int32_t)0xb8433fca);
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     return object;
 }
 
@@ -100,6 +102,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // Биты, которые выставляет приложение, в схеме 228 значат то же самое.
+    [os writeInt32:self.flags];
+    [os writeInt32:(int32_t)self.offset];
+    [os writeInt32:(int32_t)self.limit];
+    [os writeInt64:(int64_t)self.n_hash];
+}
 
 @end
 

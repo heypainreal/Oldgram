@@ -10,7 +10,7 @@
 - (void)updateSearchQuery:(NSString *)query;
 - (void)presentFilterController;
 
-- (bool)canBanUser:(int32_t)userId;
+- (bool)canBanUser:(int64_t)userId;
 - (void)banUser:(TGUser *)userId;
 
 @end

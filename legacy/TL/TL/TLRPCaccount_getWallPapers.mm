@@ -1,5 +1,7 @@
 #import "TLRPCaccount_getWallPapers.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xc04cfac2;
+    return (int32_t)0x07967d36;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xc4047dc6;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
@@ -72,6 +74,11 @@
 {
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:0];
+}
 
 @end
 

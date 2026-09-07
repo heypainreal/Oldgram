@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong, readonly) NSURL *containerUrl;
 
-@property (nonatomic, readonly) int32_t clientUserId;
+@property (nonatomic, readonly) int64_t clientUserId;
 
 @property (nonatomic, strong, readonly) MTContext *mtContext;
 @property (nonatomic, strong, readonly) MTProto *mtProto;
@@ -32,7 +32,7 @@
 @property (nonatomic, strong, readonly) TGMemoryCache *memoryCache;
 @property (nonatomic, strong, readonly) SThreadPool *sharedThreadPool;
 
-- (instancetype)initWithContainerUrl:(NSURL *)containerUrl mtContext:(MTContext *)mtContext mtProto:(MTProto *)mtProto mtRequestService:(MTRequestMessageService *)mtRequestService clientUserId:(int32_t)clientUserId legacyDatabase:(TGLegacyDatabase *)legacyDatabase;
+- (instancetype)initWithContainerUrl:(NSURL *)containerUrl mtContext:(MTContext *)mtContext mtProto:(MTProto *)mtProto mtRequestService:(MTRequestMessageService *)mtRequestService clientUserId:(int64_t)clientUserId legacyDatabase:(TGLegacyDatabase *)legacyDatabase;
 
 - (SSignal *)function:(Api86_FunctionContext *)functionContext;
 - (SSignal *)datacenter:(NSInteger)datacenterId function:(Api86_FunctionContext *)functionContext;

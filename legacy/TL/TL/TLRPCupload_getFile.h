@@ -9,7 +9,7 @@
 @interface TLRPCupload_getFile : TLMetaRpc
 
 @property (nonatomic, retain) TLInputFileLocation *location;
-@property (nonatomic) int32_t offset;
+@property (nonatomic) int64_t offset;
 @property (nonatomic) int32_t limit;
 
 - (Class)responseClass;

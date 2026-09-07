@@ -77,7 +77,7 @@
     TLEncryptedFile$encryptedFile *object = [[TLEncryptedFile$encryptedFile alloc] init];
     object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.access_hash = metaObject->getInt64((int32_t)0x8f305224);
-    object.size = metaObject->getInt32((int32_t)0x5a228f5e);
+    object.size = metaObject->getInt64((int32_t)0x5a228f5e);
     object.dc_id = metaObject->getInt32((int32_t)0xae973dc4);
     object.key_fingerprint = metaObject->getInt32((int32_t)0x3633de43);
     return object;

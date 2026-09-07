@@ -1,5 +1,7 @@
 #import "TLRPCupload_getCdnFileHashes.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,19 +56,19 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x4da54231;
+    return (int32_t)0x91dc3f31;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x1ccd5960;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCupload_getCdnFileHashes$upload_getCdnFileHashes *object = [[TLRPCupload_getCdnFileHashes$upload_getCdnFileHashes alloc] init];
     object.file_token = metaObject->getBytes((int32_t)0x12624663);
-    object.offset = metaObject->getInt32((int32_t)0xfc56269);
+    object.offset = metaObject->getInt64((int32_t)0xfc56269);
     return object;
 }
 
@@ -86,6 +88,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeBytes:self.file_token == nil ? [NSData data] : self.file_token];
+    [os writeInt64:(int64_t)self.offset];
+}
 
 @end
 

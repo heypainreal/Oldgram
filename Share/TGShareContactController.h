@@ -8,6 +8,6 @@
 
 @property (nonatomic, copy) void (^completionBlock)(TGContactModel *);
 
-- (instancetype)initWithContext:(TGShareContext *)context vCard:(TGVCard *)vcard uid:(int32_t)uid;
+- (instancetype)initWithContext:(TGShareContext *)context vCard:(TGVCard *)vcard uid:(int64_t)uid;
 
 @end

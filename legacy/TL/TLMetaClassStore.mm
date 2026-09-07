@@ -1,5 +1,8 @@
 #include "TLMetaClassStore.h"
 
+#import "ModernTL.h"
+#import "ModernBridge.h"
+
 #import <LegacyComponents/LegacyComponents.h>
 
 #import "NSData+GZip.h"
@@ -581,6 +584,19 @@ void TLMetaClassStore::mergeScheme(TLScheme *scheme)
         manualObjectParsers.insert(std::pair<int32_t, id<TLObject> >(0x1da7158f, [[TLhelp_AppUpdate$help_appUpdate alloc] init]));
         manualObjectParsers.insert(std::pair<int32_t, id<TLObject> >(0xad2641f8, [[TLaccount_Password$account_password alloc] init]));
         manualObjectParsers.insert(std::pair<int32_t, id<TLObject> >(0x9a5c33e5, [[TLaccount_PasswordSettings$account_passwordSettings alloc] init]));
+        
+        // Современная схема (layer 228): регистрируется поверх старой, так что
+        // для любого конструктора нового слоя мы используем сгенерированный
+        // парсер, а не мета-схему 2018 года.
+        for (id<TLObject> parser in ModernTLAllParsers()) {
+            manualObjectParsers[[parser TLconstructorSignature]] = parser;
+        }
+        
+        // Там, где у конструктора есть класс образца 2018 года, разбираем в
+        // него — тогда весь код приложения работает без изменений.
+        for (id<TLObject> bridge in ModernBridgeAllParsers()) {
+            manualObjectParsers[[bridge TLconstructorSignature]] = bridge;
+        }
 
         {
             TLSchemeType$schemeType *constructor = [[TLSchemeType$schemeType alloc] init];

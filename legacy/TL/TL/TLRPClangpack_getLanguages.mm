@@ -1,5 +1,7 @@
 #import "TLRPClangpack_getLanguages.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x800fd57d;
+    return (int32_t)0x42c6978f;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x230ac3a6;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
@@ -72,6 +74,11 @@
 {
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeString:@""];
+}
 
 @end
 

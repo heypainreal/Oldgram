@@ -9,7 +9,7 @@
 
 @interface TLFeedBroadcasts$feedBroadcasts : TLFeedBroadcasts
 
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic, strong) NSArray *channels;
 
 @end

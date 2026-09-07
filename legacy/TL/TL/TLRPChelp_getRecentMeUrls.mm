@@ -1,5 +1,7 @@
 #import "TLRPChelp_getRecentMeUrls.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xd19bc174;
+    return (int32_t)0x3dc0f114;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x38a0843b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -79,6 +81,11 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeString:self.referer == nil ? @"" : self.referer];
+}
 
 @end
 

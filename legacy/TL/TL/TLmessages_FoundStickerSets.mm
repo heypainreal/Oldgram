@@ -47,7 +47,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLmessages_FoundStickerSets$messages_foundStickerSets *object = [[TLmessages_FoundStickerSets$messages_foundStickerSets alloc] init];
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     object.sets = metaObject->getArray((int32_t)0xc535ffc6);
     return object;
 }

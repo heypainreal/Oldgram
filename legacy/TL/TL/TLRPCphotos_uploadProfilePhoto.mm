@@ -1,5 +1,7 @@
 #import "TLRPCphotos_uploadProfilePhoto.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -57,12 +59,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xd50f9c88;
+    return (int32_t)0x0388a3b5;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xa5a4710;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -103,6 +105,11 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+}
 
 @end
 

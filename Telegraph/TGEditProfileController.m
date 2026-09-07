@@ -37,7 +37,7 @@
 
 @interface TGEditProfileController () <ASWatcher>
 {
-    int32_t _uid;
+    int64_t _uid;
     NSString *_initialAbout;
     
     UIBarButtonItem *_doneItem;
@@ -640,7 +640,7 @@
     
     static int actionId = 0;
     
-    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:_uid], @"uid", nil];
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:@(_uid), @"uid", nil];
     NSString *action = [[NSString alloc] initWithFormat:@"/tg/timeline/(%" PRId32 ")/deleteAvatar/(%d)", _uid, actionId++];
     [ActionStageInstance() requestActor:action options:options watcher:self];
     [ActionStageInstance() requestActor:action options:options watcher:TGTelegraphInstance];

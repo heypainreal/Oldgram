@@ -83,13 +83,13 @@
 
 @end
 
-static inline void maybeProcessUser(TLUser *user, std::map<int, TLUser *> &processedUsers)
+static inline void maybeProcessUser(TLUser *user, std::map<int64_t, TLUser *> &processedUsers)
 {
     if (((TLUser$modernUser *)user).n_id != 0)
         processedUsers[((TLUser$modernUser *)user).n_id] = user;
 }
 
-static inline void maybeProcessChat(TLChat *chat, std::map<int, TLChat *> &processedChats)
+static inline void maybeProcessChat(TLChat *chat, std::map<int64_t, TLChat *> &processedChats)
 {
     if (chat.n_id != 0)
         processedChats[chat.n_id] = chat;
@@ -698,13 +698,13 @@ static NSMutableArray *delayedNotifications()
 }
 
 template<typename T>
-static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
+static int64_t extractMessageConversationId(T concreteMessage, int64_t &outFromUid)
 {
     int64_t fromUid = concreteMessage.from_id;
     bool outgoing = concreteMessage.flags & 2;
     
     if (!outgoing)
-        outFromUid = (int)fromUid;
+        outFromUid = fromUid;
     
     if ([concreteMessage.to_id isKindOfClass:[TLPeer$peerUser class]])
     {
@@ -779,12 +779,12 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
             stateQts = MAX(stateQts, [(id<TGSyntheticUpdateWithQts>)update.update qts]);
     }
     
-    std::map<int, TLUser *> processedUsers;
-    std::map<int, TLChat *> processedChats;
+    std::map<int64_t, TLUser *> processedUsers;
+    std::map<int64_t, TLChat *> processedChats;
     
     NSMutableArray *updatesWithDates = [[NSMutableArray alloc] init];
     
-    std::set<int> knownUsers;
+    std::set<int64_t> knownUsers;
     std::set<int64_t> knownChats;
     
     NSMutableArray *addedMessages = [[NSMutableArray alloc] init];
@@ -882,7 +882,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                 TGLog(@"Message %d does not match for local notification", (int)message.n_id);
             
             int64_t conversationId = 0;
-            int fromUid = 0;
+            int64_t fromUid = 0;
             
             if ([message isKindOfClass:messageClass])
                 conversationId = extractMessageConversationId((TLMessage$message *)message, fromUid);
@@ -893,7 +893,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
             {
                 if (conversationId < 0)
                 {
-                    if (knownChats.find(conversationId) == knownChats.end() && processedChats.find(-(int)conversationId) == processedChats.end())
+                    if (knownChats.find(conversationId) == knownChats.end() && processedChats.find(-conversationId) == processedChats.end())
                     {
                         bool contains = [TGDatabaseInstance() containsConversationWithId:conversationId];
                         if (contains)
@@ -907,11 +907,11 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                 }
                 else
                 {
-                    if (knownUsers.find((int)conversationId) == knownUsers.end() && processedUsers.find((int)conversationId) == processedUsers.end())
+                    if (knownUsers.find(conversationId) == knownUsers.end() && processedUsers.find(conversationId) == processedUsers.end())
                     {
-                        bool contains = [TGDatabaseInstance() loadUser:(int)conversationId];
+                        bool contains = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
                         if (contains)
-                            knownUsers.insert((int)conversationId);
+                            knownUsers.insert(conversationId);
                         else
                         {
                             TGLog(@"Unknown user %" PRId64 "", conversationId);
@@ -1007,7 +1007,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
             
             if (conversationId < 0)
             {
-                if (knownChats.find(conversationId) == knownChats.end() && processedChats.find(-(int)conversationId) == processedChats.end())
+                if (knownChats.find(conversationId) == knownChats.end() && processedChats.find(-conversationId) == processedChats.end())
                 {
                     bool contains = [TGDatabaseInstance() containsConversationWithId:conversationId];
                     if (contains)
@@ -1022,7 +1022,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
         else if ([update isKindOfClass:updateChatParticipantAddClass] || [update isKindOfClass:updateChatParticipantDeleteClass])
         {
             int64_t conversationId = 0;
-            int32_t userId = 0;
+            int64_t userId = 0;
             if ([update isKindOfClass:updateChatParticipantAddClass])
             {
                 conversationId = -((TLUpdate$updateChatParticipantAdd *)update).chat_id;
@@ -1036,7 +1036,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
             
             if (conversationId < 0)
             {
-                if (knownChats.find(conversationId) == knownChats.end() && processedChats.find(-(int)conversationId) == processedChats.end())
+                if (knownChats.find(conversationId) == knownChats.end() && processedChats.find(-conversationId) == processedChats.end())
                 {
                     bool contains = [TGDatabaseInstance() containsConversationWithId:conversationId];
                     if (contains)
@@ -1074,7 +1074,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
             {
                 if (conversation.chatParticipants.chatParticipantUids.count != 0)
                 {
-                    int userId = [conversation.chatParticipants.chatParticipantUids[0] intValue];
+                    int64_t userId = [conversation.chatParticipants.chatParticipantUids[0] longLongValue];
                     if ([TGDatabaseInstance() loadUser:userId] != nil)
                         [allUpdates addObject:update];
                     else
@@ -1114,14 +1114,14 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
     {
         NSMutableArray *usersToProcess = [[NSMutableArray alloc] initWithCapacity:processedUsers.size()];
         
-        for (std::map<int, TLUser *>::iterator it = processedUsers.begin(); it != processedUsers.end(); it++)
+        for (std::map<int64_t, TLUser *>::iterator it = processedUsers.begin(); it != processedUsers.end(); it++)
         {
             [usersToProcess addObject:it->second];
         }
         
         NSMutableArray *chatsToProcess = [[NSMutableArray alloc] initWithCapacity:processedChats.size()];
         
-        for (std::map<int, TLChat *>::iterator it = processedChats.begin(); it != processedChats.end(); it++)
+        for (std::map<int64_t, TLChat *>::iterator it = processedChats.begin(); it != processedChats.end(); it++)
         {
             [chatsToProcess addObject:it->second];
         }
@@ -1389,7 +1389,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                         }
                         else if (message.cid > 0)
                         {
-                            user = [TGDatabaseInstance() loadUser:(int)message.cid];
+                            user = [TGDatabaseInstance() loadUser:message.cid];
                             notificationPeerId = message.cid;
                         }
                         else
@@ -1398,7 +1398,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                                 notificationPeerId = message.fromUid;
                             else
                                 notificationPeerId = message.cid;
-                            user = [TGDatabaseInstance() loadUser:(int)message.fromUid];
+                            user = [TGDatabaseInstance() loadUser:message.fromUid];
                             TGConversation *conversation = [TGDatabaseInstance() loadConversationWithIdCached:message.cid];
                             if (conversation != nil)
                                 chatName = conversation.chatTitle;
@@ -1454,7 +1454,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                                             TGUser *authorUser = user;
                                             NSMutableArray *subjectUsers = [[NSMutableArray alloc] init];
                                             for (NSNumber *nUid in uids) {
-                                                TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                                                TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                                                 if (user != nil) {
                                                     [subjectUsers addObject:subjectUser];
                                                 }
@@ -1477,7 +1477,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                                             NSNumber *nUid = [actionAttachment.actionData objectForKey:@"uid"];
                                             if (nUid != nil)
                                             {
-                                                TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                                                TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                                                 
                                                 if (subjectUser.uid == user.uid)
                                                     text = [[NSString alloc] initWithFormat:TGLocalized(@"CHAT_RETURNED"), user.displayName, chatName];
@@ -1496,7 +1496,7 @@ static int64_t extractMessageConversationId(T concreteMessage, int &outFromUid)
                                         NSNumber *nUid = [actionAttachment.actionData objectForKey:@"uid"];
                                         if (nUid != nil)
                                         {
-                                            TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                                            TGUser *subjectUser = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                                             
                                             if (subjectUser.uid == user.uid)
                                                 text = [[NSString alloc] initWithFormat:TGLocalized(@"CHAT_LEFT"), user.displayName, chatName];

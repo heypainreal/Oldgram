@@ -10,13 +10,13 @@
 
 @interface TGPreparedContactMessage : TGPreparedMessage
 
-@property (nonatomic) int32_t uid;
+@property (nonatomic) int64_t uid;
 @property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *vcard;
 
-- (instancetype)initWithUid:(int32_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber vcard:(NSString *)vcard replyMessage:(TGMessage *)replyMessage replyMarkup:(TGReplyMarkupAttachment *)replyMarkup;;
+- (instancetype)initWithUid:(int64_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber vcard:(NSString *)vcard replyMessage:(TGMessage *)replyMessage replyMarkup:(TGReplyMarkupAttachment *)replyMarkup;;
 - (instancetype)initWithFirstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber vcard:(NSString *)vcard replyMessage:(TGMessage *)replyMessage replyMarkup:(TGReplyMarkupAttachment *)replyMarkup;;
 
 @end

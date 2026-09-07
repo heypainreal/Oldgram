@@ -41,7 +41,7 @@
 
 @interface TLMessageAction$messageActionChatDeleteUser : TLMessageAction
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 
 @end
 
@@ -58,7 +58,7 @@
 
 @interface TLMessageAction$messageActionChatJoinedByLink : TLMessageAction
 
-@property (nonatomic) int32_t inviter_id;
+@property (nonatomic) int64_t inviter_id;
 
 @end
 
@@ -76,7 +76,7 @@
 
 @interface TLMessageAction$messageActionChatMigrateTo : TLMessageAction
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 
 @end
 
@@ -93,7 +93,7 @@
 @interface TLMessageAction$messageActionChannelMigrateFrom : TLMessageAction
 
 @property (nonatomic, retain) NSString *title;
-@property (nonatomic) int32_t chat_id;
+@property (nonatomic) int64_t chat_id;
 
 @end
 

@@ -434,12 +434,9 @@ void TGLogSynchronize()
     });
 }
 
-static bool logEnabled =
-#if (defined(DEBUG) || defined(INTERNAL_RELEASE)) && !defined(DISABLE_LOGGING)
-    true;
-#else
-    false;
-#endif
+// Логи нужны и в релизной сборке: это единственный способ разобрать, что
+// происходит на устройстве при переезде на layer 228.
+static bool logEnabled = true;
 
 void TGLogSetEnabled(bool enabled)
 {

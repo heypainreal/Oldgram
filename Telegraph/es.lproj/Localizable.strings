@@ -40,7 +40,7 @@
 "MESSAGE_STICKER" = "%1$@ te envió un %2$@sticker";
 "CHAT_MESSAGE_STICKER" = "%1$@ envió un %3$@sticker al grupo %2$@";
 
-"CONTACT_JOINED" = "¡%1$@ se unió a Telegram!";
+"CONTACT_JOINED" = "¡%1$@ se unió a Oldgram!";
 "CONTACT_ACTIVATED" = "¡%1$@ te ayudó a activar tu cuenta!";
 
 "AUTH_UNKNOWN" = "Sesión iniciada desde un nuevo dispositivo %1$@";
@@ -182,42 +182,42 @@
 "Date.DialogDateFormat" = "{day} de {month}";
 
 // Tour
-"Tour.Title1" = "Telegram";
+"Tour.Title1" = "Oldgram";
 "Tour.Text1" = "La aplicación de mensajería más \n**veloz** del mundo. Es **gratis** y **segura**.";
 
 "Tour.Title2" = "Rápida";
-"Tour.Text2" = "**Telegram** entrega mensajes más \nrápido que cualquier otra aplicación.";
+"Tour.Text2" = "**Oldgram** entrega mensajes más \nrápido que cualquier otra aplicación.";
 
 "Tour.Title3" = "Poderosa";
-"Tour.Text3" = "**Telegram** no tiene límites en\nel tamaño de tus chats y archivos.";
+"Tour.Text3" = "**Oldgram** no tiene límites en\nel tamaño de tus chats y archivos.";
 
 "Tour.Title4" = "Segura";
-"Tour.Text4" = "**Telegram** mantiene tus mensajes\na salvo del ataque de hackers.";
+"Tour.Text4" = "**Oldgram** mantiene tus mensajes\na salvo del ataque de hackers.";
 
 "Tour.Title5" = "Basada en la nube";
-"Tour.Text5" = "**Telegram** te permite acceder a tus\nmensajes desde múltiples dispositivos.";
+"Tour.Text5" = "**Oldgram** te permite acceder a tus\nmensajes desde múltiples dispositivos.";
 
 "Tour.Title6" = "Gratis";
-"Tour.Text6" = "**Telegram** es gratis para siempre. \nSin publicidad ni suscripciones.";
+"Tour.Text6" = "**Oldgram** es gratis para siempre. \nSin publicidad ni suscripciones.";
 
 "Tour.Title7" = "Privada";
-"Tour.Text7" = "Los mensajes de **Telegram** están fuertemente cifrados y se pueden autodestruir.";
+"Tour.Text7" = "Los mensajes de **Oldgram** están fuertemente cifrados y se pueden autodestruir.";
 
 "Tour.StartButton" = "Empieza a chatear";
 
 // Login
 "Login.PhoneAndCountryHelp" = "Por favor, confirma tu código de país y pon tu número de teléfono.";
 "Login.CodeHelp" = "Te hemos enviado un SMS con un código de activación al número\n%@";
-"Login.CodeSentInternal" = "Enviamos el código a **Telegram** en tu otro dispositivo";
+"Login.CodeSentInternal" = "Enviamos el código a **Oldgram** en tu otro dispositivo";
 "Login.HaveNotReceivedCodeInternal" = "¿No recibiste el código?";
 "Login.CodeSentSms" = "Te hemos enviado un SMS con el código";
 "Login.Code" = "Código";
 "Login.CallRequestState1" = "Te llamaremos en %d:%.2d";
-"Login.CallRequestState2" = "Solicitando una llamada de Telegram...";
-"Login.CallRequestState3" = "Telegram marcó tu número\n[¿No recibiste el código?]";
+"Login.CallRequestState2" = "Solicitando una llamada de Oldgram...";
+"Login.CallRequestState3" = "Oldgram marcó tu número\n[¿No recibiste el código?]";
 "Login.EmailNotConfiguredError" = "Por favor, pon un correo electrónico.";
 "Login.EmailCodeSubject" = "%@, sin código";
-"Login.EmailCodeBody" = "Mi número de teléfono es:\n%@\nNo puedo obtener un código de activación para Telegram.";
+"Login.EmailCodeBody" = "Mi número de teléfono es:\n%@\nNo puedo obtener un código de activación para Oldgram.";
 "Login.UnknownError" = "Ocurrió un error. Por favor, reinténtalo más tarde.";
 "Login.InvalidCodeError" = "El código es inválido. Por favor, reinténtalo.";
 "Login.NetworkError" = "Por favor, revisa tu conexión a internet y reinténtalo.";
@@ -226,7 +226,7 @@
 "Login.InvalidPhoneError" = "Número de teléfono inválido. Por favor, reinténtalo.";
 "Login.InvalidFirstNameError" = "Nombre inválido. Por favor, reinténtalo.";
 "Login.InvalidLastNameError" = "Apellidos inválidos. Por favor, reinténtalo.";
-"Login.InactiveHelp" = "Ninguno de tus contactos\nusa Telegram todavía.\nTe notificaremos cuando se unan.\nTambién puedes invitar a algún amigo ahora mismo.";
+"Login.InactiveHelp" = "Ninguno de tus contactos\nusa Oldgram todavía.\nTe notificaremos cuando se unan.\nTambién puedes invitar a algún amigo ahora mismo.";
 "Login.InviteButton" = "Invitar a chatear a un amigo";
 
 "Login.PhoneTitle" = "Tu teléfono";
@@ -253,7 +253,7 @@
 "WelcomeScreen.Logout" = "Cerrar sesión";
 "WelcomeScreen.Greeting" = "¡Hola, %@!";
 "WelcomeScreen.ContactsAccessDisabled" = "Lo sentimos, es imposible sincronizar tus contactos.";
-"WelcomeScreen.ContactsAccessHelp" = "Telegram se basa en tu actual lista de contactos. Por favor, ve a los Ajustes de tu %@ > Privacidad > Contactos y activa Telegram.";
+"WelcomeScreen.ContactsAccessHelp" = "Oldgram se basa en tu actual lista de contactos. Por favor, ve a los Ajustes de tu %@ > Privacidad > Contactos y activa Oldgram.";
 "WelcomeScreen.ContactsAccessSettings" = "Ajustes";
 "WelcomeScreen.UpdatingTitle" = "Actualizando";
 
@@ -301,13 +301,13 @@
 "Contacts.contact" = "contacto";
 "Contacts.contacts" = "contactos";
 "Contacts.contactsvar" = "contactos";
-"Contacts.InvitationText" = "Oye, cambiémonos a Telegram http://telegram.org/dl";
+"Contacts.InvitationText" = "Oye, cambiémonos a Oldgram http://telegram.org/dl";
 "Contacts.FailedToSendInvitesMessage" = "Ocurrió un error.";
-"Contacts.AccessDeniedError" = "Telegram no tiene acceso a tus contactos";
-"Contacts.AccessDeniedHelpLandscape" = "Ve a los Ajustes de tu %@ > Privacidad > Contactos. \nActiva la opción para Telegram.";
-"Contacts.AccessDeniedHelpPortrait" = "Ve a los Ajustes de tu %@ > Privacidad > Contactos. Activa la opción para Telegram.";
+"Contacts.AccessDeniedError" = "Oldgram no tiene acceso a tus contactos";
+"Contacts.AccessDeniedHelpLandscape" = "Ve a los Ajustes de tu %@ > Privacidad > Contactos. \nActiva la opción para Oldgram.";
+"Contacts.AccessDeniedHelpPortrait" = "Ve a los Ajustes de tu %@ > Privacidad > Contactos. Activa la opción para Oldgram.";
 "Contacts.AccessDeniedHelpON" = "Activado";
-"Contacts.InviteToTelegram" = "Invitar a Telegram";
+"Contacts.InviteToOldgram" = "Invitar a Oldgram";
 "Contacts.InviteFriends" = "Invitar a amigos";
 "Contacts.SelectAll" = "Elegir todos";
 
@@ -351,10 +351,10 @@
 "Conversation.DeleteChat" = "Eliminar este chat";
 "Conversation.ClearAllConfirmation" = "¿Eliminar todo el historial?";
 "Conversation.SearchImages" = "Buscar imágenes";
-"Conversation.UnsupportedMedia" = "Este mensaje no está soportado en tu versión de Telegram. Actualiza la aplicación para verlo:\nhttp://telegram.org/update";
+"Conversation.UnsupportedMedia" = "Este mensaje no está soportado en tu versión de Oldgram. Actualiza la aplicación para verlo:\nhttp://telegram.org/update";
 "Conversation.EncryptionWaiting" = "Esperando que %@ se conecte...";
 "Conversation.EncryptionProcessing" = "Intercambiando claves de cifrado...";
-"Conversation.SupportPlaceholder" = "¿Tienes alguna pregunta sobre Telegram?";
+"Conversation.SupportPlaceholder" = "¿Tienes alguna pregunta sobre Oldgram?";
 "Conversation.EmptyPlaceholder" = "Aún no hay mensajes...";
 "Conversation.EncryptedPlaceholderTitleIncoming" = "%@ te invitó a un chat secreto.";
 "Conversation.EncryptedPlaceholderTitleOutgoing" = "Invitaste a %@ a un chat secreto.";
@@ -405,9 +405,9 @@
 "Notification.CreatedGroup" = "Grupo creado";
 "Notification.CreatedBroadcastList" = "Creaste una lista de difusión";
 "Notification.CreatedChatWithTitle" = "%@ creó el grupo “%@”";
-"Notification.Joined" = "%@ se unió a Telegram";
+"Notification.Joined" = "%@ se unió a Oldgram";
 "Notification.ChangedGroupName" = "%@ cambió el nombre del grupo a “%@”";
-"Notification.NewAuthDetected" = "%1$@: \nDetectamos una conexión a tu cuenta desde un nuevo dispositivo el %2$@ %3$@, a las %4$@. \n\nDispositivo: %5$@ \nUbicación: %6$@ \n\nSi no eras tú, puedes ir a Ajustes > Privacidad y seguridad > Sesiones activas y cerrar esa sesión.\n\nSi crees que alguien ha iniciado la sesión sin tu consentimiento, puedes activar la verificación en dos pasos, en los ajustes de privacidad y seguridad.\n\nGracias,\nEl equipo de Telegram";
+"Notification.NewAuthDetected" = "%1$@: \nDetectamos una conexión a tu cuenta desde un nuevo dispositivo el %2$@ %3$@, a las %4$@. \n\nDispositivo: %5$@ \nUbicación: %6$@ \n\nSi no eras tú, puedes ir a Ajustes > Privacidad y seguridad > Sesiones activas y cerrar esa sesión.\n\nSi crees que alguien ha iniciado la sesión sin tu consentimiento, puedes activar la verificación en dos pasos, en los ajustes de privacidad y seguridad.\n\nGracias,\nEl equipo de Oldgram";
 "Notification.EncryptedChatRequested" = "Chat secreto solicitado";
 "Notification.EncryptedChatAccepted" = "Chat secreto iniciado";
 "Notification.MessageLifetimeChanged" = "%1$@ activó la autodestrucción en %2$@";
@@ -468,7 +468,7 @@
 "Conversation.SlideToCancel" = "Cancelar";
 "Conversation.ApplyLocalization" = "Aplicar traducción";
 "Conversation.OpenFile" = "Abrir archivo";
-"Conversation.MicrophoneAccessDisabled" = "Telegram necesita acceso a tu micrófono para los mensajes de voz. Por favor, ve a Ajustes > Privacidad > Micrófono y activa Telegram.";
+"Conversation.MicrophoneAccessDisabled" = "Oldgram necesita acceso a tu micrófono para los mensajes de voz. Por favor, ve a Ajustes > Privacidad > Micrófono y activa Oldgram.";
 
 // Media Picker
 "MediaPicker.Send" = "Enviar";
@@ -477,8 +477,8 @@
 "SearchImages.Title" = "Álbumes";
 "MediaPicker.CameraRoll" = "Carrete";
 "SearchImages.NoImagesFound" = "No se encontraron imágenes";
-"MediaPicker.AccessDeniedError" = "Telegram no tiene acceso a tus fotos";
-"MediaPicker.AccessDeniedHelp" = "Ve a los Ajustes de tu %@ > Privacidad > Fotos.\nActiva la opción para Telegram.";
+"MediaPicker.AccessDeniedError" = "Oldgram no tiene acceso a tus fotos";
+"MediaPicker.AccessDeniedHelp" = "Ve a los Ajustes de tu %@ > Privacidad > Fotos.\nActiva la opción para Oldgram.";
 "SearchImages.Downloading#Kb" = "Descargando %d KB";
 "SearchImages.Downloading#Mb" = "Descargando %d MB";
 "SearchImages.ImageNofM" = "Imagen %1$@ de %2$@";
@@ -489,9 +489,9 @@
 
 // User Profile
 "Profile.ImageUploadError" = "Ocurrió un error. Por favor, reinténtalo más tarde.";
-"Profile.PhonebookAccessDisabled" = "Para activar esta opción, por favor, ve a los Ajustes de tu iPhone > Privacidad > Contactos y activa la opción para Telegram.";
+"Profile.PhonebookAccessDisabled" = "Para activar esta opción, por favor, ve a los Ajustes de tu iPhone > Privacidad > Contactos y activa la opción para Oldgram.";
 "Profile.CreateEncryptedChatError" = "Ocurrió un error.";
-"Profile.CreateEncryptedChatOutdatedError" = "No se puede crear un chat secreto con %@.\n%@ está utilizando una versión antigua de Telegram y necesita actualizarla.";
+"Profile.CreateEncryptedChatOutdatedError" = "No se puede crear un chat secreto con %@.\n%@ está utilizando una versión antigua de Oldgram y necesita actualizarla.";
 "Profile.CreateNewContact" = "Crear nuevo contacto";
 "Profile.AddToExisting" = "Añadir a contacto existente";
 "Profile.EncryptionKey" = "Clave de cifrado";
@@ -524,7 +524,7 @@
 "UserInfo.NotificationsDisabled" = "Desactivadas";
 "UserInfo.NotificationsEnable" = "Activar";
 "UserInfo.NotificationsDisable" = "Desactivar";
-"UserInfo.Invite" = "Invitar a Telegram";
+"UserInfo.Invite" = "Invitar a Oldgram";
 
 // New Contact
 "NewContact.Title" = "Nuevo contacto";
@@ -575,7 +575,7 @@
 "Preview.LoadingImages" = "cargando imágenes completas...";
 "Preview.DeletePhoto" = "Eliminar foto";
 "Preview.DeleteVideo" = "Eliminar vídeo";
-"Preview.ForwardViaTelegram" = "Reenviar por Telegram";
+"Preview.ForwardViaOldgram" = "Reenviar por Oldgram";
 "Preview.SaveToCameraRoll" = "Guardar en el Carrete";
 
 // Map
@@ -585,8 +585,8 @@
 "Map.Map" = "Mapa";
 "Map.Satellite" = "Satélite";
 "Map.Hybrid" = "Híbrido";
-"Map.AccessDeniedError" = "Para usar esta función, por favor, marca la opción de Telegram como “activa”, en los servicios de localización de los Ajustes de privacidad en tu iPhone.";
-"Map.ForwardViaTelegram" = "Reenviar por Telegram";
+"Map.AccessDeniedError" = "Para usar esta función, por favor, marca la opción de Oldgram como “activa”, en los servicios de localización de los Ajustes de privacidad en tu iPhone.";
+"Map.ForwardViaOldgram" = "Reenviar por Oldgram";
 "Map.GetDirections" = "Obtener direcciones";
 "Map.OpenInGoogleMaps" = "Abrir en Google Maps";
 
@@ -613,7 +613,7 @@
 "Settings.Support" = "Hacer una pregunta";
 "Settings.FAQ" = "Preguntas frecuentes";
 "Settings.FAQ_URL" = "https://telegram.org/faq/es";
-"Settings.FAQ_Intro" = "Por favor, considera que el soporte de Telegram está hecho por voluntarios. Respondemos lo antes posible, pero puede tomar tiempo.\n\nPor favor, mira las preguntas frecuentes de Telegram: tienen respuestas para la mayoría de las preguntas.";
+"Settings.FAQ_Intro" = "Por favor, considera que el soporte de Oldgram está hecho por voluntarios. Respondemos lo antes posible, pero puede tomar tiempo.\n\nPor favor, mira las preguntas frecuentes de Oldgram: tienen respuestas para la mayoría de las preguntas.";
 "Settings.FAQ_Button" = "Preguntas frecuentes";
 "Settings.SaveIncomingPhotos" = "Guardar fotos recibidas";
 "Settings.SaveIncomingPhotosHelp" = "Guardar fotos recibidas en el Carrete.";
@@ -663,9 +663,9 @@
 // Usage
 "Cache.Title" = "Uso de almacenamiento";
 "Cache.ClearCache" = "Eliminar caché";
-"Cache.ClearCacheAlert" = "Las fotos, vídeos y otros archivos de los chats en la nube serán eliminados de este dispositivo para ahorrar espacio.\n\nToda la multimedia permanecerá en la nube de Telegram y podrás volver a descargarla si la necesitas de nuevo.";
+"Cache.ClearCacheAlert" = "Las fotos, vídeos y otros archivos de los chats en la nube serán eliminados de este dispositivo para ahorrar espacio.\n\nToda la multimedia permanecerá en la nube de Oldgram y podrás volver a descargarla si la necesitas de nuevo.";
 "Cache.KeepMedia" = "Conservar multimedia";
-"Cache.Help" = "Las fotos, vídeos y archivos de los chats en la nube, a los que **no ingreses** durante este periodo, se eliminarán del dispositivo para ahorrar almacenamiento.\n\nToda la multimedia permanecerá en la nube de Telegram y podrás volver a descargarla si la necesitas.";
+"Cache.Help" = "Las fotos, vídeos y archivos de los chats en la nube, a los que **no ingreses** durante este periodo, se eliminarán del dispositivo para ahorrar almacenamiento.\n\nToda la multimedia permanecerá en la nube de Oldgram y podrás volver a descargarla si la necesitas.";
 
 // Blocked Users
 "BlockedUsers.Title" = "Usuarios bloqueados";
@@ -713,9 +713,9 @@
 "ChatSettings.AutoPlayAudio" = "Autorreproducción de audio";
 
 "Settings.LogoutConfirmationTitle" = "¿Quieres cerrar sesión?";
-"Settings.LogoutConfirmationText" = "\nConsidera que puedes usar Telegram en todos tus dispositivos a la vez.\n\nRecuerda que, al cerrar sesión, eliminas todos tus chats secretos.";
+"Settings.LogoutConfirmationText" = "\nConsidera que puedes usar Oldgram en todos tus dispositivos a la vez.\n\nRecuerda que, al cerrar sesión, eliminas todos tus chats secretos.";
 
-"Login.PadPhoneHelp" = "\nPuedes usar tu número para ingresar a Telegram desde todos tus dispositivos. \nNo uses el número de la SIM de iPad; necesitaremos enviarte un SMS. \n\n¿Es correcto este número? \n{number}";
+"Login.PadPhoneHelp" = "\nPuedes usar tu número para ingresar a Oldgram desde todos tus dispositivos. \nNo uses el número de la SIM de iPad; necesitaremos enviarte un SMS. \n\n¿Es correcto este número? \n{number}";
 "Login.PadPhoneHelpTitle" = "Tu número";
 
 "MessageTimer.Custom" = "Personalizada";
@@ -782,7 +782,7 @@
 
 "Service.NetworkConfigurationUpdatedMessage" = "Ajustes de conexión actualizados satisfactoriamente.";
 
-"Compatibility.SecretMediaVersionTooLow" = "%@ usa una versión antigua de Telegram, así que las fotos secretas serán mostradas en un modo de compatibilidad. \n\nCuando %@ actualice Telegram, las fotos con autodestrucción de 1 minuto o menos funcionarán con el modo “Mantén pulsado para ver”, y te notificaremos siempre que la otra parte haga una captura de pantalla.";
+"Compatibility.SecretMediaVersionTooLow" = "%@ usa una versión antigua de Oldgram, así que las fotos secretas serán mostradas en un modo de compatibilidad. \n\nCuando %@ actualice Oldgram, las fotos con autodestrucción de 1 minuto o menos funcionarán con el modo “Mantén pulsado para ver”, y te notificaremos siempre que la otra parte haga una captura de pantalla.";
 
 "Contacts.GlobalSearch" = "Búsqueda global";
 "Profile.Username" = "alias";
@@ -791,7 +791,7 @@
 
 "Username.Title" = "Alias";
 "Username.Placeholder" = "Tu alias";
-"Username.Help" = "Puedes elegir un alias en **Telegram**. Si lo haces, otras personas te podrán encontrar por ese alias y contactarte sin saber tu número de teléfono.\n\nPuedes usar **a-z**, **0-9** y guiones bajos.\nLa longitud mínima es de **5** caracteres. ";
+"Username.Help" = "Puedes elegir un alias en **Oldgram**. Si lo haces, otras personas te podrán encontrar por ese alias y contactarte sin saber tu número de teléfono.\n\nPuedes usar **a-z**, **0-9** y guiones bajos.\nLa longitud mínima es de **5** caracteres. ";
 "Username.InvalidTooShort" = "Un alias debe tener al menos 5 caracteres.";
 "Username.InvalidStartsWithNumber" = "Lo sentimos, un alias no puede comenzar con un número.";
 "Username.InvalidCharacters" = "Lo sentimos, este alias es inválido.";
@@ -902,8 +902,8 @@
 
 "Settings.PhoneNumber" = "Cambiar número";
 
-"PhoneNumberHelp.Help" = "Puedes cambiar tu número de Telegram aquí. Tu cuenta y todos tus datos de la nube, mensajes, archivos, grupos, contactos, etc., se moverán al nuevo número. \n\n**Importante:** Todos tus contactos de Telegram tendrán tu **nuevo número** añadido a sus agendas de contactos, siempre que hayan tenido tu número viejo y no los hayas bloqueado en Telegram.";
-"PhoneNumberHelp.Alert" = "Todos tus contactos de Telegram tendrán tu número nuevo añadido a sus agendas de contactos, siempre que hayan tenido tu número viejo y no los hayas bloqueado en Telegram.";
+"PhoneNumberHelp.Help" = "Puedes cambiar tu número de Oldgram aquí. Tu cuenta y todos tus datos de la nube, mensajes, archivos, grupos, contactos, etc., se moverán al nuevo número. \n\n**Importante:** Todos tus contactos de Oldgram tendrán tu **nuevo número** añadido a sus agendas de contactos, siempre que hayan tenido tu número viejo y no los hayas bloqueado en Oldgram.";
+"PhoneNumberHelp.Alert" = "Todos tus contactos de Oldgram tendrán tu número nuevo añadido a sus agendas de contactos, siempre que hayan tenido tu número viejo y no los hayas bloqueado en Oldgram.";
 "PhoneNumberHelp.ChangeNumber" = "Cambiar número";
 
 "ChangePhoneNumberNumber.Title" = "Cambiar número";
@@ -915,8 +915,8 @@
 "ChangePhoneNumberCode.CodePlaceholder" = "Código";
 "ChangePhoneNumberCode.Help" = "Te hemos enviado un SMS con el código";
 "ChangePhoneNumberCode.CallTimer" = "Te llamaremos en %@";
-"ChangePhoneNumberCode.RequestingACall" = "Solicitando una llamada de Telegram...";
-"ChangePhoneNumberCode.Called" = "Telegram marcó tu número";
+"ChangePhoneNumberCode.RequestingACall" = "Solicitando una llamada de Oldgram...";
+"ChangePhoneNumberCode.Called" = "Oldgram marcó tu número";
 
 "LoginPassword.Title" = "Tu contraseña";
 "LoginPassword.PasswordPlaceholder" = "Contraseña";
@@ -1048,14 +1048,14 @@
 "SharedMedia.EmptyFilesText" = "Puedes enviar y recibir archivos de \ntodo tipo, de hasta 1,5 GB cada uno,\ny acceder a ellos desde cualquier sitio.";
 
 "ShareFileTip.Title" = "Compartir archivos";
-"ShareFileTip.Text" = "Puedes compartir archivos multimedia **sin comprimir** desde tu Carrete. Para compartir archivos de cualquier otro tipo, ábrelos en el %@ (ej. en tu navegador), toca en **Abrir en...** o el botón de acción y elige Telegram.";
+"ShareFileTip.Text" = "Puedes compartir archivos multimedia **sin comprimir** desde tu Carrete. Para compartir archivos de cualquier otro tipo, ábrelos en el %@ (ej. en tu navegador), toca en **Abrir en...** o el botón de acción y elige Oldgram.";
 "ShareFileTip.CloseTip" = "Cerrar consejo";
 
 "DialogList.SearchSectionDialogs" = "Chats y contactos";
 "DialogList.SearchSectionGlobal" = "Búsqueda global";
 "DialogList.SearchSectionMessages" = "Mensajes";
 
-"Username.LinkHint" = "Este enlace abre un chat contigo en Telegram::[\nhttps://t.me/%@]";
+"Username.LinkHint" = "Este enlace abre un chat contigo en Oldgram::[\nhttps://t.me/%@]";
 "Username.LinkCopied" = "Enlace copiado al portapapeles";
 
 "SharedMedia.ItemsSelected_1" = "1 seleccionado";
@@ -1078,7 +1078,7 @@
 "PasscodeSettings.SimplePasscode" = "Código simple";
 "PasscodeSettings.SimplePasscodeHelp" = "Un código simple es un número de 4 dígitos.";
 "PasscodeSettings.EncryptData" = "Cifrar base de datos local";
-"PasscodeSettings.EncryptDataHelp" = "Característica experimental. Úsala con precaución. Cifra tus datos locales de Telegram usando un derivado de tu código como la clave.";
+"PasscodeSettings.EncryptDataHelp" = "Característica experimental. Úsala con precaución. Cifra tus datos locales de Oldgram usando un derivado de tu código como la clave.";
 
 "EnterPasscode.EnterTitle" = "Pon tu código de acceso";
 "EnterPasscode.SetupTitle" = "Nuevo código de acceso";
@@ -1090,7 +1090,7 @@
 "EnterPasscode.EnterCurrentPasscode" = "Pon tu código de acceso actual";
 "EnterPasscode.TouchId" = "Pon tu código de acceso";
 
-"DialogList.PasscodeLockHelp" = "Toca para bloquear Telegram";
+"DialogList.PasscodeLockHelp" = "Toca para bloquear Oldgram";
 
 "PasscodeSettings.AutoLock" = "Autobloqueo";
 "PasscodeSettings.AutoLock.Disabled" = "Desactivado";
@@ -1107,32 +1107,32 @@
 
 "AccessDenied.Title" = "Por favor, permite el acceso";
 
-"AccessDenied.Contacts" = "Telegram está basado en tu actual lista de contactos. \n\nPor favor, ve a Ajustes > Privacidad > Contactos y activa Telegram.";
+"AccessDenied.Contacts" = "Oldgram está basado en tu actual lista de contactos. \n\nPor favor, ve a Ajustes > Privacidad > Contactos y activa Oldgram.";
 
-"AccessDenied.VoiceMicrophone" = "Telegram necesita acceso a tu micrófono para los mensajes de voz. \n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa Telegram.";
+"AccessDenied.VoiceMicrophone" = "Oldgram necesita acceso a tu micrófono para los mensajes de voz. \n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa Oldgram.";
 
-"AccessDenied.VideoMicrophone" = "Telegram necesita acceso a tu micrófono para grabar el sonido en tus vídeos. \n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa Telegram.";
+"AccessDenied.VideoMicrophone" = "Oldgram necesita acceso a tu micrófono para grabar el sonido en tus vídeos. \n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa Oldgram.";
 
-"AccessDenied.MicrophoneRestricted" = "El acceso al micrófono está restringido para Telegram.\n\nPor favor, ve a Ajustes > General > Restricciones > Micrófono y activa Telegram.";
+"AccessDenied.MicrophoneRestricted" = "El acceso al micrófono está restringido para Oldgram.\n\nPor favor, ve a Ajustes > General > Restricciones > Micrófono y activa Oldgram.";
 
 
-"AccessDenied.Camera" = "Telegram necesita acceso a tu cámara para hacer fotos y vídeos.\n\nPor favor, ve a Ajustes > Privacidad > Cámara y activa Telegram.";
+"AccessDenied.Camera" = "Oldgram necesita acceso a tu cámara para hacer fotos y vídeos.\n\nPor favor, ve a Ajustes > Privacidad > Cámara y activa Oldgram.";
 
-"AccessDenied.CameraRestricted" = "El acceso a la cámara está restringido para Telegram.\n\nPor favor, ve a Ajustes > General > Restricciones > Cámara y activa Telegram.";
+"AccessDenied.CameraRestricted" = "El acceso a la cámara está restringido para Oldgram.\n\nPor favor, ve a Ajustes > General > Restricciones > Cámara y activa Oldgram.";
 
 "AccessDenied.CameraDisabled" = "El acceso a la cámara está restringido globalmente en tu teléfono.\n\nPor favor, ve a Ajustes > General > Restricciones y activa la cámara.";
 
-"AccessDenied.PhotosAndVideos" = "Telegram necesita acceso a tu biblioteca de fotos para enviar fotos y vídeos.\n\nPor favor, ve a Ajustes > Privacidad > Fotos y activa Telegram.";
+"AccessDenied.PhotosAndVideos" = "Oldgram necesita acceso a tu biblioteca de fotos para enviar fotos y vídeos.\n\nPor favor, ve a Ajustes > Privacidad > Fotos y activa Oldgram.";
 
-"AccessDenied.SaveMedia" = "Telegram necesita acceso a tu biblioteca de fotos para guardar fotos y vídeos.\n\nPor favor, ve a Ajustes > Privacidad > Fotos y activa Telegram.";
+"AccessDenied.SaveMedia" = "Oldgram necesita acceso a tu biblioteca de fotos para guardar fotos y vídeos.\n\nPor favor, ve a Ajustes > Privacidad > Fotos y activa Oldgram.";
 
-"AccessDenied.PhotosRestricted" = "El acceso a las fotos está restringido para Telegram.\n\nPor favor, ve a Ajustes > General > Restricciones > Fotos y activa Telegram.";
+"AccessDenied.PhotosRestricted" = "El acceso a las fotos está restringido para Oldgram.\n\nPor favor, ve a Ajustes > General > Restricciones > Fotos y activa Oldgram.";
 
-"AccessDenied.LocationDenied" = "Telegram necesita acceso a tu localización para que puedas compartirla con tus contactos.\n\nPor favor, ve a Ajustes > Privacidad > Localización y activa Telegram.";
+"AccessDenied.LocationDenied" = "Oldgram necesita acceso a tu localización para que puedas compartirla con tus contactos.\n\nPor favor, ve a Ajustes > Privacidad > Localización y activa Oldgram.";
 
-"AccessDenied.LocationDisabled" = "Telegram necesita acceso a tu localización para que puedas compartirla con tus contactos.\n\nPor favor, ve a Ajustes > Privacidad > Localización y actívala.";
+"AccessDenied.LocationDisabled" = "Oldgram necesita acceso a tu localización para que puedas compartirla con tus contactos.\n\nPor favor, ve a Ajustes > Privacidad > Localización y actívala.";
 
-"AccessDenied.LocationTracking" = "Telegram necesita acceso a tu localización para mostrarte en el mapa.\n\nPor favor, ve a Ajustes > Privacidad > Localización y actívala.";
+"AccessDenied.LocationTracking" = "Oldgram necesita acceso a tu localización para mostrarte en el mapa.\n\nPor favor, ve a Ajustes > Privacidad > Localización y actívala.";
 
 "AccessDenied.Settings" = "Ajustes";
 
@@ -1207,7 +1207,7 @@
 "TwoStepAuth.SetupEmail" = "Poner un e-mail de recuperación";
 "TwoStepAuth.ChangeEmail" = "Cambiar e-mail de recuperación";
 "TwoStepAuth.PendingEmailHelp" = "Tu e-mail de recuperación %@ aún no está activo y su confirmación está pendiente.";
-"TwoStepAuth.GenericHelp" = "Tienes activada la verificación en dos pasos.\nNecesitarás la contraseña que configuraste para iniciar tu sesión en Telegram.";
+"TwoStepAuth.GenericHelp" = "Tienes activada la verificación en dos pasos.\nNecesitarás la contraseña que configuraste para iniciar tu sesión en Oldgram.";
 
 "TwoStepAuth.ConfirmationTitle" = "Verificación en dos pasos";
 "TwoStepAuth.ConfirmationText" = "Por favor, revisa tu e-mail y haz click en el enlace de validación para completar la configuración de la verificación en dos pasos. Asegúrate, también, de revisar la carpeta de spam.";
@@ -1228,7 +1228,7 @@
 
 "TwoStepAuth.EmailTitle" = "Recuperación";
 "TwoStepAuth.EmailSkip" = "Omitir";
-"TwoStepAuth.EmailSkipAlert" = "En serio.\n\nSi olvidas tu contraseña, perderás el acceso a tu cuenta de Telegram. No habrá manera de recuperarla.";
+"TwoStepAuth.EmailSkipAlert" = "En serio.\n\nSi olvidas tu contraseña, perderás el acceso a tu cuenta de Oldgram. No habrá manera de recuperarla.";
 "TwoStepAuth.Email" = "E-mail";
 "TwoStepAuth.EmailPlaceholder" = "Tu e-mail";
 "TwoStepAuth.EmailHelp" = "Por favor, añade un e-mail válido. Es la única forma de recuperar una contraseña olvidada.";
@@ -1261,7 +1261,7 @@
 
 "Conversation.FileHowTo" = "¿Cómo compartir archivos?";
 "Conversation.FileOpenIn" = "Abrir en...";
-"Conversation.FileHowToText" = "Para compartir archivos de cualquier tipo, ábrelos en tu %@ (por ejemplo, en tu navegador), toca **Abrir en...** o el botón de acción y elige Telegram.";
+"Conversation.FileHowToText" = "Para compartir archivos de cualquier tipo, ábrelos en tu %@ (por ejemplo, en tu navegador), toca **Abrir en...** o el botón de acción y elige Oldgram.";
 
 "Map.LocationTitle" = "Ubicación";
 "Map.OpenInMaps" = "Abrir en Maps";
@@ -1299,9 +1299,9 @@
 "GoogleDrive.LoadErrorTitle" = "No se puede conectar";
 "GoogleDrive.LoadErrorMessage" = "Por favor, comprueba tu conexión a internet e inténtalo de nuevo.";
 
-"ChangePhone.ErrorOccupied" = "El número %@ ya está vinculado a una cuenta de Telegram. Por favor, elimina esa cuenta antes de migrar al nuevo número.";
+"ChangePhone.ErrorOccupied" = "El número %@ ya está vinculado a una cuenta de Oldgram. Por favor, elimina esa cuenta antes de migrar al nuevo número.";
 
-"AccessDenied.LocationTracking" = "Telegram necesita acceso a tu localización para mostrarte en el mapa.\n\nPor favor, ve a Ajustes > Privacidad > Localización y actívala.";
+"AccessDenied.LocationTracking" = "Oldgram necesita acceso a tu localización para mostrarte en el mapa.\n\nPor favor, ve a Ajustes > Privacidad > Localización y actívala.";
 
 "PrivacySettings.AuthSessions" = "Sesiones activas";
 "AuthSessions.Title" = "Sesiones activas";
@@ -1311,7 +1311,7 @@
 "AuthSessions.TerminateSession" = "Cerrar la sesión";
 "AuthSessions.OtherSessions" = "OTRAS SESIONES";
 "AuthSessions.EmptyTitle" = "Sin otras sesiones";
-"AuthSessions.EmptyText" = "Puedes iniciar sesión en Telegram desde otro móvil, tablet o computador, usando el mismo número de teléfono. Todos tus datos se sincronizarán al instante.";
+"AuthSessions.EmptyText" = "Puedes iniciar sesión en Oldgram desde otro móvil, tablet o computador, usando el mismo número de teléfono. Todos tus datos se sincronizarán al instante.";
 "AuthSessions.AppUnofficial" = "(ID: %@)";
 
 "WebPreview.GettingLinkInfo" = "Obteniendo información...";
@@ -1325,7 +1325,7 @@
 
 "GroupInfo.InviteLink.Title" = "Enlace de invitación";
 "GroupInfo.InviteLink.LinkSection" = "ENLACE";
-"GroupInfo.InviteLink.Help" = "Cualquiera que tenga Telegram instalada podrá unirse a tu grupo siguiendo este enlace.";
+"GroupInfo.InviteLink.Help" = "Cualquiera que tenga Oldgram instalada podrá unirse a tu grupo siguiendo este enlace.";
 "GroupInfo.InviteLink.CopyLink" = "Copiar enlace";
 "GroupInfo.InviteLink.RevokeLink" = "Anular enlace";
 "GroupInfo.InviteLink.ShareLink" = "Compartir enlace";
@@ -1415,7 +1415,7 @@
 
 "Login.PhoneNumberHelp" = "Ayuda";
 "Login.EmailPhoneSubject" = "Número inválido %@";
-"Login.EmailPhoneBody" = "Estoy intentando usar mi número de teléfono: %@\nPero Telegram dice que es inválido. Ayuda, por favor.";
+"Login.EmailPhoneBody" = "Estoy intentando usar mi número de teléfono: %@\nPero Oldgram dice que es inválido. Ayuda, por favor.";
 
 "SharedMedia.TitleLink" = "Enlaces";
 "SharedMedia.EmptyLinksText" = "Todos los enlaces compartidos \nen este chat aparecerán aquí.";
@@ -1444,8 +1444,8 @@
 "Channel.Edit.LinkItem" = "Enlace";
 
 "Channel.Username.Title" = "Enlace";
-"Channel.Username.Help" = "Puedes elegir un nombre de canal en **Telegram**. Si lo haces, otras personas podrán encontrar tu canal por ese nombre. \n\nPuedes usar **a-z**, **0-9** y guiones bajos. La longitud mínima es de **5** caracteres.";
-"Channel.Username.LinkHint" = "Este enlace abre un canal contigo en Telegram:[\nhttps://t.me/%@]";
+"Channel.Username.Help" = "Puedes elegir un nombre de canal en **Oldgram**. Si lo haces, otras personas podrán encontrar tu canal por ese nombre. \n\nPuedes usar **a-z**, **0-9** y guiones bajos. La longitud mínima es de **5** caracteres.";
+"Channel.Username.LinkHint" = "Este enlace abre un canal contigo en Oldgram:[\nhttps://t.me/%@]";
 "Channel.Username.InvalidTooShort" = "El nombre del canal debe tener al menos 5 caracteres.";
 "Channel.Username.InvalidStartsWithNumber" = "El nombre del canal no puede comenzar con un número.";
 "Channel.Username.InvalidCharacters" = "Lo sentimos, este nombre es inválido.";
@@ -1508,7 +1508,7 @@
 
 "Channel.Setup.Title" = "Canal";
 
-"Channel.Username.CreatePublicLinkHelp" = "Las personas pueden compartir este enlace con los demás y encontrar tu canal usando la búsqueda de Telegram.";
+"Channel.Username.CreatePublicLinkHelp" = "Las personas pueden compartir este enlace con los demás y encontrar tu canal usando la búsqueda de Oldgram.";
 "Channel.Username.CreatePrivateLinkHelp" = "Las personas pueden unirse a tu canal siguiendo este enlace. Puedes anular el enlace en cualquier momento.";
 
 "Channel.Username.CreateCommentsEnabled" = "Comentarios";
@@ -1657,7 +1657,7 @@
 
 "Group.Management.AddModeratorHelp" = "Puedes añadir administradores para que te ayuden en el grupo. ";
 
-"Watch.AppName" = "Telegram";
+"Watch.AppName" = "Oldgram";
 "Watch.Compose.AddContact" = "Elegir contacto";
 "Watch.Compose.CreateMessage" = "Crear mensaje";
 "Watch.Compose.CurrentLocation" = "Ubicación actual";
@@ -1690,7 +1690,7 @@
 
 "Watch.Message.ForwardedFrom" = "Reenviado desde";
 
-"Watch.Notification.Joined" = "Se unió a Telegram";
+"Watch.Notification.Joined" = "Se unió a Oldgram";
 
 "Watch.MessageView.Title" = "Mensaje";
 "Watch.MessageView.Forward" = "Reenviar";
@@ -1704,10 +1704,10 @@
 "Watch.Stickers.StickerPacks" = "Packs de stickers";
 
 "Watch.Location.Current" = "Ubicación actual";
-"Watch.Location.Access" = "Permite a Telegram acceder a la ubicación en tu teléfono";
+"Watch.Location.Access" = "Permite a Oldgram acceder a la ubicación en tu teléfono";
 
-"Watch.AuthRequired" = "Inicia la sesión en Telegram en tu teléfono para comenzar";
-"Watch.UnlockRequired" = "Desbloquea Telegram en tu teléfono";
+"Watch.AuthRequired" = "Inicia la sesión en Oldgram en tu teléfono para comenzar";
+"Watch.UnlockRequired" = "Desbloquea Oldgram en tu teléfono";
 
 "Watch.NoConnection" = "Sin conexión";
 "Watch.ConnectionDescription" = "Tu Watch debe estar conectado para que la app funcione";
@@ -1842,7 +1842,7 @@
 "PrivacyLastSeenSettings.GroupsAndChannelsHelp" = "Elige quién puede añadirte a grupos y canales.";
 "MusicPlayer.VoiceNote" = "Mensaje de voz";
 
-"Watch.Microphone.Access" = "Permite a Telegram acceder al micrófono en tu teléfono";
+"Watch.Microphone.Access" = "Permite a Oldgram acceder al micrófono en tu teléfono";
 
 "Settings.AppleWatch" = "Apple Watch";
 "AppleWatch.Title" = "Apple Watch";
@@ -1861,7 +1861,7 @@
 "KeyCommand.SendMessage" = "Enviar mensaje";
 "KeyCommand.ChatInfo" = "Información";
 
-"Conversation.SecretLinkPreviewAlert" = "¿Quieres permitir las vistas previas ampliadas en chats secretos? Ten en cuenta que son generadas en los servidores de Telegram.";
+"Conversation.SecretLinkPreviewAlert" = "¿Quieres permitir las vistas previas ampliadas en chats secretos? Ten en cuenta que son generadas en los servidores de Oldgram.";
 "Conversation.SecretChatContextBotAlert" = "Ten en cuenta que los bots integrados son hechos por terceros. Para que funcione, los símbolos escritos después del alias del bot, son enviados al desarrollador respectivo.";
 
 "Map.OpenInWaze" = "Abrir en Waze";
@@ -1892,12 +1892,12 @@
 "Conversation.Moderate.Report" = "Reportar spam";
 "Conversation.Moderate.DeleteAllMessages" = "Eliminar todo de %@";
 
-"Group.Username.Help" = "Puedes elegir un nombre del grupo en **Telegram**. Si lo haces, otras personas podrán encontrar tu grupo por ese nombre. \n\nPuedes usar **a-z**, **0-9** y guiones bajos. La longitud mínima es de **5** caracteres.";
+"Group.Username.Help" = "Puedes elegir un nombre del grupo en **Oldgram**. Si lo haces, otras personas podrán encontrar tu grupo por ese nombre. \n\nPuedes usar **a-z**, **0-9** y guiones bajos. La longitud mínima es de **5** caracteres.";
 
 "Group.Username.InvalidTooShort" = "El nombre del grupo debe tener al menos 5 caracteres.";
 "Group.Username.InvalidStartsWithNumber" = "El nombre del grupo no puede comenzar con un número.";
 
-"Group.Username.LinkHint" = "Este enlace abre un grupo contigo en Telegram:[\nhttps://t.me/%@]";
+"Group.Username.LinkHint" = "Este enlace abre un grupo contigo en Oldgram:[\nhttps://t.me/%@]";
 
 "Notification.PinnedTextMessage" = "%@ ancló “%@”";
 "Notification.PinnedPhotoMessage" = "%@ ancló una foto ";
@@ -1938,7 +1938,7 @@
 "Group.Setup.TypePublicHelp" = "Los grupos públicos pueden encontrarse en la búsqueda, su historial está disponible para todos y cualquiera puede unirse.";
 "Group.Setup.TypePrivateHelp" = "Puedes unirte a un grupo privado sólo si te invitan o tienes un enlace de invitación.";
 
-"Group.Username.CreatePublicLinkHelp" = "Las personas pueden compartir este enlace con los demás y encontrar tu grupo usando la búsqueda de Telegram.";
+"Group.Username.CreatePublicLinkHelp" = "Las personas pueden compartir este enlace con los demás y encontrar tu grupo usando la búsqueda de Oldgram.";
 "Group.Username.CreatePrivateLinkHelp" = "Las personas pueden unirse a tu grupo siguiendo este enlace. Puedes anularlo cuando quieras.";
 
 "Conversation.PinMessageAlertGroup" = "¿Anclar este mensaje y notificar a todos los miembros?";
@@ -2059,12 +2059,12 @@
 
 "Login.CodeSentCall" = "Estamos llamando a tu teléfono para dictar un código.";
 
-"Login.SmsRequestState1" = "Telegram te enviará un SMS en %d:%.2d";
-"Login.SmsRequestState2" = "Solicitando un SMS de Telegram...";
-"Login.SmsRequestState3" = "Telegram te envió un SMS\n[¿No recibiste el código?]";
+"Login.SmsRequestState1" = "Oldgram te enviará un SMS en %d:%.2d";
+"Login.SmsRequestState2" = "Solicitando un SMS de Oldgram...";
+"Login.SmsRequestState3" = "Oldgram te envió un SMS\n[¿No recibiste el código?]";
 
 "CancelResetAccount.Title" = "No restablecer la cuenta";
-"CancelResetAccount.TextSMS" = "Alguien, con acceso a tu número de teléfono %@, solicitó eliminar tu cuenta de Telegram y restablecer tu contraseña de la verificación en dos pasos.\n\nSi no eras tú, por favor, inserta el código que enviamos por SMS a tu número.";
+"CancelResetAccount.TextSMS" = "Alguien, con acceso a tu número de teléfono %@, solicitó eliminar tu cuenta de Oldgram y restablecer tu contraseña de la verificación en dos pasos.\n\nSi no eras tú, por favor, inserta el código que enviamos por SMS a tu número.";
 
 "CancelResetAccount.Success" = "El proceso de eliminación de la cuenta %@ fue cancelado.";
 "MediaPicker.MomentsDateRangeSameMonthYearFormat" = "{day1} – {day2} de {month} de {year}";
@@ -2148,14 +2148,14 @@
 "StickerPack.RemoveMaskCount_3_10" = "Quitar %@ máscaras";
 "StickerPack.RemoveMaskCount_any" = "Quitar %@ máscaras";
 
-"Conversation.BotInteractiveUrlAlert" = "¿Permites a %@ entregar tu nombre e id de Telegram (no tu número de teléfono) a los sitios web que abres a través de este bot?";
+"Conversation.BotInteractiveUrlAlert" = "¿Permites a %@ entregar tu nombre e id de Oldgram (no tu número de teléfono) a los sitios web que abres a través de este bot?";
 "StickerPacksSettings.ArchivedMasks" = "Máscaras archivadas";
 "StickerSettings.MaskContextInfo" = "Si archivas un pack de máscaras, puedes restaurarlo después desde la sección de máscaras archivadas.";
 "StickerPacksSettings.ArchivedMasks.Info" = "Puedes instalar hasta 200 packs de máscaras.\nCuando instales más, se archivarán los que no usas.";
 
 "CloudStorage.Title" = "Almacenamiento en la nube";
 
-"Widget.AuthRequired" = "Iniciar sesión en Telegram";
+"Widget.AuthRequired" = "Iniciar sesión en Oldgram";
 "Widget.NoUsers" = "Empieza a conversar para ver a tus amigos aquí";
 
 "Message.GamePreviewLabel" = "JUEGO";
@@ -2180,12 +2180,12 @@
 "Conversation.JumpToDate" = "Ir a la fecha";
 "Conversation.AddToReadingList" = "Añadir a la lista de lectura";
 
-"AccessDenied.CallMicrophone" = "Telegram necesita acceso a tu micrófono para las llamadas de voz.\n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa la opción para Telegram.";
+"AccessDenied.CallMicrophone" = "Oldgram necesita acceso a tu micrófono para las llamadas de voz.\n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa la opción para Oldgram.";
 
 "Call.EncryptionKey.Title" = "Clave de cifrado";
 "Call.EncryptionKey.Description" = "El texto e imagen derivan de la clave de cifrado para la llamada creada con %1$@.\n\nSi se ven igual en el dispositivo de %2$@, el cifrado end-to-end está garantizado.";
 
-"Application.Name" = "Telegram";
+"Application.Name" = "Oldgram";
 "DialogList.Pin" = "Anclar";
 "DialogList.Unpin" = "Desanclar";
 "DialogList.PinLimitError" = "Lo sentimos, no puedes anclar más de %@ chats arriba.";
@@ -2236,7 +2236,7 @@
 "Calls.Search" = "Buscar llamadas";
 "Calls.NewCall" = "Nueva llamada";
 
-"Calls.RatingTitle" = "Por favor, evalúa la calidad\nde tu llamada en Telegram";
+"Calls.RatingTitle" = "Por favor, evalúa la calidad\nde tu llamada en Oldgram";
 "Calls.SubmitRating" = "Enviar";
 
 "Call.Seconds_1" = "%@ segundo";
@@ -2396,12 +2396,12 @@
 
 "Calls.RatingFeedback" = "Escribe un comentario...";
 
-"Call.StatusIncoming" = "Audio de Telegram...";
+"Call.StatusIncoming" = "Audio de Oldgram...";
 "Call.StatusRequesting" = "Contactando...";
 "Call.StatusWaiting" = "Esperando...";
 "Call.StatusRinging" = "Llamando...";
 "Call.StatusConnecting" = "Conectando...";
-"Call.StatusOngoing" = "Audio de Telegram %@";
+"Call.StatusOngoing" = "Audio de Oldgram %@";
 "Call.StatusEnded" = "Llamada terminada";
 "Call.StatusFailed" = "Llamada fallida";
 "Call.StatusBusy" = "Ocupado";
@@ -2461,7 +2461,7 @@
 
 "EncryptionKey.TapToEmojify" = "Toca para ver emojis";
 
-"Call.PhoneCallInProgressMessage" = "No puedes realizar una llamada en Telegram si ya estás hablando por teléfono.";
+"Call.PhoneCallInProgressMessage" = "No puedes realizar una llamada en Oldgram si ya estás hablando por teléfono.";
 "Call.RecordingDisabledMessage" = "Por favor, finaliza tu llamada antes de grabar un mensaje de voz.";
 
 "Call.EmojiDescription" = "Si los emojis son los mismos para %@, la llamada es 100%% segura.";
@@ -2471,7 +2471,7 @@
 "Conversation.HoldForAudio" = "Mantén para grabar audio. Toca para vídeo.";
 "Conversation.HoldForVideo" = "Mantén para grabar vídeo. Toca para audio.";
 
-"UserInfo.TelegramCall" = "Llamada de Telegram";
+"UserInfo.OldgramCall" = "Llamada de Oldgram";
 "UserInfo.PhoneCall" = "Llamada de teléfono";
 
 "SharedMedia.CategoryMedia" = "Media";
@@ -2479,8 +2479,8 @@
 "SharedMedia.CategoryLinks" = "Enlaces";
 "SharedMedia.CategoryOther" = "Audio";
 
-"AccessDenied.VideoMessageCamera" = "Telegram necesita acceso a tu cámara para enviar videomensajes.\n\nPor favor, ve a Ajustes > Privacidad > Cámara y activa Telegram.";
-"AccessDenied.VideoMessageMicrophone" = "Telegram necesita acceso a tu micrófono para enviar videomensajes. \n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa Telegram.";
+"AccessDenied.VideoMessageCamera" = "Oldgram necesita acceso a tu cámara para enviar videomensajes.\n\nPor favor, ve a Ajustes > Privacidad > Cámara y activa Oldgram.";
+"AccessDenied.VideoMessageMicrophone" = "Oldgram necesita acceso a tu micrófono para enviar videomensajes. \n\nPor favor, ve a Ajustes > Privacidad > Micrófono y activa Oldgram.";
 
 "ChatSettings.AutomaticVideoMessageDownload" = "AUTODESCARGA DE VIDEOMENSAJES";
 
@@ -2496,12 +2496,12 @@
 "Message.ForwardedMessageShort" = "Reenviado de\n%@";
 
 "Checkout.LiabilityAlertTitle" = "Advertencia";
-"Checkout.LiabilityAlert" = "Los pagos irán directamente al desarrollador de %1$@. Telegram no puede entregar garantías, así que es bajo tu propio riesgo. En caso de problemas, contacta al desarrollador de %1$@ o a tu banco.";
+"Checkout.LiabilityAlert" = "Los pagos irán directamente al desarrollador de %1$@. Oldgram no puede entregar garantías, así que es bajo tu propio riesgo. En caso de problemas, contacta al desarrollador de %1$@ o a tu banco.";
 
 "InstantPage.AutoNightTheme" = "Modo nocturno automático";
 
 "Privacy.PaymentsTitle" = "PAGOS";
 "Privacy.PaymentsClearInfo" = "Eliminar información de pago";
-"Privacy.PaymentsClearInfoHelp" = "Puedes eliminar tu información de envío y forzar a todos los proveedores de pago eliminar tus tarjetas de crédito guardadas. Telegram nunca almacena tus datos de tarjetas de crédito.";
+"Privacy.PaymentsClearInfoHelp" = "Puedes eliminar tu información de envío y forzar a todos los proveedores de pago eliminar tus tarjetas de crédito guardadas. Oldgram nunca almacena tus datos de tarjetas de crédito.";
 "Privacy.PaymentsClear.PaymentInfo" = "Información de pago";
 "Privacy.PaymentsClear.ShippingInfo" = "Información de envío";

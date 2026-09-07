@@ -309,7 +309,7 @@
                 
                 NSMutableArray *users = [[NSMutableArray alloc] init];
                 for (NSNumber *nUserId in _userIds) {
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUserId intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUserId longLongValue]];
                     if (user != nil) {
                         [users addObject:user];
                     }
@@ -396,7 +396,7 @@
     NSMutableArray *users = [[NSMutableArray alloc] init];
     for (NSNumber *nUid in _userIds)
     {
-        TGUser *user = [TGDatabaseInstance() loadUser:[nUid int32Value]];
+        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
         if (user != nil)
             [users addObject:user];
     }

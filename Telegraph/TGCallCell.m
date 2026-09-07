@@ -190,7 +190,7 @@
     }
     else
     {
-        [_avatarView loadUserPlaceholderWithSize:CGSizeMake(diameter, diameter) uid:(int32_t)peer.uid firstName:peer.firstName lastName:peer.lastName placeholder:placeholder];
+        [_avatarView loadUserPlaceholderWithSize:CGSizeMake(diameter, diameter) uid:peer.uid firstName:peer.firstName lastName:peer.lastName placeholder:placeholder];
     }
 
     [self setNeedsLayout];

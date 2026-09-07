@@ -10,6 +10,22 @@
 
 static TGCache *sharedCache = nil;
 
+NSString *TGTrimmedImageCacheUrl(NSString *url)
+{
+    if (url == nil)
+        return nil;
+
+    if ([url hasPrefix:@"peerphoto:"] || [url hasPrefix:@"photofile:"] || [url hasPrefix:@"docthumb:"])
+        return url;
+
+    NSArray *components = [url componentsSeparatedByString:@"_"];
+    if (components.count >= 5)
+        return [[NSString alloc] initWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+
+    return url;
+}
+
+
 @interface TGRemoteImageView ()
 
 @property (atomic, strong) NSString *path;
@@ -232,10 +248,7 @@ static TGCache *sharedCache = nil;
     
     TGCache *cache = _cache != nil ? _cache : [TGRemoteImageView sharedCache];
     
-    NSString *trimmedUrl = url;
-    NSArray *components = [trimmedUrl componentsSeparatedByString:@"_"];
-    if (components.count >= 5)
-        trimmedUrl = [NSString stringWithFormat:@"%@_%@_%@_%@", components[0], components[1], components[2], components[3]];
+    NSString *trimmedUrl = TGTrimmedImageCacheUrl(url);
     
     NSString *cacheUrl = filter == nil ? trimmedUrl : [[NSString alloc] initWithFormat:@"{filter:%@}%@", filter, trimmedUrl];
     self.currentCacheUrl = cacheUrl;

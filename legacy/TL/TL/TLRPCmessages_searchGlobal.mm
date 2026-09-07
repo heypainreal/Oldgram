@@ -1,4 +1,5 @@
 #import "TLRPCmessages_searchGlobal.h"
+#import "TLMetaClassStore.h"
 
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
@@ -55,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x9e3cacb0;
+    return (int32_t)0x6126a43c;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x43461509;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -108,6 +109,19 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeString:self.q == nil ? @"" : self.q];
+    [os writeInt32:(int32_t)0x57e2f66c];   // inputMessagesFilterEmpty
+    [os writeInt32:0];                     // min_date
+    [os writeInt32:0];                     // max_date
+    [os writeInt32:(int32_t)self.offset_date];
+    TLMetaClassStore::serializeObject(os, self.offset_peer, true);
+    [os writeInt32:(int32_t)self.offset_id];
+    [os writeInt32:(int32_t)self.limit];
+}
 
 @end
 

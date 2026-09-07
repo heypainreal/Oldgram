@@ -72,7 +72,7 @@
     TLSecureFile$secureFile *object = [[TLSecureFile$secureFile alloc] init];
     object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.access_hash = metaObject->getInt64((int32_t)0x8f305224);
-    object.size = metaObject->getInt32((int32_t)0x5a228f5e);
+    object.size = metaObject->getInt64((int32_t)0x5a228f5e);
     object.dc_id = metaObject->getInt32((int32_t)0xae973dc4);
     object.date = metaObject->getInt32((int32_t)0xb76958ba);
     object.file_hash = metaObject->getBytes((int32_t)0xde1902e1);

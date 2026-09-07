@@ -183,7 +183,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateUserStatus *object = [[TLUpdate$updateUserStatus alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.status = metaObject->getObject((int32_t)0xab757700);
     return object;
 }
@@ -656,8 +656,8 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChatParticipantDelete *object = [[TLUpdate$updateChatParticipantDelete alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.version = metaObject->getInt32((int32_t)0x4ea810e9);
     return object;
 }
@@ -816,7 +816,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateUserTyping *object = [[TLUpdate$updateUserTyping alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.action = metaObject->getObject((int32_t)0xc2d4a0f7);
     return object;
 }
@@ -856,7 +856,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChatUserTyping *object = [[TLUpdate$updateChatUserTyping alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
     object.action = metaObject->getObject((int32_t)0xc2d4a0f7);
     return object;
@@ -903,7 +903,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateUserName *object = [[TLUpdate$updateUserName alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.first_name = metaObject->getString((int32_t)0xa604f05d);
     object.last_name = metaObject->getString((int32_t)0x10662e0e);
     object.username = metaObject->getString((int32_t)0x626830ca);
@@ -997,7 +997,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateUserPhone *object = [[TLUpdate$updateUserPhone alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.phone = metaObject->getString((int32_t)0x9e6a8d86);
     return object;
 }
@@ -1333,9 +1333,9 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChatParticipantAdd *object = [[TLUpdate$updateChatParticipantAdd alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
-    object.inviter_id = metaObject->getInt32((int32_t)0x9ddfbd93);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
+    object.inviter_id = metaObject->getInt64((int32_t)0x9ddfbd93);
     object.date = metaObject->getInt32((int32_t)0xb76958ba);
     object.version = metaObject->getInt32((int32_t)0x4ea810e9);
     return object;
@@ -1441,7 +1441,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChannel *object = [[TLUpdate$updateChannel alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     return object;
 }
 
@@ -1561,7 +1561,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateReadChannelInbox *object = [[TLUpdate$updateReadChannelInbox alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.max_id = metaObject->getInt32((int32_t)0xe2c00ace);
     return object;
 }
@@ -1601,7 +1601,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateDeleteChannelMessages *object = [[TLUpdate$updateDeleteChannelMessages alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.messages = metaObject->getArray((int32_t)0x8c97b94f);
     object.pts = metaObject->getInt32((int32_t)0x4fc5f572);
     object.pts_count = metaObject->getInt32((int32_t)0x4ad9fe06);
@@ -1655,7 +1655,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChannelMessageViews *object = [[TLUpdate$updateChannelMessageViews alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
     object.views = metaObject->getInt32((int32_t)0xe59deddf);
     return object;
@@ -1749,8 +1749,8 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChatParticipantAdmin *object = [[TLUpdate$updateChatParticipantAdmin alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.is_admin = metaObject->getBool((int32_t)0x41fdf05a);
     object.version = metaObject->getInt32((int32_t)0x4ea810e9);
     return object;
@@ -2048,7 +2048,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateReadChannelOutbox *object = [[TLUpdate$updateReadChannelOutbox alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.max_id = metaObject->getInt32((int32_t)0xe2c00ace);
     return object;
 }
@@ -2272,7 +2272,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChannelWebPage *object = [[TLUpdate$updateChannelWebPage alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.webpage = metaObject->getObject((int32_t)0x9ae475f8);
     object.pts = metaObject->getInt32((int32_t)0x4fc5f572);
     object.pts_count = metaObject->getInt32((int32_t)0x4ad9fe06);
@@ -2625,7 +2625,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChannelReadMessagesContents *object = [[TLUpdate$updateChannelReadMessagesContents alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.messages = metaObject->getArray((int32_t)0x8c97b94f);
     return object;
 }
@@ -2691,7 +2691,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLUpdate$updateChannelAvailableMessages *object = [[TLUpdate$updateChannelAvailableMessages alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.available_min_id = metaObject->getInt32((int32_t)0x9e2c6fd0);
     return object;
 }
@@ -2732,7 +2732,7 @@
 {
     TLUpdate$updateReadFeedMeta *object = [[TLUpdate$updateReadFeedMeta alloc] init];
     object.flags = metaObject->getInt32((int32_t)0x81915c23);
-    object.feed_id = metaObject->getInt32((int32_t)0xf204bed5);
+    object.feed_id = metaObject->getInt64((int32_t)0xf204bed5);
     object.max_position = metaObject->getObject((int32_t)0x7d9baa49);
     object.unread_count = metaObject->getInt32((int32_t)0xa6b586be);
     object.unread_muted_count = metaObject->getInt32((int32_t)0xcbc42ccb);

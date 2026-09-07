@@ -369,6 +369,19 @@ static UIView *findStatusBarView()
 
 + (CGFloat)statusBarHeightForOrientation:(UIInterfaceOrientation)orientation
 {
+    // Приватного окна статус-бара с iOS 13 нет; высоту отдаёт сцена.
+    // LegacyComponents собирается как расширение-безопасный, UIApplication тут
+    // недоступен — до сцены добираемся через окна из провайдера.
+    if (@available(iOS 13.0, *)) {
+        for (UIWindow *appWindow in [[LegacyComponentsGlobals provider] applicationWindows]) {
+            CGRect frame = appWindow.windowScene.statusBarManager.statusBarFrame;
+            if (frame.size.height > FLT_EPSILON) {
+                return frame.size.height;
+            }
+        }
+        return 20.0f;
+    }
+    
     UIWindow *window = [[LegacyComponentsGlobals provider] applicationStatusBarWindow];
         
     Class statusBarClass = NSClassFromString(TGEncodeText(@"VJTubuvtCbs", -1));

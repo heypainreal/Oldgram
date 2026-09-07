@@ -3,7 +3,7 @@
 
 @interface TGPassportFormRequest : NSObject
 
-@property (nonatomic, readonly) int32_t botId;
+@property (nonatomic, readonly) int64_t botId;
 @property (nonatomic, readonly, strong) NSString *scope;
 @property (nonatomic, readonly, strong) NSArray *scopeValues;
 @property (nonatomic, readonly, strong) NSString *publicKey;
@@ -13,6 +13,6 @@
 @property (nonatomic, readonly, strong) NSString *nonce;
 @property (nonatomic, readonly, strong) NSString *payload;
 
-- (instancetype)initWithBotId:(int32_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey bundleId:(NSString *)bundleId callbackUrl:(NSString *)callbackUrl nonce:(NSString *)nonce payload:(NSString *)payload;
+- (instancetype)initWithBotId:(int64_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey bundleId:(NSString *)bundleId callbackUrl:(NSString *)callbackUrl nonce:(NSString *)nonce payload:(NSString *)payload;
 
 @end

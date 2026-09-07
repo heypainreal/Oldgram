@@ -18,6 +18,7 @@
 @interface TLUserProfilePhoto$userProfilePhoto : TLUserProfilePhoto
 
 @property (nonatomic) int64_t photo_id;
+@property (nonatomic) int32_t dc_id;
 @property (nonatomic, retain) TLFileLocation *photo_small;
 @property (nonatomic, retain) TLFileLocation *photo_big;
 

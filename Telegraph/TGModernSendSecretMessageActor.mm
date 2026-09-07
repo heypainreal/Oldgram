@@ -216,7 +216,7 @@
     return nil;
 }
 
-- (id)decryptedContactWithLayer:(NSUInteger)layer phoneNumber:(NSString *)phoneNumber firstName:(NSString *)firstName lastName:(NSString *)lastName userId:(int32_t)userId {
+- (id)decryptedContactWithLayer:(NSUInteger)layer phoneNumber:(NSString *)phoneNumber firstName:(NSString *)firstName lastName:(NSString *)lastName userId:(int64_t)userId {
     switch (layer)
     {
         case 1:

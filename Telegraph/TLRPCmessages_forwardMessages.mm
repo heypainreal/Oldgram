@@ -7,7 +7,7 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return 0x708e0195;
+    return (int32_t)0x13704a7c;
 }
 
 - (int32_t)TLconstructorName
@@ -27,12 +27,16 @@
 
 - (int)layerVersion
 {
-    return 73;
+    return 228;
 }
 
+// messages.forwardMessages#13704a7c flags:# from_peer:InputPeer id:Vector<int>
+// random_id:Vector<long> to_peer:InputPeer ...
 - (void)TLserialize:(NSOutputStream *)os
 {
-    [os writeInt32:self.flags];
+    // Биты 5 (silent) и 6 (background) сохранили смысл; бит 8 в схеме 228 занят
+    // другим полем, поэтому не отправляем его.
+    [os writeInt32:self.flags & ~(1 << 8)];
     
     TLMetaClassStore::serializeObject(os, self.from_peer, true);
     

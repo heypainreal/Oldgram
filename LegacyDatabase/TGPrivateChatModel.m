@@ -2,7 +2,7 @@
 
 @implementation TGPrivateChatModel
 
-- (instancetype)initWithUserId:(int32_t)userId
+- (instancetype)initWithUserId:(int64_t)userId
 {
     self = [super initWithPeerId:TGPeerIdPrivateMake(userId)];
     if (self != nil)

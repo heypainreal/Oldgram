@@ -2,7 +2,7 @@
 
 @implementation TGPassportFormRequest
 
-- (instancetype)initWithBotId:(int32_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey bundleId:(NSString *)bundleId callbackUrl:(NSString *)callbackUrl nonce:(NSString *)nonce payload:(NSString *)payload
+- (instancetype)initWithBotId:(int64_t)botId scope:(NSString *)scope publicKey:(NSString *)publicKey bundleId:(NSString *)bundleId callbackUrl:(NSString *)callbackUrl nonce:(NSString *)nonce payload:(NSString *)payload
 {
     self = [super init];
     if (self != nil)

@@ -53,7 +53,7 @@
 {
     TLWebAuthorization$webAuthorization *object = [[TLWebAuthorization$webAuthorization alloc] init];
     object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
-    object.bot_id = metaObject->getInt32((int32_t)0x214f3dba);
+    object.bot_id = metaObject->getInt64((int32_t)0x214f3dba);
     object.domain = metaObject->getString((int32_t)0x4bfcaf2c);
     object.browser = metaObject->getString((int32_t)0x8d3cf31d);
     object.platform = metaObject->getString((int32_t)0x2b6704be);

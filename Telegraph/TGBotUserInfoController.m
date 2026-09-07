@@ -69,7 +69,7 @@
 
 @interface TGBotUserInfoController () <TGAlertSoundControllerDelegate, TGUserInfoEditingPhoneCollectionItemDelegate, TGPhoneLabelPickerControllerDelegate, TGCreateContactControllerDelegate, TGAddToExistingContactControllerDelegate>
 {
-    int32_t _uid;
+    int64_t _uid;
     bool _editing;
     UIEdgeInsets _defaultPhonesSectionInsets;
     
@@ -125,7 +125,7 @@
 
 @implementation TGBotUserInfoController
 
-- (instancetype)initWithUid:(int32_t)uid sendCommand:(void (^)(NSString *))sendCommand
+- (instancetype)initWithUid:(int64_t)uid sendCommand:(void (^)(NSString *))sendCommand
 {
     self = [super init];
     if (self != nil)
@@ -1099,7 +1099,7 @@ static UIView *_findBackArrow(UIView *view)
 {
     self.view.userInteractionEnabled = false;
     
-    int nativeId = _phonebookInfo.nativeId;
+    int64_t nativeId = _phonebookInfo.nativeId;
     
     [ActionStageInstance() dispatchOnStageQueue:^
      {
@@ -1119,7 +1119,7 @@ static UIView *_findBackArrow(UIView *view)
              [ActionStageInstance() removeWatcher:self fromPath:@"/tg/phonebook"];
              
              static int actionId = 0;
-             [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(break%d,%d,breakLinkLocal)", _uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:[[NSNumber alloc] initWithInt:_uid], @"uid", [[NSNumber alloc] initWithInt:nativeId], @"nativeId", nil] watcher:self];
+             [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(break%lld,%d,breakLinkLocal)", (long long)_uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:@(_uid), @"uid", [[NSNumber alloc] initWithInt:nativeId], @"nativeId", nil] watcher:self];
          }
      }];
 }
@@ -1128,7 +1128,7 @@ static UIView *_findBackArrow(UIView *view)
 {
     self.view.userInteractionEnabled = false;
     
-    int nativeId = _phonebookInfo.nativeId;
+    int64_t nativeId = _phonebookInfo.nativeId;
     
     [ActionStageInstance() dispatchOnStageQueue:^
      {
@@ -1144,7 +1144,7 @@ static UIView *_findBackArrow(UIView *view)
          else
          {
              static int actionId = 0;
-             [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(%d,%d,changeNameLocal)", _uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:[[NSNumber alloc] initWithInt:_uid], @"uid", firstName == nil ? @"" : firstName, @"firstName", lastName == nil ? @"" : lastName, @"lastName", [[NSNumber alloc] initWithInt:nativeId], @"nativeId", nil] watcher:self];
+             [ActionStageInstance() requestActor:[NSString stringWithFormat:@"/tg/synchronizeContacts/(%lld,%d,changeNameLocal)", (long long)_uid, actionId++] options:[NSDictionary dictionaryWithObjectsAndKeys:@(_uid), @"uid", firstName == nil ? @"" : firstName, @"firstName", lastName == nil ? @"" : lastName, @"lastName", [[NSNumber alloc] initWithInt:nativeId], @"nativeId", nil] watcher:self];
          }
      }];
 }
@@ -1174,7 +1174,7 @@ static UIView *_findBackArrow(UIView *view)
              static int actionId = 0;
              
              NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
-             [options setObject:[[NSNumber alloc] initWithInt:_uid] forKey:@"uid"];
+             [options setObject:@(_uid) forKey:@"uid"];
              [options setObject:[[NSNumber alloc] initWithInt:_phonebookInfo.nativeId] forKey:@"nativeId"];
              if (phoneNumbers != nil)
                  [options setObject:phoneNumbers forKey:@"phones"];
@@ -1334,7 +1334,7 @@ static UIView *_findBackArrow(UIView *view)
             }];
             
         } else {
-            int32_t uid = _uid;
+            int64_t uid = _uid;
             [[[[TGGroupManagementSignals inviteUserWithId:_uid toGroupWithId:TGGroupIdFromPeerId(conversation.conversationId)] deliverOn:[SQueue mainQueue]] onDispose:^
             {
                 [progressWindow dismiss:true];

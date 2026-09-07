@@ -319,6 +319,10 @@ static ASQueue *taskManagementQueue()
                 
                 if (compressedData != nil)
                     [compressedData writeToFile:cachedFilePath atomically:true];
+
+                // Анимированный стикер (.tgs) — сжатый JSON Lottie, а не webp.
+                if (image == nil)
+                    image = [UIImage convertFromAnimatedSticker:filePath size:size];
             }
         }
     }

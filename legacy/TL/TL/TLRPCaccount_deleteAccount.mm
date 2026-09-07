@@ -1,5 +1,7 @@
 #import "TLRPCaccount_deleteAccount.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -53,12 +55,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x418d4e0b;
+    return (int32_t)0xa2c0cf74;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x980b9e1b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -78,6 +80,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeString:self.reason == nil ? @"" : self.reason];
+}
 
 @end
 

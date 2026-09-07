@@ -54,7 +54,7 @@
 
 @interface TLUpdate$updateUserStatus : TLUpdate
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic, retain) TLUserStatus *status;
 
 @end
@@ -137,8 +137,8 @@
 
 @interface TLUpdate$updateChatParticipantDelete : TLUpdate
 
-@property (nonatomic) int32_t chat_id;
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t chat_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic) int32_t version;
 
 @end
@@ -165,14 +165,14 @@
 
 @interface TLUpdate$updateUserTyping : TLUpdate
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic, retain) TLSendMessageAction *action;
 
 @end
 
 @interface TLUpdate$updateChatUserTyping : TLUpdate
 
-@property (nonatomic) int32_t chat_id;
+@property (nonatomic) int64_t chat_id;
 @property (nonatomic) int32_t user_id;
 @property (nonatomic, retain) TLSendMessageAction *action;
 
@@ -180,7 +180,7 @@
 
 @interface TLUpdate$updateUserName : TLUpdate
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic, retain) NSString *first_name;
 @property (nonatomic, retain) NSString *last_name;
 @property (nonatomic, retain) NSString *username;
@@ -196,7 +196,7 @@
 
 @interface TLUpdate$updateUserPhone : TLUpdate
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic, retain) NSString *phone;
 
 @end
@@ -253,9 +253,9 @@
 
 @interface TLUpdate$updateChatParticipantAdd : TLUpdate
 
-@property (nonatomic) int32_t chat_id;
-@property (nonatomic) int32_t user_id;
-@property (nonatomic) int32_t inviter_id;
+@property (nonatomic) int64_t chat_id;
+@property (nonatomic) int64_t user_id;
+@property (nonatomic) int64_t inviter_id;
 @property (nonatomic) int32_t date;
 @property (nonatomic) int32_t version;
 
@@ -271,7 +271,7 @@
 
 @interface TLUpdate$updateChannel : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 
 @end
 
@@ -292,14 +292,14 @@
 
 @interface TLUpdate$updateReadChannelInbox : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic) int32_t max_id;
 
 @end
 
 @interface TLUpdate$updateDeleteChannelMessages : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic, retain) NSArray *messages;
 @property (nonatomic) int32_t pts;
 @property (nonatomic) int32_t pts_count;
@@ -308,7 +308,7 @@
 
 @interface TLUpdate$updateChannelMessageViews : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic) int32_t n_id;
 @property (nonatomic) int32_t views;
 
@@ -324,8 +324,8 @@
 
 @interface TLUpdate$updateChatParticipantAdmin : TLUpdate
 
-@property (nonatomic) int32_t chat_id;
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t chat_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic) bool is_admin;
 @property (nonatomic) int32_t version;
 
@@ -377,7 +377,7 @@
 
 @interface TLUpdate$updateReadChannelOutbox : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic) int32_t max_id;
 
 @end
@@ -418,7 +418,7 @@
 
 @interface TLUpdate$updateChannelWebPage : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic, retain) TLWebPage *webpage;
 @property (nonatomic) int32_t pts;
 @property (nonatomic) int32_t pts_count;
@@ -480,7 +480,7 @@
 
 @interface TLUpdate$updateChannelReadMessagesContents : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic, retain) NSArray *messages;
 
 @end
@@ -492,7 +492,7 @@
 
 @interface TLUpdate$updateChannelAvailableMessages : TLUpdate
 
-@property (nonatomic) int32_t channel_id;
+@property (nonatomic) int64_t channel_id;
 @property (nonatomic) int32_t available_min_id;
 
 @end
@@ -500,7 +500,7 @@
 @interface TLUpdate$updateReadFeedMeta : TLUpdate
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic, retain) TLFeedPosition *max_position;
 @property (nonatomic) int32_t unread_count;
 @property (nonatomic) int32_t unread_muted_count;

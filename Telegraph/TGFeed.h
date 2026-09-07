@@ -6,7 +6,7 @@
 
 @interface TGFeed : NSObject <PSCoding, NSCopying>
 
-@property (nonatomic) int32_t fid;
+@property (nonatomic) int64_t fid;
 @property (nonatomic) NSSet *channelIds;
 @property (nonatomic) int32_t cachedChannelsHash;
 @property (nonatomic) bool addsJoinedChannels;

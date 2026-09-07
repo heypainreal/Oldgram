@@ -1117,7 +1117,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
 {
     bool needsAuthors = _everyMessageNeedsAuthor;
     
-    std::vector<int32_t> requiredUsers;
+    std::vector<int64_t> requiredUsers;
     std::vector<int> requiredUsersItemIndices;
     
     NSMutableArray *requiredChannelPeerIds = [[NSMutableArray alloc] init];
@@ -1147,9 +1147,9 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                             if (TGPeerIdIsChannel(forwardPeerId)) {
                                 [requiredChannelPeerIds addObject:@(forwardPeerId)];
                             } else {
-                                requiredUsers.push_back((int32_t)forwardPeerId);
+                                requiredUsers.push_back(forwardPeerId);
                             }
-                            int32_t authorId = ((TGForwardedMessageMediaAttachment *)attachment).forwardAuthorUserId;
+                            int64_t authorId = ((TGForwardedMessageMediaAttachment *)attachment).forwardAuthorUserId;
                             if (authorId != 0) {
                                 requiredUsers.push_back(authorId);
                             }
@@ -1178,7 +1178,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                     if (TGPeerIdIsChannel(forwardPeerId)) {
                                         [requiredChannelPeerIds addObject:@(forwardPeerId)];
                                     } else {
-                                        requiredUsers.push_back((int32_t)forwardPeerId);
+                                        requiredUsers.push_back(forwardPeerId);
                                     }
                                     break;
                                 }
@@ -1187,7 +1187,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                             if (TGPeerIdIsChannel(replyPeerId)) {
                                 [requiredChannelPeerIds addObject:@(replyPeerId)];
                             } else {
-                                requiredUsers.push_back((int32_t)replyPeerId);
+                                requiredUsers.push_back(replyPeerId);
                             }
                             
                             if (!didAddToQueue)
@@ -1225,7 +1225,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                     NSArray *uids = ((TGActionMediaAttachment *)attachment).actionData[@"uids"];
                                     if (uids != nil) {
                                         for (NSNumber *nUid in uids) {
-                                            requiredUsers.push_back([nUid intValue]);
+                                            requiredUsers.push_back([nUid longLongValue]);
                                             
                                             if (!didAddToQueue) {
                                                 requiredUsersItemIndices.push_back(index);
@@ -1233,7 +1233,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                             }
                                         }
                                     } else {
-                                        int uid = [((TGActionMediaAttachment *)attachment).actionData[@"uid"] intValue];
+                                        int64_t uid = [((TGActionMediaAttachment *)attachment).actionData[@"uid"] longLongValue];
                                         if (uid != 0)
                                         {
                                             requiredUsers.push_back(uid);
@@ -1266,7 +1266,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                 }
                                 case TGMessageActionSecureValuesSent:
                                 {
-                                    requiredUsers.push_back((int32_t)messageItem->_message.toUid);
+                                    requiredUsers.push_back(messageItem->_message.toUid);
                                     
                                     if (!didAddToQueue) {
                                         requiredUsersItemIndices.push_back(index);
@@ -1281,7 +1281,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                         }
                         case TGViaUserAttachmentType:
                         {
-                            int32_t userId = ((TGViaUserAttachment *)attachment).userId;
+                            int64_t userId = ((TGViaUserAttachment *)attachment).userId;
                                 if (userId != 0) {
                                 requiredUsers.push_back(userId);
                                 
@@ -1308,7 +1308,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                     if (TGPeerIdIsChannel(peerId)) {
                         [requiredChannelPeerIds addObject:@(peerId)];
                     } else {
-                        requiredUsers.push_back((int32_t)peerId);
+                        requiredUsers.push_back(peerId);
                     }
                     requiredUsersItemIndices.push_back(index);
                     didAddToQueue = true;
@@ -1317,7 +1317,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
         }
     }
     
-    std::shared_ptr<std::map<int, TGUser *> > pUsers = [TGDatabaseInstance() loadUsers:requiredUsers];
+    std::shared_ptr<std::map<int64_t, TGUser *> > pUsers = [TGDatabaseInstance() loadUsers:requiredUsers];
     NSDictionary *channels = requiredChannelPeerIds.count == 0 ? nil : [TGDatabaseInstance() loadChannels:requiredChannelPeerIds];
     
     for (int itemIndex : requiredUsersItemIndices)
@@ -1345,11 +1345,11 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                 [additionalConversations addObject:conversation];
                             }
                         } else {
-                            it = pUsers->find((int32_t)forwardPeerId);
+                            it = pUsers->find(forwardPeerId);
                             if (it != pUsers->end())
                                 [additionalUsers addObject:it->second];
                         }
-                        int32_t authorId = ((TGForwardedMessageMediaAttachment *)attachment).forwardAuthorUserId;
+                        int64_t authorId = ((TGForwardedMessageMediaAttachment *)attachment).forwardAuthorUserId;
                         if (authorId != 0) {
                             it = pUsers->find(authorId);
                             if (it != pUsers->end())
@@ -1372,7 +1372,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                 [additionalConversations addObject:conversation];
                             }
                         } else {
-                            it = pUsers->find((int32_t)replyPeerId);
+                            it = pUsers->find(replyPeerId);
                             if (it != pUsers->end())
                                 [additionalUsers addObject:it->second];
                         }
@@ -1388,7 +1388,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                         [additionalConversations addObject:conversation];
                                     }
                                 } else {
-                                    it = pUsers->find((int32_t)forwardPeerId);
+                                    it = pUsers->find(forwardPeerId);
                                     if (it != pUsers->end())
                                         [additionalUsers addObject:it->second];
                                 }
@@ -1399,7 +1399,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                     }
                     case TGContactMediaAttachmentType:
                     {
-                        int32_t contactUid = ((TGContactMediaAttachment *)attachment).uid;
+                        int64_t contactUid = ((TGContactMediaAttachment *)attachment).uid;
                         if (contactUid == 0)
                         {
                             TGUser *contactUser = [[TGUser alloc] init];
@@ -1445,14 +1445,14 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                 NSArray *uids = ((TGActionMediaAttachment *)attachment).actionData[@"uids"];
                                 if (uids != nil) {
                                     for (NSNumber *nUid in uids) {
-                                        it = pUsers->find([nUid intValue]);
+                                        it = pUsers->find([nUid longLongValue]);
                                         if (it != pUsers->end()) {
                                             [additionalUsers addObject:it->second];
                                         }
                                     }
                                 }
                                 
-                                int uid = [((TGActionMediaAttachment *)attachment).actionData[@"uid"] intValue];
+                                int64_t uid = [((TGActionMediaAttachment *)attachment).actionData[@"uid"] longLongValue];
                                 it = pUsers->find(uid);
                                 if (it != pUsers->end())
                                     [additionalUsers addObject:it->second];
@@ -1475,7 +1475,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                             }
                             case TGMessageActionSecureValuesSent:
                             {
-                                it = pUsers->find((int32_t)messageItem->_message.toUid);
+                                it = pUsers->find(messageItem->_message.toUid);
                                 if (it != pUsers->end()) {
                                     [additionalUsers addObject:it->second];
                                 }
@@ -1488,7 +1488,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                     }
                     case TGViaUserAttachmentType:
                     {
-                        int32_t userId = ((TGViaUserAttachment *)attachment).userId;
+                        int64_t userId = ((TGViaUserAttachment *)attachment).userId;
                         if (userId != 0) {
                             it = pUsers->find(userId);
                             if (it != pUsers->end()) {
@@ -1512,7 +1512,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
         {
             if (TGPeerIdIsUser(messageItem->_message.fromUid))
             {
-                it = pUsers->find((int32_t)messageItem->_message.fromUid);
+                it = pUsers->find(messageItem->_message.fromUid);
                 if (it != pUsers->end())
                     messageItem->_author = it->second;
             }
@@ -4110,7 +4110,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
     if (addToDatabaseMessages.count != 0)
     {
         if (TGPeerIdIsChannel(_conversationId)) {
-            [TGDatabaseInstance() addMessagesToChannel:_conversationId messages:addToDatabaseMessages deleteMessages:nil unimportantGroups:nil addedHoles:nil removedHoles:nil removedUnimportantHoles:nil updatedMessageSortKeys:nil returnGroups:nil keepUnreadCounters:false skipFeedUpdate:true changedMessages:nil];
+            [TGDatabaseInstance() addMessagesToChannel:_conversationId messages:addToDatabaseMessages deleteMessages:nil unimportantGroups:nil addedHoles:nil removedHoles:nil removedUnimportantHoles:nil updatedMessageSortKeys:nil returnGroups:false keepUnreadCounters:false skipFeedUpdate:true changedMessages:nil];
         } else {
             [TGDatabaseInstance() transactionAddMessages:addToDatabaseMessages updateConversationDatas:nil notifyAdded:false];
         }
@@ -4404,7 +4404,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
     }];
 }
 
-- (void)controllerRequestedNavigationToConversationWithUser:(int32_t)uid
+- (void)controllerRequestedNavigationToConversationWithUser:(int64_t)uid
 {
     [[TGInterfaceManager instance] navigateToConversationWithId:uid conversation:nil];
 }
@@ -4493,7 +4493,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
 
 #pragma mark -
 
-- (void)controllerWantsToCreateContact:(int32_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
+- (void)controllerWantsToCreateContact:(int64_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
 {
     TGCreateContactController *createContactController = nil;
     if (uid > 0)
@@ -4513,7 +4513,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
     [controller presentViewController:navigationController animated:true completion:nil];
 }
 
-- (void)controllerWantsToAddContactToExisting:(int32_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
+- (void)controllerWantsToAddContactToExisting:(int64_t)uid phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment
 {
     TGAddToExistingContactController *addToExistingController = [[TGAddToExistingContactController alloc] initWithUid:uid phoneNumber:phoneNumber attachment:attachment];
     addToExistingController.presentation = self.controller.presentation;
@@ -4752,8 +4752,11 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
     
     if ([action isEqualToString:@"userAvatarTapped"])
     {
-        if ([options[@"uid"] intValue] > 0) {
-            [self actionStageActionRequested:@"openLinkRequested" options:@{@"url": [NSString stringWithFormat:@"tg-user://%d", [options[@"uid"] intValue]], @"mid": @([options[@"mid"] intValue])}];
+        // intValue обрезал идентификатор до 32 бит: у современных аккаунтов
+        // он становился отрицательным, проверка не проходила и вместо профиля
+        // автора открывался профиль самой группы.
+        if ([options[@"uid"] longLongValue] > 0) {
+            [self actionStageActionRequested:@"openLinkRequested" options:@{@"url": [NSString stringWithFormat:@"tg-user://%lld", (long long)[options[@"uid"] longLongValue]], @"mid": @([options[@"mid"] intValue])}];
         }
         else {
             [self _controllerAvatarPressed];
@@ -4799,7 +4802,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
     {
         if ([options[@"url"] hasPrefix:@"tg-user://"])
         {
-            int32_t uid = (int32_t)[[options[@"url"] substringFromIndex:@"tg-user://".length] intValue];
+            int64_t uid = [[options[@"url"] substringFromIndex:@"tg-user://".length] longLongValue];
             if (uid != 0) {
                 TGUser *user = [TGDatabaseInstance() loadUser:uid];
                 int32_t messageId = [options[@"mid"] intValue];
@@ -4854,7 +4857,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                 {
                     if (item->_message.mid == mid)
                     {
-                        TGUser *user = [TGDatabaseInstance() loadUser:(int)(item->_message.fromUid)];
+                        TGUser *user = [TGDatabaseInstance() loadUser:(item->_message.fromUid)];
                         if (![self isASingleBotGroup] && user.uid != self.conversationId && user.userName.length != 0 && (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot))
                         {
                             command = [command stringByAppendingFormat:@"@%@", user.userName];
@@ -5146,7 +5149,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
             if (url.length != 0) {
                 bool hiddenLink = true;
                 if (TGPeerIdIsUser(_conversationId)) {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)_conversationId];
+                    TGUser *user = [TGDatabaseInstance() loadUser:_conversationId];
                     if (user.isVerified) {
                         hiddenLink = false;
                     }
@@ -5200,7 +5203,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
         } else if ([action isKindOfClass:[TGBotReplyMarkupButtonActionSwitchInline class]]) {
             NSString *query = ((TGBotReplyMarkupButtonActionSwitchInline *)action).query;
             TGMessage *message = [TGDatabaseInstance() loadMessageWithMid:messageId peerId:_conversationId];
-            int32_t userId = (int)message.fromUid;
+            int64_t userId = message.fromUid;
             for (id attachment in message.mediaAttachments) {
                 if ([attachment isKindOfClass:[TGViaUserAttachment class]]) {
                     userId = ((TGViaUserAttachment *)attachment).userId;
@@ -5279,7 +5282,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                     int64_t peerId = _conversationId;
                                     [TGDatabaseInstance() dispatchOnDatabaseThread:^{
                                         TGMessage *message = [TGDatabaseInstance() loadMessageWithMid:messageId peerId:peerId];
-                                        int32_t userId = (int32_t)message.fromUid;
+                                        int64_t userId = message.fromUid;
                                         NSString *gameTitle = nil;
                                         NSString *shareName = nil;
                                         for (id attachment in message.mediaAttachments) {
@@ -5324,7 +5327,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                                 } else {
                                     bool hiddenLink = true;
                                     if (TGPeerIdIsUser(_conversationId)) {
-                                        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)strongSelf->_conversationId];
+                                        TGUser *user = [TGDatabaseInstance() loadUser:strongSelf->_conversationId];
                                         if (user.isVerified) {
                                             hiddenLink = false;
                                         }
@@ -5356,7 +5359,7 @@ static NSString *addGameShareHash(NSString *url, NSString *addHash) {
                 
                 if ([action isKindOfClass:[TGBotReplyMarkupButtonActionGame class]]) {
                     TGMessage *message = [TGDatabaseInstance() loadMessageWithMid:messageId peerId:_conversationId];
-                    int32_t userId = (int32_t)message.fromUid;
+                    int64_t userId = message.fromUid;
                     for (id attachment in message.mediaAttachments) {
                         if ([attachment isKindOfClass:[TGViaUserAttachment class]]) {
                             userId = ((TGViaUserAttachment *)attachment).userId;
@@ -6654,7 +6657,7 @@ static id mediaIdForMessage(TGMessage *message)
                             updatedItem->_message.containsUnseenMention = false;
                             ((NSMutableArray *)_items)[index] = updatedItem;
                             int32_t convType = 0;
-                            int32_t convPeerId = 0;
+                            int64_t convPeerId = 0;
                             if (TGPeerIdIsChannel(_conversationId)) {
                                 convType = 1;
                                 convPeerId = TGChannelIdFromPeerId(_conversationId);
@@ -7144,7 +7147,7 @@ static id mediaIdForMessage(TGMessage *message)
             if (TGPeerIdIsChannel(peerId))
                 peer = [TGDatabaseInstance() loadChannels:@[@(peerId)]][@(peerId)];
             else
-                peer = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+                peer = [TGDatabaseInstance() loadUser:(int64_t)peerId];
             
             TGLiveLocation *entry = [[TGLiveLocation alloc] initWithMessage:message peer:peer hasOwnSession:false isOwnLocation:false isExpired:false];
             [entries addObject:entry];

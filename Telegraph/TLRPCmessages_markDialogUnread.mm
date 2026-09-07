@@ -6,7 +6,7 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return 0xc286d98f;
+    return (int32_t)0x8c5006f8;
 }
 
 - (int32_t)TLconstructorName
@@ -26,7 +26,7 @@
 
 - (int)layerVersion
 {
-    return 82;
+    return 228;
 }
 
 - (void)TLserialize:(NSOutputStream *)os

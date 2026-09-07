@@ -81,8 +81,8 @@
                         localImageId = murMurHash32(legacyCacheUrl);
                     
                     TGSecretPeerMediaGalleryImageItem *imageItem = [[TGSecretPeerMediaGalleryImageItem alloc] initWithImageId:imageMedia.imageId orLocalId:localImageId peerId:_peerId messageId:message.mid legacyImageInfo:imageMedia.imageInfo messageCountdownTime:messageCountdownTime messageLifetime:message.messageLifetime];
-                    imageItem.author = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
-                    imageItem.peer = [TGDatabaseInstance() loadUser:(int32_t)message.toUid];
+                    imageItem.author = [TGDatabaseInstance() loadUser:message.fromUid];
+                    imageItem.peer = [TGDatabaseInstance() loadUser:message.toUid];
                     imageItem.date = message.date;
                     
                     item = imageItem;
@@ -95,8 +95,8 @@
                         continue;
                     
                     TGSecretPeerMediaGalleryVideoItem *videoItem = [[TGSecretPeerMediaGalleryVideoItem alloc] initWithVideoMedia:videoMedia peerId:_peerId messageId:message.mid messageCountdownTime:messageCountdownTime messageLifetime:message.messageLifetime];
-                    videoItem.author = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
-                    videoItem.peer = [TGDatabaseInstance() loadUser:(int32_t)message.toUid];
+                    videoItem.author = [TGDatabaseInstance() loadUser:message.fromUid];
+                    videoItem.peer = [TGDatabaseInstance() loadUser:message.toUid];
                     videoItem.date = message.date;
                     
                     item = videoItem;

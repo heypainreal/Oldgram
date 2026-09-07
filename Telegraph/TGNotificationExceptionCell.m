@@ -160,7 +160,7 @@
     {
         CGSize size = CGSizeMake(diameter, diameter);
         if (TGPeerIdIsUser(exception.peerId)) {
-            [_avatarView loadUserPlaceholderWithSize:size uid:(int32_t)exception.peerId firstName:firstName lastName:lastName placeholder:placeholder];
+            [_avatarView loadUserPlaceholderWithSize:size uid:exception.peerId firstName:firstName lastName:lastName placeholder:placeholder];
         } else {
             [_avatarView loadGroupPlaceholderWithSize:size conversationId:exception.peerId title:title placeholder:placeholder];
         }

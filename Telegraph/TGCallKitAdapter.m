@@ -189,7 +189,7 @@
 
 - (CXHandle *)_handleForPeerId:(int64_t)peerId outUser:(TGUser **)outUser
 {
-    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+    TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
     if (outUser != NULL)
         *outUser = user;
     

@@ -53,7 +53,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLChatFull$chatFull *object = [[TLChatFull$chatFull alloc] init];
-    object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
+    object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.participants = metaObject->getObject((int32_t)0xe0e25c28);
     object.chat_photo = metaObject->getObject((int32_t)0x824caff);
     object.notify_settings = metaObject->getObject((int32_t)0xfa59265);

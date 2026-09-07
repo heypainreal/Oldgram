@@ -20,7 +20,7 @@ static inline int32_t TGChannelIdFromPeerId(int64_t peerId) {
     }
 }
 
-static inline int64_t TGPeerIdFromChannelId(int32_t channelId) {
+static inline int64_t TGPeerIdFromChannelId(int64_t channelId) {
     return ((int64_t)INT32_MIN) * 2 - ((int64_t)channelId);
 }
 
@@ -181,7 +181,7 @@ const NSInteger TGRecentSearchLimit = 20;
             
             if (chat == nil || usersMapping[@(peerId)] == nil)
             {
-                TGLegacyUser *user = [database userWithIdSync:(int32_t)peerId];
+                TGLegacyUser *user = [database userWithIdSync:(int64_t)peerId];
                 chat = [[TGPrivateChatModel alloc] initWithUserId:user.userId];
                 
                 TGUserModel *userModel = [[TGUserModel alloc] initWithUserId:user.userId accessHash:user.accessHash firstName:user.firstName lastName:user.lastName avatarLocation:[[TGFileLocation alloc] initWithFileUrl:user.photoSmall]];

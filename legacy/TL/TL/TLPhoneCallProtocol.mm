@@ -1,5 +1,7 @@
 #import "TLPhoneCallProtocol.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -38,12 +40,25 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xa2bb35cb;
+    return (int32_t)0xfc878fc8;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x40cd0b19;
+    return -1;
+}
+
+// layer 228: к трём старым полям добавился список версий голосовой библиотеки.
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:self.flags];
+    [os writeInt32:self.min_layer];
+    [os writeInt32:self.max_layer];
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.library_versions.count];
+    for (NSString *version in self.library_versions) {
+        [os writeString:version];
+    }
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject

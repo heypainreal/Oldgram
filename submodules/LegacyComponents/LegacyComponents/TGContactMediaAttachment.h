@@ -6,7 +6,7 @@
 
 @interface TGContactMediaAttachment : TGMediaAttachment <TGMediaAttachmentParser, NSCoding>
 
-@property (nonatomic) int uid;
+@property (nonatomic) int64_t uid;
 @property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *phoneNumber;

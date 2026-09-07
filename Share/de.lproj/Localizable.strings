@@ -17,8 +17,8 @@
 "Share.Select" = "Auswählen";
 "Share.Done" = "Fertig";
 
-"Share.AuthTitle" = "Bei Telegram anmelden";
-"Share.AuthText" = "Um zu teilen, Telegram öffnen und anmelden.";
+"Share.AuthTitle" = "Bei Oldgram anmelden";
+"Share.AuthText" = "Um zu teilen, Oldgram öffnen und anmelden.";
 
 "Share.ChoosePhoneNumber" = "Wähle eine Telefonnummer um zu teilen";
 

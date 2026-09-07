@@ -1,98 +1,30 @@
 #import "TLRPCauth_signIn.h"
-
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
-
-#import "TLauth_Authorization.h"
+#import "ModernTL.h"
 
 @implementation TLRPCauth_signIn
-
-
-- (Class)responseClass
-{
-    return [TLauth_Authorization class];
-}
-
-- (int)impliedResponseSignature
-{
-    return (int)0xb1937d19;
-}
-
-- (int)layerVersion
-{
-    return 8;
-}
-
-- (int32_t)TLconstructorSignature
-{
-    TGLog(@"constructorSignature is not implemented for base type");
-    return 0;
-}
-
-- (int32_t)TLconstructorName
-{
-    TGLog(@"constructorName is not implemented for base type");
-    return 0;
-}
-
-- (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)__unused metaObject
-{
-    TGLog(@"TLbuildFromMetaObject is not implemented for base type");
-    return nil;
-}
-
-- (void)TLfillFieldsWithValues:(std::map<int32_t, TLConstructedValue> *)__unused values
-{
-    TGLog(@"TLfillFieldsWithValues is not implemented for base type");
-}
-
-
+- (Class)responseClass { return [ModernTL_auth_authorization class]; }
+- (int)impliedResponseSignature { return 0; }
+- (int)layerVersion { return 176; }
+- (int32_t)TLconstructorSignature { return 0; }
+- (int32_t)TLconstructorName { return -1; }
+- (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject { return nil; }
+- (void)TLfillFieldsWithValues:(std::map<int32_t, TLConstructedValue> *)values {}
 @end
 
-@implementation TLRPCauth_signIn$auth_signIn : TLRPCauth_signIn
+@implementation TLRPCauth_signIn$auth_signIn
+- (int32_t)TLconstructorSignature { return 0x8d52a951; }
+- (int32_t)TLconstructorName { return -1; }
 
-
-- (int32_t)TLconstructorSignature
-{
-    return (int32_t)0xbcd51581;
-}
-
-- (int32_t)TLconstructorName
-{
-    return (int32_t)0xc6e76afa;
-}
-
-- (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
-{
-    TLRPCauth_signIn$auth_signIn *object = [[TLRPCauth_signIn$auth_signIn alloc] init];
-    object.phone_number = metaObject->getString((int32_t)0xaecb6c79);
-    object.phone_code_hash = metaObject->getString((int32_t)0xd4dfef1b);
-    object.phone_code = metaObject->getString((int32_t)0xbbf1e711);
-    return object;
-}
-
-- (void)TLfillFieldsWithValues:(std::map<int32_t, TLConstructedValue> *)values
-{
-    {
-        TLConstructedValue value;
-        value.type = TLConstructedValueTypeString;
-        value.nativeObject = self.phone_number;
-        values->insert(std::pair<int32_t, TLConstructedValue>((int32_t)0xaecb6c79, value));
-    }
-    {
-        TLConstructedValue value;
-        value.type = TLConstructedValueTypeString;
-        value.nativeObject = self.phone_code_hash;
-        values->insert(std::pair<int32_t, TLConstructedValue>((int32_t)0xd4dfef1b, value));
-    }
-    {
-        TLConstructedValue value;
-        value.type = TLConstructedValueTypeString;
-        value.nativeObject = self.phone_code;
-        values->insert(std::pair<int32_t, TLConstructedValue>((int32_t)0xbbf1e711, value));
+- (void)TLserialize:(NSOutputStream *)os {
+    _flags = 0;
+    if (_phone_code) _flags |= (1 << 0);
+    [os writeInt32:_flags];
+    [os writeString:_phone_number];
+    [os writeString:_phone_code_hash];
+    if (_flags & (1 << 0)) {
+        [os writeString:_phone_code];
     }
 }
-
-
 @end
-

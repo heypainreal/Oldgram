@@ -50,7 +50,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLDialogPeer$dialogPeerFeed *object = [[TLDialogPeer$dialogPeerFeed alloc] init];
-    object.feed_id = metaObject->getInt32((int32_t)0xf204bed5);
+    object.feed_id = metaObject->getInt64((int32_t)0xf204bed5);
     return object;
 }
 

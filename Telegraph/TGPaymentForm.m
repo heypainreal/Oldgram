@@ -187,7 +187,7 @@
 
 @implementation TGPaymentForm
 
-- (instancetype)initWithCanSaveCredentials:(bool)canSaveCredentials passwordMissing:(bool)passwordMissing botId:(int32_t)botId url:(NSString *)url invoice:(TGInvoice *)invoice providerId:(int32_t)providerId nativeProvider:(NSString *)nativeProvider nativeParams:(NSString *)nativeParams savedInfo:(TGPaymentRequestedInfo *)savedInfo savedCredentials:(TGPaymentSavedCredentialsCard *)savedCredentials {
+- (instancetype)initWithCanSaveCredentials:(bool)canSaveCredentials passwordMissing:(bool)passwordMissing botId:(int64_t)botId url:(NSString *)url invoice:(TGInvoice *)invoice providerId:(int32_t)providerId nativeProvider:(NSString *)nativeProvider nativeParams:(NSString *)nativeParams savedInfo:(TGPaymentRequestedInfo *)savedInfo savedCredentials:(TGPaymentSavedCredentialsCard *)savedCredentials {
     self = [super init];
     if (self != nil) {
         _canSaveCredentials = canSaveCredentials;
@@ -243,7 +243,7 @@
 
 @implementation TGPaymentReceipt
 
-- (instancetype)initWithDate:(int32_t)date botId:(int32_t)botId invoice:(TGInvoice *)invoice providerId:(int32_t)providerId info:(TGPaymentRequestedInfo *)info shippingOption:(TGShippingOption *)shippingOption currency:(NSString *)currency totalAmount:(int64_t)totalAmount credentialsTitle:(NSString *)credentialsTitle {
+- (instancetype)initWithDate:(int32_t)date botId:(int64_t)botId invoice:(TGInvoice *)invoice providerId:(int32_t)providerId info:(TGPaymentRequestedInfo *)info shippingOption:(TGShippingOption *)shippingOption currency:(NSString *)currency totalAmount:(int64_t)totalAmount credentialsTitle:(NSString *)credentialsTitle {
     self = [super init];
     if (self != nil) {
         _date = date;

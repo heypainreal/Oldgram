@@ -11,7 +11,7 @@
 @property (nonatomic) int64_t forwardPeerId;
 @property (nonatomic) int forwardDate;
 
-@property (nonatomic) int32_t forwardAuthorUserId;
+@property (nonatomic) int64_t forwardAuthorUserId;
 @property (nonatomic) int32_t forwardPostId;
 
 @property (nonatomic) NSString *forwardAuthorSignature;

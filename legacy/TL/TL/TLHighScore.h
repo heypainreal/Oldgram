@@ -7,7 +7,7 @@
 @interface TLHighScore : NSObject <TLObject>
 
 @property (nonatomic) int32_t pos;
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic) int32_t score;
 
 @end

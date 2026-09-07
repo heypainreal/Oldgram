@@ -75,7 +75,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLmessages_RecentStickers$messages_recentStickers *object = [[TLmessages_RecentStickers$messages_recentStickers alloc] init];
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     object.packs = metaObject->getArray((int32_t)0xfc361c6c);
     object.stickers = metaObject->getArray((int32_t)0x6863de1a);
     object.dates = metaObject->getArray((int32_t)0xe1eb12cb);

@@ -90,18 +90,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x179be863;
+    return (int32_t)0x35a95cb9;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x4697094b;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLInputPeer$inputPeerChat *object = [[TLInputPeer$inputPeerChat alloc] init];
-    object.chat_id = metaObject->getInt32((int32_t)0x7234457c);
+    object.chat_id = metaObject->getInt64((int32_t)0x7234457c);
     return object;
 }
 
@@ -115,6 +115,11 @@
     }
 }
 
+// inputPeerChat#35a95cb9
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.chat_id];
+}
 
 @end
 
@@ -123,18 +128,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x7b8e7de6;
+    return (int32_t)0xdde8a54c;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x29e02491;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLInputPeer$inputPeerUser *object = [[TLInputPeer$inputPeerUser alloc] init];
-    object.user_id = metaObject->getInt32((int32_t)0xafdf4073);
+    object.user_id = metaObject->getInt64((int32_t)0xafdf4073);
     object.access_hash = metaObject->getInt64((int32_t)0x8f305224);
     return object;
 }
@@ -155,6 +160,13 @@
     }
 }
 
+// inputPeerUser#dde8a54c
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // layer 228: идентификаторы стали 64-битными
+    [os writeInt64:(int64_t)self.user_id];
+    [os writeInt64:self.access_hash];
+}
 
 @end
 
@@ -163,18 +175,18 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x20adaef8;
+    return (int32_t)0x27bcbbfc;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x8fc84fa0;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLInputPeer$inputPeerChannel *object = [[TLInputPeer$inputPeerChannel alloc] init];
-    object.channel_id = metaObject->getInt32((int32_t)0x1cfcdb86);
+    object.channel_id = metaObject->getInt64((int32_t)0x1cfcdb86);
     object.access_hash = metaObject->getInt64((int32_t)0x8f305224);
     return object;
 }
@@ -195,6 +207,32 @@
     }
 }
 
+// inputPeerChannel#27bcbbfc
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt64:(int64_t)self.channel_id];
+    [os writeInt64:self.access_hash];
+}
 
 @end
 
+#import "TLInputUser.h"
+
+/// В схеме 228 участник канала задаётся пиром, а старый код держит InputUser.
+void TLSerializeInputUserAsPeer(NSOutputStream *os, TLInputUser *inputUser)
+{
+    if ([inputUser isKindOfClass:[TLInputUser$inputUserSelf class]]) {
+        [os writeInt32:(int32_t)0x7da07ec9];   // inputPeerSelf
+        return;
+    }
+    
+    if ([inputUser isKindOfClass:[TLInputUser$inputUser class]]) {
+        TLInputUser$inputUser *concrete = (TLInputUser$inputUser *)inputUser;
+        [os writeInt32:(int32_t)0xdde8a54c];   // inputPeerUser
+        [os writeInt64:(int64_t)concrete.user_id];
+        [os writeInt64:concrete.access_hash];
+        return;
+    }
+    
+    [os writeInt32:(int32_t)0x7f3b18ea];       // inputPeerEmpty
+}

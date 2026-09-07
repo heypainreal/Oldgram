@@ -59,7 +59,7 @@
         _localDocumentId = [aDecoder decodeInt64ForKey:@"localDocumentId"];
         _accessHash = [aDecoder decodeInt64ForKey:@"accessHash"];
         _datacenterId = [aDecoder decodeInt32ForKey:@"datacenterId"];
-        _userId = [aDecoder decodeInt32ForKey:@"userId"];
+        _userId = ([aDecoder containsValueForKey:@"userId64"] ? [aDecoder decodeInt64ForKey:@"userId64"] : [aDecoder decodeInt32ForKey:@"userId"]);
         _date = [aDecoder decodeInt32ForKey:@"date"];
         _mimeType = [aDecoder decodeObjectForKey:@"mimeType"];
         _size = [aDecoder decodeInt32ForKey:@"size"];
@@ -79,7 +79,7 @@
     [aCoder encodeInt64:_localDocumentId forKey:@"localDocumentId"];
     [aCoder encodeInt64:_accessHash forKey:@"accessHash"];
     [aCoder encodeInt32:_datacenterId forKey:@"datacenterId"];
-    [aCoder encodeInt32:_userId forKey:@"userId"];
+    [aCoder encodeInt64:_userId forKey:@"userId64"];
     [aCoder encodeInt32:_date forKey:@"date"];
     [aCoder encodeInt32:_version forKey:@"version"];
     if (_mimeType != nil)

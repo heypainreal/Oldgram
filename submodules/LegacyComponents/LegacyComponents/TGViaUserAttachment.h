@@ -4,9 +4,9 @@
 
 @interface TGViaUserAttachment : TGMediaAttachment <TGMediaAttachmentParser, NSCoding>
 
-@property (nonatomic, readonly) int32_t userId;
+@property (nonatomic, readonly) int64_t userId;
 @property (nonatomic, readonly) NSString *username;
 
-- (instancetype)initWithUserId:(int32_t)userId username:(NSString *)username;
+- (instancetype)initWithUserId:(int64_t)userId username:(NSString *)username;
 
 @end

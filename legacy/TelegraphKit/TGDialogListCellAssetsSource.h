@@ -24,12 +24,12 @@
 - (UIImage *)dialogListDeliveryErrorBadge;
 - (UIImage *)dialogListDeliveryErrorBadgeHighlighted;
 
-- (UIImage *)avatarPlaceholder:(int)uid;
+- (UIImage *)avatarPlaceholder:(int64_t)uid;
 - (UIImage *)avatarPlaceholderGeneric;
 - (UIImage *)authorAvatarPlaceholder;
 - (UIImage *)groupAvatarPlaceholder:(int64_t)conversationId;
 - (UIImage *)groupAvatarPlaceholderGeneric;
-- (UIImage *)smallAvatarPlaceholder:(int)uid;
+- (UIImage *)smallAvatarPlaceholder:(int64_t)uid;
 - (UIImage *)smallAvatarPlaceholderGeneric;
 - (UIImage *)smallGroupAvatarPlaceholder:(int64_t)conversationId;
 - (UIImage *)smallGroupAvatarPlaceholderGeneric;

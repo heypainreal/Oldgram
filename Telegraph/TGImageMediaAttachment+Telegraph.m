@@ -19,7 +19,15 @@
             self.accessHash = concretePhoto.access_hash;
             self.date = concretePhoto.date;
             
-            self.imageInfo = [[TGImageInfo alloc] initWithTelegraphSizesDescription:concretePhoto.sizes];
+            // В схеме 228 у размеров нет описания файла, поэтому адрес строим
+            // из идентификатора фотографии и типа размера.
+            int32_t photoDatacenterId = concretePhoto.dc_id;
+            int64_t photoIdentifier = concretePhoto.n_id;
+            int64_t photoAccessHash = concretePhoto.access_hash;
+            NSData *photoFileReference = concretePhoto.file_reference;
+            self.imageInfo = [[TGImageInfo alloc] initWithTelegraphSizesDescription:concretePhoto.sizes photoFileUrlBuilder:^NSString *(NSString *thumbType) {
+                return TGPhotoFileUrl(photoDatacenterId, photoIdentifier, photoAccessHash, photoFileReference, thumbType);
+            }];
 
             self.hasLocation = false;
             self.hasStickers = concretePhoto.flags & (1 << 0);

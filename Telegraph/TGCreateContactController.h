@@ -24,9 +24,9 @@
 @property (nonatomic, weak) id<TGCreateContactControllerDelegate> delegate;
 
 - (instancetype)init;
-- (instancetype)initWithUid:(int32_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
+- (instancetype)initWithUid:(int64_t)uid firstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
 - (instancetype)initWithFirstName:(NSString *)firstName lastName:(NSString *)lastName phoneNumber:(NSString *)phoneNumber attachment:(TGContactMediaAttachment *)attachment;
-- (instancetype)initWithUid:(int32_t)uid phoneNumber:(NSString *)phoneNumber existingUid:(int32_t)existingUid attachment:(TGContactMediaAttachment *)attachment;
-- (instancetype)initWithUid:(int32_t)uid phoneNumber:(NSString *)phoneNumber existingNativeContactId:(int)existingNativeContactId attachment:(TGContactMediaAttachment *)attachment modal:(bool)modal;
+- (instancetype)initWithUid:(int64_t)uid phoneNumber:(NSString *)phoneNumber existingUid:(int64_t)existingUid attachment:(TGContactMediaAttachment *)attachment;
+- (instancetype)initWithUid:(int64_t)uid phoneNumber:(NSString *)phoneNumber existingNativeContactId:(int)existingNativeContactId attachment:(TGContactMediaAttachment *)attachment modal:(bool)modal;
 
 @end

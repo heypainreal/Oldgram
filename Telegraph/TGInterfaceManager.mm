@@ -233,7 +233,7 @@
         {
             int64_t encryptedConversationId = [TGDatabaseInstance() encryptedConversationIdForPeerId:conversationId];
             int64_t accessHash = [TGDatabaseInstance() encryptedConversationAccessHash:conversationId];
-            int32_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:conversationId];
+            int64_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:conversationId];
             TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:conversationId];
             TGSecretModernConversationCompanion *companion = [[TGSecretModernConversationCompanion alloc] initWithConversation:conversation encryptedConversationId:encryptedConversationId accessHash:accessHash uid:uid activity:[TGTelegraphInstance typingUserActivitiesInConversationFromMainThread:conversationId][@(uid)] mayHaveUnreadMessages:conversationUnreadCount != 0];
             if (atMessage != nil)
@@ -257,7 +257,7 @@
         }
         else
         {
-            TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)conversationId];
+            TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
             if (user.hasExplicitContent) {
                 if (!navigationController)
                     [TGAppDelegateInstance.rootController.dialogListController selectConversationWithId:0];
@@ -271,7 +271,7 @@
             if (conversation == nil) {
                 conversation = [[TGConversation alloc] initWithConversationId:conversationId unreadCount:0 serviceUnreadCount:0];
             }
-            TGPrivateModernConversationCompanion *companion = [[TGPrivateModernConversationCompanion alloc] initWithConversation:conversation activity:[TGTelegraphInstance typingUserActivitiesInConversationFromMainThread:conversationId][@((int)conversationId)] mayHaveUnreadMessages:conversationUnreadCount != 0];
+            TGPrivateModernConversationCompanion *companion = [[TGPrivateModernConversationCompanion alloc] initWithConversation:conversation activity:[TGTelegraphInstance typingUserActivitiesInConversationFromMainThread:conversationId][@(conversationId)] mayHaveUnreadMessages:conversationUnreadCount != 0];
             companion.botStartPayload = performActions[@"botStartPayload"];
             companion.botContextPeerId = performActions[@"contextPeerId"];
             companion.botAutostartPayload = performActions[@"botAutostartPayload"];
@@ -410,7 +410,7 @@
     _conversationControllerPipe.sink(weakController);
 }
 
-- (void)navigateToChannelsFeed:(int32_t)feedId animated:(bool)animated
+- (void)navigateToChannelsFeed:(int64_t)feedId animated:(bool)animated
 {
     TGModernConversationController *conversationController = [self configuredFeedControllerWithId:feedId preview:false];
     conversationController.shouldIgnoreAppearAnimationOnce = !animated;
@@ -434,7 +434,7 @@
     return [self configuredConversationControlerWithId:conversationId performActions:nil preview:true];
 }
 
-- (TGModernConversationController *)configuredPreviewFeedControllerWithId:(int32_t)feedId
+- (TGModernConversationController *)configuredPreviewFeedControllerWithId:(int64_t)feedId
 {
     return [self configuredFeedControllerWithId:feedId preview:true];
 }
@@ -500,7 +500,7 @@
     {
         int64_t encryptedConversationId = [TGDatabaseInstance() encryptedConversationIdForPeerId:conversationId];
         int64_t accessHash = [TGDatabaseInstance() encryptedConversationAccessHash:conversationId];
-        int32_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:conversationId];
+        int64_t uid = [TGDatabaseInstance() encryptedParticipantIdForConversationId:conversationId];
         TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:conversationId];
         if (conversation == nil) {
             conversation = [[TGConversation alloc] initWithConversationId:conversationId unreadCount:0 serviceUnreadCount:0];
@@ -529,7 +529,7 @@
     }
     else
     {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)conversationId];
+        TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)conversationId];
         if (user.hasExplicitContent) {
             [TGAppDelegateInstance.rootController.dialogListController selectConversationWithId:0];
             
@@ -542,7 +542,7 @@
         if (conversation == nil) {
             conversation = [[TGConversation alloc] initWithConversationId:conversationId unreadCount:0 serviceUnreadCount:0];
         }
-        TGPrivateModernConversationCompanion *companion = [[TGPrivateModernConversationCompanion alloc] initWithConversation:conversation activity:[TGTelegraphInstance typingUserActivitiesInConversationFromMainThread:conversationId][@((int)conversationId)] mayHaveUnreadMessages:conversationUnreadCount != 0];
+        TGPrivateModernConversationCompanion *companion = [[TGPrivateModernConversationCompanion alloc] initWithConversation:conversation activity:[TGTelegraphInstance typingUserActivitiesInConversationFromMainThread:conversationId][@(conversationId)] mayHaveUnreadMessages:conversationUnreadCount != 0];
         companion.previewMode = preview;
         companion.botStartPayload = performActions[@"botStartPayload"];
         companion.botAutostartPayload = performActions[@"botAutostartPayload"];
@@ -586,12 +586,12 @@
     [TGAppDelegateInstance.rootController.dialogListController selectConversationWithId:0];
 }
 
-- (void)navigateToProfileOfUser:(int)uid
+- (void)navigateToProfileOfUser:(int64_t)uid
 {
     [self navigateToProfileOfUser:uid preferNativeContactId:0];
 }
 
-- (void)navigateToProfileOfUser:(int)uid shareVCard:(void (^)())shareVCard
+- (void)navigateToProfileOfUser:(int64_t)uid shareVCard:(void (^)())shareVCard
 {
     TGUser *user = [TGDatabaseInstance() loadUser:uid];
     if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot)
@@ -607,22 +607,22 @@
     }
 }
 
-- (void)navigateToProfileOfUser:(int)uid encryptedConversationId:(int64_t)encryptedConversationId
+- (void)navigateToProfileOfUser:(int64_t)uid encryptedConversationId:(int64_t)encryptedConversationId
 {
     [self navigateToProfileOfUser:uid preferNativeContactId:0 encryptedConversationId:encryptedConversationId callMessages:nil];
 }
 
-- (void)navigateToProfileOfUser:(int)uid callMessages:(NSArray *)callMessages
+- (void)navigateToProfileOfUser:(int64_t)uid callMessages:(NSArray *)callMessages
 {
     [self navigateToProfileOfUser:uid preferNativeContactId:0 encryptedConversationId:0 callMessages:callMessages];
 }
 
-- (void)navigateToProfileOfUser:(int)uid preferNativeContactId:(int)preferNativeContactId
+- (void)navigateToProfileOfUser:(int64_t)uid preferNativeContactId:(int)preferNativeContactId
 {
     [self navigateToProfileOfUser:uid preferNativeContactId:preferNativeContactId encryptedConversationId:0 callMessages:nil];
 }
 
-- (void)navigateToProfileOfUser:(int)uid preferNativeContactId:(int)__unused preferNativeContactId encryptedConversationId:(int64_t)encryptedConversationId callMessages:(NSArray *)callMessages
+- (void)navigateToProfileOfUser:(int64_t)uid preferNativeContactId:(int)__unused preferNativeContactId encryptedConversationId:(int64_t)encryptedConversationId callMessages:(NSArray *)callMessages
 {
     void (^pushController)(TGViewController *) = ^(TGViewController *controller)
     {
@@ -807,7 +807,7 @@
         TGConversation *conversation = [TGDatabaseInstance() loadConversationWithId:conversationId];
         
         if (!conversation.isChannel || conversation.isChannelGroup)
-            user = [TGDatabaseInstance() loadUser:(int)message.fromUid];
+            user = [TGDatabaseInstance() loadUser:message.fromUid];
         
         if (conversationId > 0 || conversation != nil)
         {
@@ -880,7 +880,7 @@
                             }
                             else
                             {
-                                TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)peerId];
+                                TGUser *user = [TGDatabaseInstance() loadUser:(int64_t)peerId];
                                 if (user != nil)
                                     peers[@(user.uid)] = user;
                             }
@@ -1000,7 +1000,7 @@
         
         if (currentCallController != nil)
         {
-            TGUser *newUser = [TGDatabaseInstance() loadUser:(int)peerId];
+            TGUser *newUser = [TGDatabaseInstance() loadUser:(int64_t)peerId];
             NSString *message = [NSString stringWithFormat:TGLocalized(@"Call.CallInProgressMessage"), currentCallController.peer.displayName, newUser.displayName];
            
             [TGCustomAlertView presentAlertWithTitle:TGLocalized(@"Call.CallInProgressTitle") message:message cancelButtonTitle:TGLocalized(@"Common.No") okButtonTitle:TGLocalized(@"Common.Yes") completionBlock:^(bool okButtonPressed)

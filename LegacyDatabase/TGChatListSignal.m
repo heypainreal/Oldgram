@@ -142,7 +142,7 @@
         
         if (dialogs.count != 0) {
             Api86_Dialog *lastDialog = dialogs.lastObject;
-            int32_t peerId = 0;
+            int64_t peerId = 0;
             if ([lastDialog.peer isKindOfClass:[Api86_Peer_peerUser class]]) {
                 peerId = [((Api86_Peer_peerUser *)lastDialog.peer).userId intValue];
             } else if ([lastDialog.peer isKindOfClass:[Api86_Peer_peerChat class]]) {

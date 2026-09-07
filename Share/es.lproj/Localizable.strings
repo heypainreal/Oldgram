@@ -17,8 +17,8 @@
 "Share.Select" = "Elegir";
 "Share.Done" = "Hecho";
 
-"Share.AuthTitle" = "Iniciar sesión en Telegram";
-"Share.AuthText" = "Abre Telegram e inicia sesión para compartir.";
+"Share.AuthTitle" = "Iniciar sesión en Oldgram";
+"Share.AuthText" = "Abre Oldgram e inicia sesión para compartir.";
 
 "Share.ChoosePhoneNumber" = "Elige un número de teléfono para compartir";
 

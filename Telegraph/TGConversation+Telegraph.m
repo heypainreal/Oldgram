@@ -41,17 +41,17 @@
                     TLChatParticipant$chatParticipant *concreteParticipant = (TLChatParticipant$chatParticipant *)chatParticipant;
 
                     int64_t inviterUid = concreteParticipant.inviter_id;
-                    [invitedBy setObject:[NSNumber numberWithInt:(int)inviterUid] forKey:[NSNumber numberWithInt:(int)uid]];
-                    [invitedDates setObject:[NSNumber numberWithInt:concreteParticipant.date] forKey:[NSNumber numberWithInt:(int)uid]];
+                    [invitedBy setObject:@(inviterUid) forKey:@(uid)];
+                    [invitedDates setObject:@(concreteParticipant.date) forKey:@(uid)];
                 } else if ([chatParticipant isKindOfClass:[TLChatParticipant$chatParticipantAdmin class]]) {
                     TLChatParticipant$chatParticipantAdmin *concreteParticipant = (TLChatParticipant$chatParticipantAdmin *)chatParticipant;
                     
                     int64_t inviterUid = concreteParticipant.inviter_id;
-                    [invitedBy setObject:[NSNumber numberWithInt:(int)inviterUid] forKey:[NSNumber numberWithInt:(int)uid]];
-                    [invitedDates setObject:[NSNumber numberWithInt:concreteParticipant.date] forKey:[NSNumber numberWithInt:(int)uid]];
+                    [invitedBy setObject:@(inviterUid) forKey:@(uid)];
+                    [invitedDates setObject:@(concreteParticipant.date) forKey:@(uid)];
                     [chatAdminUids addObject:@(uid)];
                 } else if ([chatParticipant isKindOfClass:[TLChatParticipant$chatParticipantCreator class]]) {
-                    self.chatAdminId = (int32_t)uid;
+                    self.chatAdminId = uid;
                 }
             }
             
@@ -67,6 +67,51 @@
 }
 
 @end
+
+
+/// Адреса аватарки пира по описанию фото.
+///
+/// В схеме 228 chatPhoto/userProfilePhoto несут только photo_id и датацентр:
+/// координат файла больше нет, поэтому адрес собираем из пира и photo_id.
+/// Старый формат (photo_small/photo_big) оставлен для данных из локальной базы.
+static void TGApplyChatPhoto(TGConversation *conversation, TLChatPhoto *photo)
+{
+    if (![photo isKindOfClass:[TLChatPhoto$chatPhoto class]])
+    {
+        conversation.chatPhotoSmall = nil;
+        conversation.chatPhotoMedium = nil;
+        conversation.chatPhotoBig = nil;
+        return;
+    }
+
+    TLChatPhoto$chatPhoto *concretePhoto = (TLChatPhoto$chatPhoto *)photo;
+
+    if (concretePhoto.photo_small == nil)
+    {
+        if (concretePhoto.photo_id == 0)
+        {
+            conversation.chatPhotoSmall = nil;
+            conversation.chatPhotoMedium = nil;
+            conversation.chatPhotoBig = nil;
+            return;
+        }
+
+        conversation.chatPhotoSmall = TGPeerPhotoUrl(concretePhoto.dc_id, conversation.conversationId, conversation.accessHash, concretePhoto.photo_id, false);
+        conversation.chatPhotoMedium = nil;
+        conversation.chatPhotoBig = TGPeerPhotoUrl(concretePhoto.dc_id, conversation.conversationId, conversation.accessHash, concretePhoto.photo_id, true);
+        return;
+    }
+
+    conversation.chatPhotoSmall = extractFileUrl(concretePhoto.photo_small);
+    conversation.chatPhotoMedium = nil;
+    conversation.chatPhotoBig = extractFileUrl(concretePhoto.photo_big);
+
+    if ([concretePhoto.photo_small isKindOfClass:[TLFileLocation$fileLocation class]])
+        conversation.chatPhotoFileReferenceSmall = ((TLFileLocation$fileLocation *)concretePhoto.photo_small).file_reference;
+
+    if ([concretePhoto.photo_big isKindOfClass:[TLFileLocation$fileLocation class]])
+        conversation.chatPhotoFileReferenceBig = ((TLFileLocation$fileLocation *)concretePhoto.photo_big).file_reference;
+}
 
 @implementation TGConversation (Telegraph)
 
@@ -87,20 +132,7 @@
             self.leftChat = concreteChat.flags & (1 << 2);
             self.kickedFromChat = concreteChat.flags & (1 << 1);
             
-            TLChatPhoto *photo = concreteChat.photo;
-            if ([photo isKindOfClass:[TLChatPhoto$chatPhoto class]])
-            {
-                TLChatPhoto$chatPhoto *concretePhoto = (TLChatPhoto$chatPhoto *)photo;
-                self.chatPhotoSmall = extractFileUrl(concretePhoto.photo_small);
-                self.chatPhotoMedium = nil;
-                self.chatPhotoBig = extractFileUrl(concretePhoto.photo_big);
-                
-                if ([concretePhoto.photo_small isKindOfClass:[TLFileLocation$fileLocation class]])
-                    self.chatPhotoFileReferenceSmall = ((TLFileLocation$fileLocation *)concretePhoto.photo_small).file_reference;
-                
-                if ([concretePhoto.photo_big isKindOfClass:[TLFileLocation$fileLocation class]])
-                    self.chatPhotoFileReferenceBig = ((TLFileLocation$fileLocation *)concretePhoto.photo_big).file_reference;
-            }
+            TGApplyChatPhoto(self, concreteChat.photo);
             
             self.chatParticipantCount = concreteChat.participants_count;
             self.chatVersion = concreteChat.version;
@@ -127,19 +159,7 @@
             self.isChannel = true;
             self.accessHash = channel.access_hash;
             self.chatTitle = channel.title;
-            if ([channel.photo isKindOfClass:[TLChatPhoto$chatPhoto class]])
-            {
-                TLChatPhoto$chatPhoto *concretePhoto = (TLChatPhoto$chatPhoto *)channel.photo;
-                self.chatPhotoSmall = extractFileUrl(concretePhoto.photo_small);
-                self.chatPhotoMedium = nil;
-                self.chatPhotoBig = extractFileUrl(concretePhoto.photo_big);
-                
-                if ([concretePhoto.photo_small isKindOfClass:[TLFileLocation$fileLocation class]])
-                    self.chatPhotoFileReferenceSmall = ((TLFileLocation$fileLocation *)concretePhoto.photo_small).file_reference;
-                
-                if ([concretePhoto.photo_big isKindOfClass:[TLFileLocation$fileLocation class]])
-                    self.chatPhotoFileReferenceBig = ((TLFileLocation$fileLocation *)concretePhoto.photo_big).file_reference;
-            }
+            TGApplyChatPhoto(self, channel.photo);
             self.chatCreationDate = channel.date;
             self.chatVersion = channel.version;
             self.importantSortKey = TGConversationSortKeyMake(self.kind, channel.date, 0);
@@ -178,6 +198,11 @@
                 self.channelAdminRights = [[TGChannelAdminRights alloc] initWithTL:channel.admin_rights];
             }
             
+            if (channel.banned_rights == nil && channel.default_banned_rights != nil) {
+                // В схеме 228 общие ограничения приходят отдельным полем.
+                self.channelBannedRights = [[TGChannelBannedRights alloc] initWithTL:channel.default_banned_rights];
+            }
+            
             if (channel.banned_rights != nil) {
                 self.channelBannedRights = [[TGChannelBannedRights alloc] initWithTL:channel.banned_rights];
             }
@@ -213,8 +238,8 @@
         
         self.isChat = true;
         
-        int participantUid = 0;
-        int adminUid = 0;
+        int64_t participantUid = 0;
+        int64_t adminUid = 0;
         
         int64_t accessHash = 0;
         int64_t keyFingerprint = 0;
@@ -247,15 +272,15 @@
         
         if (participantUid != 0)
         {
-            int selfUid = TGTelegraphInstance.clientUserId;
+            int64_t selfUid = TGTelegraphInstance.clientUserId;
             if (selfUid == participantUid)
                 participantUid = adminUid;
             
             TGConversationParticipantsData *participantsData = [[TGConversationParticipantsData alloc] init];
-            participantsData.chatParticipantUids = [[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:participantUid], nil];
+            participantsData.chatParticipantUids = @[@(participantUid)];
             participantsData.chatAdminId = adminUid;
-            participantsData.chatInvitedDates = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:0], [[NSNumber alloc] initWithInt:participantUid], nil];
-            participantsData.chatInvitedBy = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:adminUid], [[NSNumber alloc] initWithInt:participantUid], nil];
+            participantsData.chatInvitedDates = @{@(participantUid): @0};
+            participantsData.chatInvitedBy = @{@(participantUid): @(adminUid)};
             self.chatParticipants = participantsData;
         }
         

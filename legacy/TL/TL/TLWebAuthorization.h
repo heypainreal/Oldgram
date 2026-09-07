@@ -4,7 +4,7 @@
 @interface TLWebAuthorization : NSObject <TLObject>
 
 @property (nonatomic) int64_t n_hash;
-@property (nonatomic) int32_t bot_id;
+@property (nonatomic) int64_t bot_id;
 @property (nonatomic, strong) NSString *domain;
 @property (nonatomic, strong) NSString *browser;
 @property (nonatomic, strong) NSString *platform;

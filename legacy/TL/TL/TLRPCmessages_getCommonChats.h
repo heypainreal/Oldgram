@@ -9,7 +9,7 @@
 @interface TLRPCmessages_getCommonChats : TLMetaRpc
 
 @property (nonatomic, retain) TLInputUser *user_id;
-@property (nonatomic) int32_t max_id;
+@property (nonatomic) int64_t max_id;
 @property (nonatomic) int32_t limit;
 
 - (Class)responseClass;

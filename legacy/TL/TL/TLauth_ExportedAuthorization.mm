@@ -49,7 +49,7 @@
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLauth_ExportedAuthorization$auth_exportedAuthorization *object = [[TLauth_ExportedAuthorization$auth_exportedAuthorization alloc] init];
-    object.n_id = metaObject->getInt32((int32_t)0x7a5601fb);
+    object.n_id = metaObject->getInt64((int32_t)0x7a5601fb);
     object.bytes = metaObject->getBytes((int32_t)0xec5ef20a);
     return object;
 }

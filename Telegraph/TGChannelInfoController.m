@@ -1137,7 +1137,7 @@
 {
     if ([action isEqualToString:@"openUser"])
     {
-        int32_t uid = [options[@"uid"] int32Value];
+        int64_t uid = [options[@"uid"] longLongValue];
         if (uid != 0)
         {
             TGUser *user = [TGDatabaseInstance() loadUser:uid];

@@ -49,7 +49,7 @@
 - (void)inputPanelRequestedSendData:(TGModernConversationInputTextPanel *)inputTextPanel data:(NSData *)data;
 - (void)inputPanelRequestedSendSticker:(TGModernConversationInputTextPanel *)inputTextPanel sticker:(TGDocumentMediaAttachment *)sticker;
 - (void)inputPanelRequestedSendGif:(TGModernConversationInputTextPanel *)inputTextPanel document:(TGDocumentMediaAttachment *)document;
-- (void)inputPanelRequestedActivateCommand:(TGModernConversationInputTextPanel *)inputTextPanel button:(TGBotReplyMarkupButton *)button userId:(int32_t)userId messageId:(int32_t)messageId;
+- (void)inputPanelRequestedActivateCommand:(TGModernConversationInputTextPanel *)inputTextPanel button:(TGBotReplyMarkupButton *)button userId:(int64_t)userId messageId:(int32_t)messageId;
 - (void)inputPanelRequestedToggleCommandKeyboard:(TGModernConversationInputTextPanel *)inputTextPanel showCommandKeyboard:(bool)showCommandKeyboard;
 - (void)inputPanelTextChanged:(TGModernConversationInputTextPanel *)inputTextPanel text:(NSString *)text;
 - (void)inputPanelMentionEntered:(TGModernConversationInputTextPanel *)inputTextPanel mention:(NSString *)mention startOfLine:(bool)startOfLine;
@@ -149,7 +149,7 @@
 
 - (void)shakeControls;
 
-- (void)replaceMention:(NSString *)mention username:(bool)username userId:(int32_t)userId;
+- (void)replaceMention:(NSString *)mention username:(bool)username userId:(int64_t)userId;
 - (void)replaceHashtag:(NSString *)hashtag;
 
 - (void)startMention;
@@ -179,7 +179,7 @@
 + (NSString *)linkCandidateInText:(NSString *)text;
 
 + (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField;
-+ (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField username:(bool)username userId:(int32_t)userId;
++ (void)replaceMention:(NSString *)mention inputField:(HPGrowingTextView *)inputField username:(bool)username userId:(int64_t)userId;
 + (void)replaceHashtag:(NSString *)hashtag inputField:(HPGrowingTextView *)inputField;
 
 - (void)animateRecordingIn;

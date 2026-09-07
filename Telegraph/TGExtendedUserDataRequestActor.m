@@ -29,7 +29,7 @@
 
 - (void)execute:(NSDictionary *)__unused options
 {
-    int uid = [[options objectForKey:@"uid"] intValue];
+    int64_t uid = [[options objectForKey:@"uid"] longLongValue];
     if (uid == 0)
     {
         [ActionStageInstance() nodeRetrieveFailed:self.path];
@@ -47,7 +47,7 @@
     {
         if (outdated)
         {
-            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/completeUsers/(%d,force)", uid] options:[[NSDictionary alloc] initWithObjectsAndKeys:[[NSNumber alloc] initWithInt:uid], @"uid", nil] watcher:TGTelegraphInstance];
+            [ActionStageInstance() requestActor:[[NSString alloc] initWithFormat:@"/tg/completeUsers/(%lld,force)", (int64_t)uid] options:[[NSDictionary alloc] initWithObjectsAndKeys:@(uid), @"uid", nil] watcher:TGTelegraphInstance];
         }
         
         NSMutableDictionary *resultDict = [[NSMutableDictionary alloc] init];
@@ -62,7 +62,7 @@
     [TGUserDataRequestBuilder executeUserObjectsUpdate:[NSArray arrayWithObject:user]];
     
     int userLink = extractUserLink(userDesc.link);
-    [TGUserDataRequestBuilder executeUserLinkUpdates:[[NSArray alloc] initWithObjects:[[NSArray alloc] initWithObjects:[[NSNumber alloc] initWithInt:((TLUser$modernUser *)userDesc.link.user).n_id], [[NSNumber alloc] initWithInt:userLink], nil], nil]];
+    [TGUserDataRequestBuilder executeUserLinkUpdates:[[NSArray alloc] initWithObjects:[[NSArray alloc] initWithObjects:@(((TLUser$modernUser *)userDesc.link.user).n_id), [[NSNumber alloc] initWithInt:userLink], nil], nil]];
     
     NSNumber *peerSoundId = nil;
     NSNumber *peerMuteUntil = nil;

@@ -19,8 +19,8 @@
 
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 
 @end
 
@@ -33,8 +33,8 @@
 
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 @property (nonatomic, retain) NSData *g_a;
 
 @end
@@ -43,8 +43,8 @@
 
 @property (nonatomic) int64_t access_hash;
 @property (nonatomic) int32_t date;
-@property (nonatomic) int32_t admin_id;
-@property (nonatomic) int32_t participant_id;
+@property (nonatomic) int64_t admin_id;
+@property (nonatomic) int64_t participant_id;
 @property (nonatomic, retain) NSData *g_a_or_b;
 @property (nonatomic) int64_t key_fingerprint;
 

@@ -242,7 +242,7 @@ static void dispatchOnMessageQueue(dispatch_block_t block, bool synchronous)
                         }
                     }
                     if ([strongSelf isKindOfClass:[TGAdminLogConversationCompanion class]]) {
-                        TGUser *author = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+                        TGUser *author = [TGDatabaseInstance() loadUser:message.fromUid];
                         TGMusicPlayerItem *item = [TGMusicPlayerItem itemWithMessage:message author:author];
                         [TGTelegraphInstance.musicPlayer setPlaylist:[TGGenericPeerPlaylistSignals playlistForItem:item voice:isVoice] initialItemKey:item.key metadata:[strongSelf playlistMetadata:isVoice]];
                     } else {

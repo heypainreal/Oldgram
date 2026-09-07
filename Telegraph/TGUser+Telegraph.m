@@ -19,6 +19,18 @@ void extractUserPhoto(TLUserProfilePhoto *photo, TGUser *target)
     if ([photo isKindOfClass:[TLUserProfilePhoto$userProfilePhoto class]])
     {
         TLUserProfilePhoto$userProfilePhoto *profilePhoto = (TLUserProfilePhoto$userProfilePhoto *)photo;
+        
+        // В схеме 228 у фото профиля нет описания файла — только photo_id и
+        // датацентр, поэтому адрес собираем из пира и идентификатора фото.
+        if (profilePhoto.photo_small == nil && profilePhoto.photo_id != 0)
+        {
+            int32_t datacenterId = profilePhoto.dc_id;
+            target.photoUrlSmall = TGPeerPhotoUrl(datacenterId, target.uid, target.phoneNumberHash, profilePhoto.photo_id, false);
+            target.photoUrlMedium = nil;
+            target.photoUrlBig = TGPeerPhotoUrl(datacenterId, target.uid, target.phoneNumberHash, profilePhoto.photo_id, true);
+            return;
+        }
+        
         target.photoUrlSmall = extractFileUrl(profilePhoto.photo_small);
         target.photoUrlMedium = nil;
         target.photoUrlBig = extractFileUrl(profilePhoto.photo_big);
@@ -139,7 +151,7 @@ int extractUserLinkFromUpdate(TLUpdate$updateContactLink *linkUpdate)
     self = [self init];
     if (self != nil)
     {
-        int32_t uid = 0;
+        int64_t uid = 0;
         NSString *userPhone = nil;
         if ([user isKindOfClass:[TLUser$modernUser class]])
         {

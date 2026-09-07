@@ -21,7 +21,7 @@
 @property (nonatomic) int64_t documentId;
 @property (nonatomic) int64_t accessHash;
 @property (nonatomic) int datacenterId;
-@property (nonatomic) int32_t userId;
+@property (nonatomic) int64_t userId;
 @property (nonatomic) int date;
 @property (nonatomic, strong) NSString *mimeType;
 @property (nonatomic) int size;

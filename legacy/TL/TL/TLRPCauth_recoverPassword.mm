@@ -1,5 +1,7 @@
 #import "TLRPCauth_recoverPassword.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x4ea56e92;
+    return (int32_t)0x37096c70;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xbaf9c23a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -79,6 +81,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeInt32:0];
+    [os writeString:self.code == nil ? @"" : self.code];
+}
 
 @end
 

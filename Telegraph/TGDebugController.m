@@ -156,7 +156,7 @@
             {
                 MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
                 composeController.mailComposeDelegate = strongSelf;
-                [composeController setSubject:@"Telegram Logs"];
+                [composeController setSubject:@"Oldgram Logs"];
                 NSString *versionString = [[NSString alloc] initWithFormat:@"%@ (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
                 [composeController setMessageBody:[NSString stringWithFormat:@"User %d v %@", TGTelegraphInstance.clientUserId, versionString] isHTML:false];
                 

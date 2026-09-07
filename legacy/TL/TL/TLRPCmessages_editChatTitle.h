@@ -7,7 +7,7 @@
 
 @interface TLRPCmessages_editChatTitle : TLMetaRpc
 
-@property (nonatomic) int32_t chat_id;
+@property (nonatomic) int64_t chat_id;
 @property (nonatomic, retain) NSString *title;
 
 - (Class)responseClass;

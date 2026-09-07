@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getWebPage.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,12 +56,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x32ca8f91;
+    return (int32_t)0x8d9692a3;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x24dbf77a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -86,6 +88,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeString:self.url == nil ? @"" : self.url];
+    [os writeInt32:(int32_t)self.n_hash];
+}
 
 @end
 

@@ -2,6 +2,40 @@
 
 #import "TGImageMediaAttachment.h"
 
+/// Идентификаторы пиров в базе лежали 32-битными, а у аккаунтов последних лет
+/// они за int32 не помещаются: служебные сообщения теряли автора, и строка
+/// «X добавил Y» приходила с пустыми именами.
+///
+/// Пишем 64 бита после метки: 32-битного идентификатора, равного -1, не бывает,
+/// поэтому старые записи по-прежнему читаются как раньше.
+static const int32_t TGActionMediaWidePeerIdMarker = -1;
+
+static void TGActionMediaAppendPeerId(NSMutableData *data, int64_t peerId)
+{
+    int32_t marker = TGActionMediaWidePeerIdMarker;
+    [data appendBytes:&marker length:4];
+    [data appendBytes:&peerId length:8];
+}
+
+static int64_t TGActionMediaReadPeerId(NSInputStream *is, int *dataLength)
+{
+    int32_t value = 0;
+    [is read:(uint8_t *)&value maxLength:4];
+    if (dataLength != NULL) {
+        *dataLength -= 4;
+    }
+    if (value != TGActionMediaWidePeerIdMarker) {
+        return value;
+    }
+
+    int64_t wide = 0;
+    [is read:(uint8_t *)&wide maxLength:8];
+    if (dataLength != NULL) {
+        *dataLength -= 8;
+    }
+    return wide;
+}
+
 @implementation TGActionMediaAttachment
 
 - (id)init
@@ -25,20 +59,17 @@
     
     if (actionType == TGMessageActionChatAddMember || actionType == TGMessageActionChatDeleteMember)
     {
-        int uid = [[_actionData objectForKey:@"uid"] intValue];
-        [data appendBytes:&uid length:4];
+        TGActionMediaAppendPeerId(data, [[_actionData objectForKey:@"uid"] longLongValue]);
         NSArray *uids = _actionData[@"uids"];
         int32_t uidsCount = (int32_t)uids.count;
         [data appendBytes:&uidsCount length:4];
         for (NSNumber *nUid in uids) {
-            int32_t listUid = [nUid intValue];
-            [data appendBytes:&listUid length:4];
+            TGActionMediaAppendPeerId(data, [nUid longLongValue]);
         }
     }
     else if (actionType == TGMessageActionJoinedByLink)
     {
-        int uid = [[_actionData objectForKey:@"inviterId"] intValue];
-        [data appendBytes:&uid length:4];
+        TGActionMediaAppendPeerId(data, [[_actionData objectForKey:@"inviterId"] longLongValue]);
     }
     else if (actionType == TGMessageActionChatEditTitle)
     {
@@ -61,8 +92,7 @@
         [data appendBytes:&count length:4];
         for (NSNumber *nUid in uids)
         {
-            int uid = [nUid intValue];
-            [data appendBytes:&uid length:4];
+            TGActionMediaAppendPeerId(data, [nUid longLongValue]);
         }
     }
     else if (actionType == TGMessageActionCreateBroadcastList)
@@ -78,8 +108,7 @@
         [data appendBytes:&count length:4];
         for (NSNumber *nUid in uids)
         {
-            int uid = [nUid intValue];
-            [data appendBytes:&uid length:4];
+            TGActionMediaAppendPeerId(data, [nUid longLongValue]);
         }
     }
     else if (actionType == TGMessageActionChatEditPhoto)
@@ -140,11 +169,9 @@
         uint8_t enabled = [_actionData[@"enabled"] boolValue];
         [data appendBytes:&enabled length:1];
     } else if (actionType == TGMessageActionChannelInviter) {
-        int32_t inviter = [_actionData[@"uid"] intValue];
-        [data appendBytes:&inviter length:4];
+        TGActionMediaAppendPeerId(data, [_actionData[@"uid"] longLongValue]);
     } else if (actionType == TGMessageActionGroupMigratedTo) {
-        int32_t channelId = [_actionData[@"channelId"] intValue];
-        [data appendBytes:&channelId length:4];
+        TGActionMediaAppendPeerId(data, [_actionData[@"channelId"] longLongValue]);
     } else if (actionType == TGMessageActionGroupDeactivated) {
         
     } else if (actionType == TGMessageActionGroupActivated) {
@@ -156,8 +183,7 @@
         [data appendBytes:&length length:4];
         [data appendData:titleData];
         
-        int32_t channelId = [_actionData[@"groupId"] intValue];
-        [data appendBytes:&channelId length:4];
+        TGActionMediaAppendPeerId(data, [_actionData[@"groupId"] longLongValue]);
     } else if (actionType == TGMessageActionPinnedMessage) {
     } else if (actionType == TGMessageActionClearChat) {
     } else if (actionType == TGMessageActionGameScore) {
@@ -218,9 +244,7 @@
     
     if (actionType == TGMessageActionChatAddMember || actionType == TGMessageActionChatDeleteMember)
     {
-        int uid = 0;
-        [is read:(uint8_t *)&uid maxLength:4];
-        dataLength -= 4;
+        int64_t uid = TGActionMediaReadPeerId(is, &dataLength);
         
         NSMutableArray *uids = [[NSMutableArray alloc] init];
         if (dataLength >= 4) {
@@ -229,10 +253,7 @@
             dataLength -= 4;
             
             for (int32_t i = 0; dataLength > 0 && i < uidsCount; i++) {
-                int32_t listUid = 0;
-                [is read:(uint8_t *)&listUid maxLength:4];
-                [uids addObject:@(listUid)];
-                dataLength -= 4;
+                [uids addObject:@(TGActionMediaReadPeerId(is, &dataLength))];
             }
         }
         
@@ -244,9 +265,8 @@
     }
     else if (actionType == TGMessageActionJoinedByLink)
     {
-        int uid = 0;
-        [is read:(uint8_t *)&uid maxLength:4];
-        actionAttachment.actionData = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:uid] forKey:@"inviterId"];
+        int64_t uid = TGActionMediaReadPeerId(is, NULL);
+        actionAttachment.actionData = [NSDictionary dictionaryWithObject:@(uid) forKey:@"inviterId"];
     }
     else if (actionType == TGMessageActionChatEditTitle)
     {
@@ -270,10 +290,9 @@
         NSMutableArray *uids = [[NSMutableArray alloc] initWithCapacity:count];
         for (int i = 0; i < count; i++)
         {
-            int uid = 0;
-            [is read:(uint8_t *)&uid maxLength:4];
+            int64_t uid = TGActionMediaReadPeerId(is, NULL);
             if (uid != 0)
-                [uids addObject:[[NSNumber alloc] initWithInt:uid]];
+                [uids addObject:@(uid)];
         }
         
         actionAttachment.actionData = [[NSDictionary alloc] initWithObjectsAndKeys:(title == nil ? @"" : title), @"title", uids, @"uids", nil];
@@ -291,10 +310,9 @@
         NSMutableArray *uids = [[NSMutableArray alloc] initWithCapacity:count];
         for (int i = 0; i < count; i++)
         {
-            int uid = 0;
-            [is read:(uint8_t *)&uid maxLength:4];
+            int64_t uid = TGActionMediaReadPeerId(is, NULL);
             if (uid != 0)
-                [uids addObject:[[NSNumber alloc] initWithInt:uid]];
+                [uids addObject:@(uid)];
         }
         
         actionAttachment.actionData = [[NSDictionary alloc] initWithObjectsAndKeys:(title == nil ? @"" : title), @"title", uids, @"uids", nil];
@@ -355,12 +373,10 @@
         [is read:(uint8_t *)&enabled maxLength:1];
         actionAttachment.actionData = @{@"enabled": @(enabled != 0)};
     } else if (actionType == TGMessageActionChannelInviter) {
-        int32_t uid = 0;
-        [is read:(uint8_t *)&uid maxLength:4];
+        int64_t uid = TGActionMediaReadPeerId(is, NULL);
         actionAttachment.actionData = @{@"uid": @(uid)};
     } else if (actionType == TGMessageActionGroupMigratedTo) {
-        int32_t channelId = 0;
-        [is read:(uint8_t *)&channelId maxLength:4];
+        int64_t channelId = TGActionMediaReadPeerId(is, NULL);
         actionAttachment.actionData = @{@"channelId": @(channelId)};
     } else if (actionType == TGMessageActionChannelMigratedFrom) {
         int length = 0;
@@ -369,8 +385,7 @@
         [is read:titleBytes maxLength:length];
         NSString *title = [[NSString alloc] initWithBytesNoCopy:titleBytes length:length encoding:NSUTF8StringEncoding freeWhenDone:true];
         
-        int32_t groupId = 0;
-        [is read:(uint8_t *)&groupId maxLength:4];
+        int64_t groupId = TGActionMediaReadPeerId(is, NULL);
         
         actionAttachment.actionData = @{@"groupId": @(groupId), @"title": title};
     } else if (actionType == TGMessageActionPinnedMessage) {

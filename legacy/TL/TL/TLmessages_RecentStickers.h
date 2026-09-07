@@ -16,7 +16,7 @@
 
 @interface TLmessages_RecentStickers$messages_recentStickers : TLmessages_RecentStickers
 
-@property (nonatomic) int32_t n_hash;
+@property (nonatomic) int64_t n_hash;
 @property (nonatomic, retain) NSArray *packs;
 @property (nonatomic, retain) NSArray *stickers;
 @property (nonatomic, retain) NSArray *dates;

@@ -1,4 +1,6 @@
 #import "TLRPCchannels_editBanned.h"
+#import "TLMetaClassStore.h"
+#import "TLInputPeer.h"
 
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
@@ -57,12 +59,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xbfd915cd;
+    return (int32_t)0x96e6cd81;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x987e139a;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -96,6 +98,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    TLSerializeInputUserAsPeer(os, self.user_id);
+    TLMetaClassStore::serializeObject(os, self.banned_rights, true);
+}
 
 @end
 

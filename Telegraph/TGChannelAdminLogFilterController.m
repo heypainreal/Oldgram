@@ -346,7 +346,7 @@ static bool filterIsFull(TGChannelEventFilter filter) {
     }
 }
 
-- (void)toggleUserChecked:(int32_t)userId {
+- (void)toggleUserChecked:(int64_t)userId {
     bool allUsers = _users.count != 0;
     for (TGGroupInfoUserCollectionItem *item in _usersSection.items) {
         if ([item isKindOfClass:[TGGroupInfoUserCollectionItem class]]) {

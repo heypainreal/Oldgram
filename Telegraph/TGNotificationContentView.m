@@ -169,7 +169,7 @@
     }
     else
     {
-        [_avatarView loadUserPlaceholderWithSize:CGSizeMake(44.0f, 44.0f) uid:(int32_t)message.fromUid firstName:user.firstName lastName:user.lastName placeholder:placeholder];
+        [_avatarView loadUserPlaceholderWithSize:CGSizeMake(44.0f, 44.0f) uid:message.fromUid firstName:user.firstName lastName:user.lastName placeholder:placeholder];
     }
 }
 

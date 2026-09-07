@@ -57,7 +57,7 @@
     {
         TGUser *author = nil;
         if (!TGPeerIdIsChannel(message.fromUid)) {
-            author = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+            author = [TGDatabaseInstance() loadUser:message.fromUid];
         }
         TGMusicPlayerItem *item = [TGMusicPlayerItem itemWithMessage:message author:author];
         if (item != nil && item.isVoice == voice)
@@ -151,7 +151,7 @@
                         bool readMention = message.containsUnseenMention;
                         
                         int32_t convType = 0;
-                        int32_t convPeerId = 0;
+                        int64_t convPeerId = 0;
                         if (TGPeerIdIsChannel(message.cid)) {
                             convType = 1;
                             convPeerId = TGChannelIdFromPeerId(message.cid);

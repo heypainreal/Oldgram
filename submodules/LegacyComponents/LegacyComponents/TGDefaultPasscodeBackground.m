@@ -21,7 +21,12 @@
     {
         _size = size;
         
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(8.0f, _size.height), true, 0.0f);
+        // View создаётся с нулевым фреймом, а setFrame: сразу перерисовывает фон:
+        // с iOS 17 нулевой размер контекста — не пустая картинка, а падение по
+        // ассерту, из-за чего приложение вылетало при попытке позвонить.
+        CGFloat gradientHeight = MAX(1.0f, _size.height);
+        
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(8.0f, gradientHeight), true, 0.0f);
         CGContextRef context = UIGraphicsGetCurrentContext();
         
         CGColorRef colors[2] = {
@@ -41,7 +46,7 @@
         
         CGColorSpaceRelease(colorSpace);
         
-        CGContextDrawLinearGradient(context, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, _size.height), 0);
+        CGContextDrawLinearGradient(context, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, gradientHeight), 0);
         CGGradientRelease(gradient);
         
         _backgroundImage = [UIGraphicsGetImageFromCurrentImageContext() resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f) resizingMode:UIImageResizingModeTile];

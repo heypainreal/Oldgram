@@ -24,14 +24,14 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) NSData *a;
 @property (nonatomic, strong, readonly) NSData *gA;
 @property (nonatomic, strong, readonly) id dhConfig;
 @property (nonatomic, readonly) int32_t receiveDate;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId a:(NSData *)a gA:(NSData *)gA dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId a:(NSData *)a gA:(NSData *)gA dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate;
 
 @end
 
@@ -40,14 +40,14 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) NSData *b;
 @property (nonatomic, strong, readonly) NSData *gAHash;
 @property (nonatomic, strong, readonly) id dhConfig;
 @property (nonatomic, readonly) int32_t receiveDate;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId b:(NSData *)b gAHash:(NSData *)gAHash dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId b:(NSData *)b gAHash:(NSData *)gAHash dhConfig:(id)dhConfig receiveDate:(int32_t)receiveDate;
 
 @end
 
@@ -56,12 +56,12 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) NSData *gAHash;
 @property (nonatomic, readonly) bool declined;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gAHash:(NSData *)gAHash declined:(bool)declined;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gAHash:(NSData *)gAHash declined:(bool)declined;
 
 @end
 
@@ -70,14 +70,14 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) id dhConfig;
 @property (nonatomic, strong, readonly) NSData *b;
 @property (nonatomic, strong, readonly) NSData *gB;
 @property (nonatomic, strong, readonly) NSData *gAHash;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId dhConfig:(id)dhConfig b:(NSData *)b gB:(NSData *)gB gAHash:(NSData *)gAHash;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId dhConfig:(id)dhConfig b:(NSData *)b gB:(NSData *)gB gAHash:(NSData *)gAHash;
 
 @end
 
@@ -86,12 +86,12 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) NSData *gA;
 @property (nonatomic, strong, readonly) NSData *gB;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gA:(NSData *)gA gB:(NSData *)gB;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gA:(NSData *)gA gB:(NSData *)gB;
 
 @end
 
@@ -101,14 +101,14 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) NSData *gA;
 @property (nonatomic, readonly) int64_t keyFingerprint;
 @property (nonatomic, strong, readonly) TGCallConnectionDescription *defaultConnection;
 @property (nonatomic, strong, readonly) NSArray<TGCallConnectionDescription *> *alternativeConnections;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId gA:(NSData *)gA keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId gA:(NSData *)gA keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections;
 
 @end
 
@@ -118,14 +118,14 @@
 @property (nonatomic, readonly) int64_t callId;
 @property (nonatomic, readonly) int64_t accessHash;
 @property (nonatomic, readonly) int32_t date;
-@property (nonatomic, readonly) int32_t adminId;
-@property (nonatomic, readonly) int32_t participantId;
+@property (nonatomic, readonly) int64_t adminId;
+@property (nonatomic, readonly) int64_t participantId;
 @property (nonatomic, strong, readonly) NSData *key;
 @property (nonatomic, readonly) int64_t keyFingerprint;
 @property (nonatomic, strong, readonly) TGCallConnectionDescription *defaultConnection;
 @property (nonatomic, strong, readonly) NSArray<TGCallConnectionDescription *> *alternativeConnections;
 
-- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int32_t)adminId participantId:(int32_t)participantId key:(NSData *)key keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections;
+- (instancetype)initWithCallId:(int64_t)callId accessHash:(int64_t)accessHash date:(int32_t)date adminId:(int64_t)adminId participantId:(int64_t)participantId key:(NSData *)key keyFingerprint:(int64_t)keyFingerprint defaultConnection:(TGCallConnectionDescription *)defaultConnection alternativeConnections:(NSArray<TGCallConnectionDescription *> *)alternativeConnections;
 
 @end
 

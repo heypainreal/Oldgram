@@ -11,6 +11,9 @@
         TLPhoto$photo *photo = (TLPhoto$photo *)desc;
         
         NSMutableDictionary *fileReferences = [[NSMutableDictionary alloc] init];
+        // Схема 228 адресует фотографию парой (id, access_hash) — держим ссылку
+        // и под этим ключом, иначе загрузчику нечего было бы обновлять.
+        fileReferences[[NSString stringWithFormat:@"%lld_%lld", photo.n_id, photo.access_hash]] = photo.file_reference;
         for (TLPhotoSize$photoSize *size in photo.sizes)
         {
             if (![size respondsToSelector:@selector(location)])
@@ -37,6 +40,9 @@
         TLPhoto$photo *photo = (TLPhoto$photo *)desc;
         
         NSMutableDictionary *fileReferences = [[NSMutableDictionary alloc] init];
+        // Схема 228 адресует фотографию парой (id, access_hash) — держим ссылку
+        // и под этим ключом, иначе загрузчику нечего было бы обновлять.
+        fileReferences[[NSString stringWithFormat:@"%lld_%lld", photo.n_id, photo.access_hash]] = photo.file_reference;
         for (TLPhotoSize$photoSize *size in photo.sizes)
         {
             if (![size respondsToSelector:@selector(location)])
@@ -63,6 +69,9 @@
         TLPhoto$photo *photo = (TLPhoto$photo *)desc;
         
         NSMutableDictionary *fileReferences = [[NSMutableDictionary alloc] init];
+        // Схема 228 адресует фотографию парой (id, access_hash) — держим ссылку
+        // и под этим ключом, иначе загрузчику нечего было бы обновлять.
+        fileReferences[[NSString stringWithFormat:@"%lld_%lld", photo.n_id, photo.access_hash]] = photo.file_reference;
         for (TLPhotoSize$photoSize *size in photo.sizes)
         {
             if (![size respondsToSelector:@selector(location)])

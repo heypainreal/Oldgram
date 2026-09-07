@@ -156,7 +156,7 @@
     return participantsData;
 }
 
-- (void)addParticipantWithId:(int32_t)uid invitedBy:(int32_t)invitedBy date:(int32_t)date
+- (void)addParticipantWithId:(int64_t)uid invitedBy:(int64_t)invitedBy date:(int32_t)date
 {
     NSMutableArray *chatParticipantUids = [[NSMutableArray alloc] initWithArray:_chatParticipantUids];
     if (![chatParticipantUids containsObject:@(uid)])
@@ -174,7 +174,7 @@
     }
 }
 
-- (void)removeParticipantWithId:(int32_t)uid
+- (void)removeParticipantWithId:(int64_t)uid
 {
     NSMutableArray *chatParticipantUids = [[NSMutableArray alloc] initWithArray:_chatParticipantUids];
     [chatParticipantUids removeObject:@(uid)];
@@ -252,9 +252,15 @@
         ptr += 4;
     }
     
-    int adminId = 0;
-    [data getBytes:&adminId range:NSMakeRange(ptr, 4)];
-    ptr += 4;
+    // Начиная с формата 5 идентификаторы участников 64-битные: у аккаунтов и
+    // ботов они давно вышли за 2^31 и в 32 битах схлопывались друг в друга.
+    int idSize = formatVersion >= 5 ? 8 : 4;
+
+    int64_t adminId = 0;
+    if (ptr + idSize > length)
+        return nil;
+    [data getBytes:&adminId range:NSMakeRange(ptr, idSize)];
+    ptr += idSize;
     
     int count = 0;
     [data getBytes:&count range:NSMakeRange(ptr, 4)];
@@ -272,18 +278,23 @@
             return nil;
         }
         
-        int uid = 0;
-        [data getBytes:&uid range:NSMakeRange(ptr, 4)];
-        ptr += 4;
-        
-        if (ptr + 4 > length)
+        int64_t uid = 0;
+        if (ptr + idSize > length)
         {
             TGLegacyLog(@"***** Invalid participants data");
             return nil;
         }
-        int inviter = 0;
-        [data getBytes:&inviter range:NSMakeRange(ptr, 4)];
-        ptr += 4;
+        [data getBytes:&uid range:NSMakeRange(ptr, idSize)];
+        ptr += idSize;
+        
+        if (ptr + idSize > length)
+        {
+            TGLegacyLog(@"***** Invalid participants data");
+            return nil;
+        }
+        int64_t inviter = 0;
+        [data getBytes:&inviter range:NSMakeRange(ptr, idSize)];
+        ptr += idSize;
         
         if (ptr + 4 > length)
         {
@@ -294,11 +305,11 @@
         [data getBytes:&date range:NSMakeRange(ptr, 4)];
         ptr += 4;
         
-        NSNumber *nUid = [[NSNumber alloc] initWithInt:uid];
+        NSNumber *nUid = @(uid);
         
         [uids addObject:nUid];
-        [invitedBy setObject:[[NSNumber alloc] initWithInt:inviter] forKey:nUid];
-        [invitedDates setObject:[[NSNumber alloc] initWithInt:date] forKey:nUid];
+        [invitedBy setObject:@(inviter) forKey:nUid];
+        [invitedDates setObject:@(date) forKey:nUid];
     }
     
     NSMutableArray *chatParticipantSecretChatPeerIds = [[NSMutableArray alloc] init];
@@ -362,15 +373,17 @@
     }
     
     if (formatVersion >= 4) {
+        if (ptr + 4 > (int)data.length)
+            return participantsData;
         int32_t length = 0;
         [data getBytes:&length range:NSMakeRange(ptr, 4)];
         ptr += 4;
         
         NSMutableSet *chatAdminUids = [[NSMutableSet alloc] init];
         for (int32_t i = 0; i < length; i++) {
-            int32_t item = 0;
-            [data getBytes:&item range:NSMakeRange(ptr, 4)];
-            ptr += 4;
+            int64_t item = 0;
+            [data getBytes:&item range:NSMakeRange(ptr, idSize)];
+            ptr += idSize;
             [chatAdminUids addObject:@(item)];
         }
         
@@ -397,21 +410,22 @@
         int32_t magic = 0xabcdef12;
         [data appendBytes:&magic length:4];
         
-        int32_t formatVersion = 4;
+        int32_t formatVersion = 5;
         [data appendBytes:&formatVersion length:4];
         
         [data appendBytes:&_version length:4];
-        [data appendBytes:&_chatAdminId length:4];
+        int64_t adminId = _chatAdminId;
+        [data appendBytes:&adminId length:8];
         
         int count = (int)_chatParticipantUids.count;
         [data appendBytes:&count length:4];
         for (NSNumber *nUid in _chatParticipantUids)
         {
-            int uid = [nUid intValue];
-            [data appendBytes:&uid length:4];
+            int64_t uid = [nUid longLongValue];
+            [data appendBytes:&uid length:8];
             
-            int invitedBy = [[_chatInvitedBy objectForKey:nUid] intValue];
-            [data appendBytes:&invitedBy length:4];
+            int64_t invitedBy = [[_chatInvitedBy objectForKey:nUid] longLongValue];
+            [data appendBytes:&invitedBy length:8];
             
             int invitedDate = [[_chatInvitedDates objectForKey:nUid] intValue];
             [data appendBytes:&invitedDate length:4];
@@ -443,8 +457,8 @@
         int32_t chatAdminUidsCount = (int32_t)_chatAdminUids.count;
         [data appendBytes:&chatAdminUidsCount length:4];
         for (NSNumber *nUid in _chatAdminUids) {
-            int32_t uid = [nUid intValue];
-            [data appendBytes:&uid length:4];
+            int64_t uid = [nUid longLongValue];
+            [data appendBytes:&uid length:8];
         }
         
         _serializedData = data;
@@ -521,7 +535,9 @@
         _isDeleted = false;
         _encryptedData = nil;
         _isBroadcast = false;
-        _migratedToChannelId = [coder decodeInt32ForCKey:"mtci"];
+        _migratedToChannelId = [coder decodeInt64ForCKey:"mtci64"];
+        if (_migratedToChannelId == 0)
+            _migratedToChannelId = [coder decodeInt32ForCKey:"mtci"];
         _migratedToChannelAccessHash = [coder decodeInt64ForCKey:"mtch"];
         _restrictionReason = [coder decodeStringForCKey:"rr"];
         _pinnedMessageId = [coder decodeInt32ForCKey:"pmi"];
@@ -579,7 +595,7 @@
     [coder encodeInt64:_flags forCKey:"flags"];
     [coder encodeInt32:_leftChat forCKey:"lef"];
     [coder encodeInt32:_kickedFromChat forCKey:"kk"];
-    [coder encodeInt32:_migratedToChannelId forCKey:"mtci"];
+    [coder encodeInt64:_migratedToChannelId forCKey:"mtci64"];
     [coder encodeInt64:_migratedToChannelAccessHash forCKey:"mtch"];
     [coder encodeString:_restrictionReason forCKey:"rr"];
     [coder encodeInt32:_pinnedMessageId forCKey:"pmi"];
@@ -686,7 +702,7 @@
 {
     _outgoing = message.outgoing;
     _messageDate = (int)message.date;
-    _fromUid = (int)message.fromUid;
+    _fromUid = message.fromUid;
     _text = message.text;
     _media = message.mediaAttachments;
     _unread = [self isMessageUnread:message];
@@ -878,7 +894,7 @@
     
     int32_t magic = 0x7acde441;
     [data appendBytes:&magic length:4];
-    int32_t version = 9;
+    int32_t version = 10;
     [data appendBytes:&version length:4];
     
     for (int i = 0; i < 3; i++)
@@ -905,7 +921,7 @@
     
     [data appendBytes:&_flags length:4];
     
-    [data appendBytes:&_migratedToChannelId length:4];
+    [data appendBytes:&_migratedToChannelId length:8];
     [data appendBytes:&_migratedToChannelAccessHash length:8];
     
     [data appendBytes:&_maxReadMessageId length:4];
@@ -991,8 +1007,10 @@
             ptr += 4;
             
             if (version >= 4) {
-                [data getBytes:&_migratedToChannelId range:NSMakeRange(ptr, 4)];
-                ptr += 4;
+                _migratedToChannelId = 0;
+                int migratedIdSize = version >= 10 ? 8 : 4;
+                [data getBytes:&_migratedToChannelId range:NSMakeRange(ptr, migratedIdSize)];
+                ptr += migratedIdSize;
                 [data getBytes:&_migratedToChannelAccessHash range:NSMakeRange(ptr, 8)];
                 ptr += 8;
                 
@@ -1135,6 +1153,11 @@
 }
 
 - (void)setPinnedDate:(int32_t)pinnedDate {
+    // Значения, записанные со старой базой, переносим на новую — иначе уже
+    // закреплённые чаты остались бы ниже свежих сообщений.
+    if (pinnedDate >= TGConversationLegacyPinnedDateBase && pinnedDate < TGConversationPinnedDateBase) {
+        pinnedDate = pinnedDate - TGConversationLegacyPinnedDateBase + TGConversationPinnedDateBase;
+    }
     _pinnedDate = pinnedDate;
     if (pinnedDate > TGConversationSortKeyTimestamp(_variantSortKey)) {
         _variantSortKey = TGConversationSortKeyMake(TGConversationSortKeyKind(_variantSortKey), pinnedDate, TGConversationSortKeyMid(_variantSortKey));

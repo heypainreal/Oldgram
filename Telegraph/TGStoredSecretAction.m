@@ -135,7 +135,7 @@ TGStoredSecretActionWithSeqActionId TGStoredSecretActionWithSeqActionIdMake(TGSt
 
 @implementation TGStoredIncomingEncryptedDataSecretAction
 
-- (instancetype)initWithKeyId:(int64_t)keyId randomId:(int64_t)randomId chatId:(int32_t)chatId date:(int32_t)date encryptedData:(NSData *)encryptedData fileInfo:(TGStoredIncomingMessageFileInfo *)fileInfo
+- (instancetype)initWithKeyId:(int64_t)keyId randomId:(int64_t)randomId chatId:(int64_t)chatId date:(int32_t)date encryptedData:(NSData *)encryptedData fileInfo:(TGStoredIncomingMessageFileInfo *)fileInfo
 {
     self = [super init];
     if (self != nil)

@@ -328,7 +328,7 @@ typedef enum {
         
         for (NSNumber *nUid in activities)
         {
-            TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+            TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
             if (user != nil)
             {
                 if (typingString.length != 0)
@@ -526,7 +526,7 @@ typedef enum {
 
 - (NSDictionary *)userActivityData
 {
-    return @{@"user_id": @(TGTelegraphInstance.clientUserId), @"peer": @{@"type": @"group", @"id": @(-(int32_t)_conversationId)}};
+    return @{@"user_id": @(TGTelegraphInstance.clientUserId), @"peer": @{@"type": @"group", @"id": @(-_conversationId)}};
 }
 
 - (TGApplicationFeaturePeerType)applicationFeaturePeerType
@@ -695,7 +695,7 @@ typedef enum {
             
             for (NSNumber *nUid in _conversation.chatParticipants.chatParticipantUids)
             {
-                TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+                TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
                 if (TGStringCompare(domain, user.userName))
                 {
                     [[TGInterfaceManager instance] navigateToProfileOfUser:user.uid shareVCard:nil];
@@ -717,7 +717,7 @@ typedef enum {
         bool needsUpdate = false;
         for (NSNumber *nUid in _conversation.chatParticipants.chatParticipantUids)
         {
-            int uid = [nUid intValue];
+            int64_t uid = [nUid longLongValue];
             for (TGUser *user in users)
             {
                 if (user.uid == uid)
@@ -820,7 +820,7 @@ typedef enum {
     int count = 0;
     for (NSNumber *nUid in conversation.chatParticipants.chatParticipantUids)
     {
-        TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+        TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
         if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot)
         {
             count++;
@@ -881,7 +881,7 @@ typedef enum {
     {
         for (NSNumber *nUid in _conversation.chatParticipants.chatParticipantUids)
         {
-            TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+            TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
             if (user != nil && (normalizedMention.length == 0 || [[user.userName lowercaseString] hasPrefix:normalizedMention] || [[user.firstName lowercaseString] hasPrefix:normalizedMention] || [[user.lastName lowercaseString] hasPrefix:normalizedMention])) {
                 userDict[@(user.uid)] = user;
             }
@@ -893,7 +893,7 @@ typedef enum {
     TGModernConversationController *controller = self.controller;
     for (TGMessageModernConversationItem *item in [controller _items])
     {
-        int32_t uid = (int32_t)(item->_message.fromUid);
+        int64_t uid = (int32_t)(item->_message.fromUid);
         TGUser *user = userDict[@(uid)];
         if (user != nil && (includeSelf || user.uid != TGTelegraphInstance.clientUserId))
         {
@@ -930,7 +930,7 @@ typedef enum {
                 if (![existingUsers containsObject:nUserId]) {
                     [existingUsers addObject:nUserId];
                     
-                    TGUser *user = [TGDatabaseInstance() loadUser:[nUserId intValue]];
+                    TGUser *user = [TGDatabaseInstance() loadUser:[nUserId longLongValue]];
                     if (user != nil && (normalizedMention.length == 0 || [[user.userName lowercaseString] hasPrefix:normalizedMention] || [[user.firstName lowercaseString] hasPrefix:normalizedMention] || [[user.lastName lowercaseString] hasPrefix:normalizedMention])) {
                         if (user.isContextBot) {
                             [contextBots addObject:user];
@@ -972,7 +972,7 @@ typedef enum {
         NSMutableArray *initialStates = [[NSMutableArray alloc] init];
         for (NSNumber *nUid in _conversation.chatParticipants.chatParticipantUids)
         {
-            TGUser *user = [TGDatabaseInstance() loadUser:[nUid intValue]];
+            TGUser *user = [TGDatabaseInstance() loadUser:[nUid longLongValue]];
             if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot)
             {
                 [botUsers addObject:user];

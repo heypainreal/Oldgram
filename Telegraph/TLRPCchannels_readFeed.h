@@ -4,7 +4,7 @@
 
 @interface TLRPCchannels_readFeed : TLMetaRpc
 
-@property (nonatomic) int32_t feed_id;
+@property (nonatomic) int64_t feed_id;
 @property (nonatomic, strong) TLFeedPosition *max_position;
 
 

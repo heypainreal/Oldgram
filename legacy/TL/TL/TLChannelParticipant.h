@@ -8,7 +8,7 @@
 
 @interface TLChannelParticipant : NSObject <TLObject>
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 
 @end
 
@@ -20,7 +20,7 @@
 
 @interface TLChannelParticipant$channelParticipantSelf : TLChannelParticipant
 
-@property (nonatomic) int32_t inviter_id;
+@property (nonatomic) int64_t inviter_id;
 @property (nonatomic) int32_t date;
 
 @end
@@ -33,8 +33,8 @@
 @interface TLChannelParticipant$channelParticipantAdmin : TLChannelParticipant
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t inviter_id;
-@property (nonatomic) int32_t promoted_by;
+@property (nonatomic) int64_t inviter_id;
+@property (nonatomic) int64_t promoted_by;
 @property (nonatomic) int32_t date;
 @property (nonatomic, retain) TLChannelAdminRights *admin_rights;
 
@@ -43,7 +43,7 @@
 @interface TLChannelParticipant$channelParticipantBanned : TLChannelParticipant
 
 @property (nonatomic) int32_t flags;
-@property (nonatomic) int32_t kicked_by;
+@property (nonatomic) int64_t kicked_by;
 @property (nonatomic) int32_t date;
 @property (nonatomic, retain) TLChannelBannedRights *banned_rights;
 

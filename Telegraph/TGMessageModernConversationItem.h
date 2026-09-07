@@ -12,7 +12,7 @@
 extern "C" {
 #endif
     
-extern int32_t TGMessageModernConversationItemLocalUserId;
+extern int64_t TGMessageModernConversationItemLocalUserId;
 
 #ifdef __cplusplus
 }

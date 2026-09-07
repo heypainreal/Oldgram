@@ -20,7 +20,7 @@
 }
 
 @property (nonatomic) int64_t encryptedConversationId;
-@property (nonatomic) int userId;
+@property (nonatomic) int64_t userId;
 
 @property (nonatomic, strong) UIImageView *keyImageView;
 
@@ -37,7 +37,7 @@
 
 @implementation TGEncryptionKeyViewController
 
-- (id)initWithEncryptedConversationId:(int64_t)encryptedConversationId userId:(int)userId
+- (id)initWithEncryptedConversationId:(int64_t)encryptedConversationId userId:(int64_t)userId
 {
     self = [super init];
     if (self)

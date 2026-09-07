@@ -55,7 +55,7 @@ const CGFloat TGCallAvatarNormalScale = 0.75f;
     TGCallSpeechVolumeView *_volumeView;
     TGLetteredAvatarView *_avatarView;
     
-    int32_t _currentPeerId;
+    int64_t _currentPeerId;
     bool _largeAvatar;
     bool _forcedLargeAvatar;
     

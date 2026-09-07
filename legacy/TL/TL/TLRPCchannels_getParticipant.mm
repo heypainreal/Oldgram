@@ -1,4 +1,6 @@
 #import "TLRPCchannels_getParticipant.h"
+#import "TLMetaClassStore.h"
+#import "TLInputPeer.h"
 
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
@@ -56,12 +58,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x546dd7a6;
+    return (int32_t)0xa0ab6cc6;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x57bff8bc;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -88,6 +90,12 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    TLSerializeInputUserAsPeer(os, self.user_id);
+}
 
 @end
 

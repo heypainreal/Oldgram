@@ -10,7 +10,7 @@
 @property (nonatomic) int32_t flags;
 @property (nonatomic) int32_t offset;
 @property (nonatomic) int32_t limit;
-@property (nonatomic) int32_t n_hash;
+@property (nonatomic) int64_t n_hash;
 
 - (Class)responseClass;
 

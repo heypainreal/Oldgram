@@ -122,7 +122,7 @@ static bool isNativeApplePayProvider(NSString *provider) {
 - (instancetype)initWithMessage:(TGMessage *)message {
     self = [super init];
     if (self != nil) {
-        _bot = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+        _bot = [TGDatabaseInstance() loadUser:message.fromUid];
         
         bool isTest = false;
 

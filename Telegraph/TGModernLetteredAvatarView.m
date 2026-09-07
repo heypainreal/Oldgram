@@ -14,7 +14,7 @@
     NSString *_firstName;
     NSString *_lastName;
     NSString *_title;
-    int32_t _uid;
+    int64_t _uid;
     int64_t _groupId;
 }
 
@@ -50,7 +50,7 @@
     [self loadImage:avatarUri filter:filter placeholder:placeholder forceFade:false];
 }
 
-- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int32_t)uid placeholder:(UIImage *)placeholder
+- (void)setFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int64_t)uid placeholder:(UIImage *)placeholder
 {
     _firstName = firstName;
     _lastName = lastName;

@@ -25,7 +25,8 @@ typedef enum {
 
 @property (nonatomic, strong) ASHandle *actionHandle;
 
-- (void)sendCodeRequestSuccess:(TLauth_SentCode *)sendCode;
+// Ответ приходит в современном слое (ModernTL_auth_sentCode), поэтому здесь id.
+- (void)sendCodeRequestSuccess:(id)sendCode;
 - (void)sendCodeRequestFailed:(TGSendCodeError)errorCode;
 - (void)sendCodeRedirect:(NSInteger)datacenterId;
 

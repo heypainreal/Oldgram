@@ -8,7 +8,7 @@
 @interface TLRPCupload_getCdnFile : TLMetaRpc
 
 @property (nonatomic, retain) NSData *file_token;
-@property (nonatomic) int32_t offset;
+@property (nonatomic) int64_t offset;
 @property (nonatomic) int32_t limit;
 
 - (Class)responseClass;

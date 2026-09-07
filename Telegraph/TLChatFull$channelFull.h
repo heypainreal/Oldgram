@@ -23,7 +23,7 @@
 @property (nonatomic) int32_t read_inbox_max_id;
 @property (nonatomic) int32_t read_outbox_max_id;
 @property (nonatomic) int32_t unread_count;
-@property (nonatomic) int32_t migrated_from_chat_id;
+@property (nonatomic) int64_t migrated_from_chat_id;
 @property (nonatomic) int32_t migrated_from_max_id;
 @property (nonatomic) int32_t pinned_msg_id;
 @property (nonatomic, strong) TLStickerSet *stickerset;

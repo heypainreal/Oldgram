@@ -8,7 +8,7 @@
 
 @interface TLChat : NSObject <TLObject>
 
-@property (nonatomic) int32_t n_id;
+@property (nonatomic) int64_t n_id;
 
 @end
 

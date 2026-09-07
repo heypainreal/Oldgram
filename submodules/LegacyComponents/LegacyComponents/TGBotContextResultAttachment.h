@@ -7,10 +7,10 @@
 
 @interface TGBotContextResultAttachment : TGMediaAttachment <TGMediaAttachmentParser, NSCoding>
 
-@property (nonatomic, readonly) int32_t userId;
+@property (nonatomic, readonly) int64_t userId;
 @property (nonatomic, strong, readonly) NSString *resultId;
 @property (nonatomic, readonly) int64_t queryId;
 
-- (instancetype)initWithUserId:(int32_t)userId resultId:(NSString *)resultId queryId:(int64_t)queryId;
+- (instancetype)initWithUserId:(int64_t)userId resultId:(NSString *)resultId queryId:(int64_t)queryId;
 
 @end

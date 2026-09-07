@@ -1,5 +1,7 @@
 #import "TLRPCmessages_getDocumentByHash.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -54,19 +56,19 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x338e2464;
+    return (int32_t)0xb1f2061f;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x9e7ab9b7;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
 {
     TLRPCmessages_getDocumentByHash$messages_getDocumentByHash *object = [[TLRPCmessages_getDocumentByHash$messages_getDocumentByHash alloc] init];
     object.sha256 = metaObject->getBytes((int32_t)0xcd993c85);
-    object.size = metaObject->getInt32((int32_t)0x5a228f5e);
+    object.size = metaObject->getInt64((int32_t)0x5a228f5e);
     object.mime_type = metaObject->getString((int32_t)0xcd8e470b);
     return object;
 }
@@ -93,6 +95,13 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    [os writeBytes:self.sha256 == nil ? [NSData data] : self.sha256];
+    [os writeInt64:(int64_t)self.size];
+    [os writeString:self.mime_type == nil ? @"" : self.mime_type];
+}
 
 @end
 

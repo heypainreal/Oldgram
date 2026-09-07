@@ -15,7 +15,11 @@
 #define TGChannelDisplayVariantImportant 0
 #define TGChannelDisplayVariantAll 1
 
-#define TGConversationPinnedDateBase 1600000000
+// Закреплённые чаты поднимаются наверх за счёт даты, которая должна быть
+// заведомо больше даты любого сообщения. Прежняя база (сентябрь 2020) давно
+// в прошлом, и закреплённые чаты тонули среди обычных.
+#define TGConversationPinnedDateBase 2000000000
+#define TGConversationLegacyPinnedDateBase 1600000000
 
 typedef enum {
     TGConversationFlagPostAsChannel = (1 << 1),
@@ -126,7 +130,7 @@ typedef enum {
 @property (nonatomic, strong) NSArray *chatParticipantSecretChatPeerIds;
 @property (nonatomic, strong) NSArray *chatParticipantChatPeerIds;
 
-@property (nonatomic) int chatAdminId;
+@property (nonatomic) int64_t chatAdminId;
 
 @property (nonatomic) int version;
 
@@ -135,8 +139,8 @@ typedef enum {
 + (TGConversationParticipantsData *)deserializeData:(NSData *)data;
 - (NSData *)serializedData;
 
-- (void)addParticipantWithId:(int32_t)uid invitedBy:(int32_t)invitedBy date:(int32_t)date;
-- (void)removeParticipantWithId:(int32_t)uid;
+- (void)addParticipantWithId:(int64_t)uid invitedBy:(int64_t)invitedBy date:(int32_t)date;
+- (void)removeParticipantWithId:(int64_t)uid;
 
 - (void)addSecretChatPeerWithId:(int64_t)peerId;
 - (void)removeSecretChatPeerWithId:(int64_t)peerId;
@@ -193,7 +197,7 @@ typedef enum {
 @property (nonatomic) int32_t messageDate;
 @property (nonatomic) int32_t minMessageDate;
 @property (nonatomic) int32_t pinnedDate;
-@property (nonatomic) int fromUid;
+@property (nonatomic) int64_t fromUid;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSArray *media;
 @property (nonatomic, strong) NSData *mediaData;
@@ -248,7 +252,7 @@ typedef enum {
 
 @property (nonatomic) bool isDeactivated;
 @property (nonatomic) bool isMigrated;
-@property (nonatomic) int32_t migratedToChannelId;
+@property (nonatomic) int64_t migratedToChannelId;
 @property (nonatomic) int64_t migratedToChannelAccessHash;
 
 @property (nonatomic) int32_t pinnedMessageId;

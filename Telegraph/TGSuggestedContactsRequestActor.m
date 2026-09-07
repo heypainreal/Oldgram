@@ -48,7 +48,7 @@ static NSDictionary *cachedSuggestions = nil;
     {
         TGUser *user = [[TGUser alloc] initWithTelegraphUserDesc:userDesc];
         if (user.uid != 0)
-            [parsedUsers setObject:user forKey:[[NSNumber alloc] initWithInt:user.uid]];
+            [parsedUsers setObject:user forKey:@(user.uid)];
     }
     
     NSMutableArray *suggestedList = [[NSMutableArray alloc] init];

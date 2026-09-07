@@ -1,5 +1,7 @@
 #import "TLRPCmessages_sendScreenshotNotification.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,25 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0xc97df020;
+    return (int32_t)0xa1405817;
 }
 
+// Разбор через мета-схему больше не подходит: reply_to стал объектом.
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xb97dbb08;
+    return -1;
+}
+
+// messages.sendScreenshotNotification#a1405817 peer:InputPeer reply_to:InputReplyTo random_id:long
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.peer, true);
+    
+    [os writeInt32:(int32_t)0x3bd4b7c2];   // inputReplyToMessage
+    [os writeInt32:0];
+    [os writeInt32:self.reply_to_msg_id];
+    
+    [os writeInt64:self.random_id];
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject

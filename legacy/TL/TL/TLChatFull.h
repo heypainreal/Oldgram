@@ -10,7 +10,7 @@
 
 @interface TLChatFull : NSObject <TLObject>
 
-@property (nonatomic) int32_t n_id;
+@property (nonatomic) int64_t n_id;
 @property (nonatomic, retain) TLChatParticipants *participants;
 @property (nonatomic, retain) TLPhoto *chat_photo;
 @property (nonatomic, retain) TLPeerNotifySettings *notify_settings;

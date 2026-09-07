@@ -296,7 +296,7 @@
             title = conversation.chatTitle;
         }
     } else {
-        TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)message.fromUid];
+        TGUser *user = [TGDatabaseInstance() loadUser:message.fromUid];
         author = user;
         title = user.displayName;
     }

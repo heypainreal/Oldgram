@@ -1,5 +1,7 @@
 #import "TLRPCchannels_inviteToChannel.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -55,12 +57,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x199f3a6c;
+    return (int32_t)0xc9e33d54;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x8dddca46;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -87,6 +89,16 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.users.count];
+    for (id item in self.users) {
+        TLMetaClassStore::serializeObject(os, item, true);
+    }
+}
 
 @end
 

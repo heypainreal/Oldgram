@@ -10,6 +10,8 @@
 
 #import "NSData+GZip.h"
 
+#import <Lottie.h>
+
 #import <WebP/decode.h>
 #import <WebP/encode.h>
 
@@ -107,6 +109,75 @@ static int32_t compressedMagic = 0x456ba41;
     free(targetMemory);
     
     return image;
+}
+
++ (UIImage *)convertFromAnimatedSticker:(NSString *)filePath size:(CGSize)size
+{
+    NSData *fileData = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:nil];
+    if (fileData.length < 2)
+        return nil;
+
+    // .tgs — это gzip поверх JSON, обычный webp-декодер на нём молчал, и вместо
+    // анимированного стикера оставался пустой квадрат.
+    const uint8_t *bytes = (const uint8_t *)fileData.bytes;
+    if (bytes[0] != 0x1f || bytes[1] != 0x8b)
+        return nil;
+
+    NSData *json = [fileData decompressGZip];
+    if (json.length == 0)
+        return nil;
+
+    NSDictionary *animation = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+    if (![animation isKindOfClass:[NSDictionary class]])
+        return nil;
+
+    CGSize targetSize = size;
+    if (targetSize.width < 1.0f || targetSize.height < 1.0f)
+        targetSize = CGSizeMake(256.0f, 256.0f);
+
+    __block UIImage *result = nil;
+    // Lottie строит слои, поэтому рисуем только на главном потоке.
+    void (^render)(void) = ^
+    {
+        LOTAnimationView *animationView = [LOTAnimationView animationFromJSON:animation];
+        if (animationView == nil)
+            return;
+
+        animationView.contentMode = UIViewContentModeScaleAspectFit;
+        animationView.frame = CGRectMake(0.0f, 0.0f, targetSize.width, targetSize.height);
+        animationView.animationProgress = 0.0f;
+        [animationView layoutIfNeeded];
+
+        UIGraphicsBeginImageContextWithOptions(targetSize, false, 1.0f);
+        [animationView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        result = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    };
+
+    if ([NSThread isMainThread])
+    {
+        render();
+    }
+    else
+    {
+        // Рисовать слои Lottie можно только на главном потоке, но глухо ждать
+        // его из рабочего нельзя: если главный в этот момент сам ждёт эту
+        // задачу, приложение зависнет и его снимет сторож. Ждём с ограничением
+        // и в худшем случае возвращаем nil — стикер просто не отрисуется.
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        dispatch_async(dispatch_get_main_queue(), ^
+        {
+            render();
+            dispatch_semaphore_signal(semaphore);
+        });
+        if (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC))) != 0)
+        {
+            // Блок ещё выполняется и допишет result — читать его отсюда нельзя.
+            return nil;
+        }
+    }
+
+    return result;
 }
 
 + (UIImage *)convertFromGZippedData:(NSString *)filePath size:(CGSize)__unused size

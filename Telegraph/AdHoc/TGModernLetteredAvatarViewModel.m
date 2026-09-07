@@ -21,7 +21,7 @@
     NSString *_firstName;
     NSString *_lastName;
     NSString *_title;
-    int32_t _uid;
+    int64_t _uid;
     int64_t _groupId;
 }
 
@@ -105,7 +105,7 @@
     }
 }
 
-- (void)setAvatarFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int32_t)uid
+- (void)setAvatarFirstName:(NSString *)firstName lastName:(NSString *)lastName uid:(int64_t)uid
 {
     _avatarUri = nil;
     _firstName = firstName;

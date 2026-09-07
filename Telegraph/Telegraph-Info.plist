@@ -75,7 +75,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>${TELEGRAM_APP_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -116,7 +116,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>70180</string>
+	<string>70214</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption </key>
@@ -197,6 +197,8 @@
 		<string>remote-notification</string>
 		<string>voip</string>
 	</array>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 	<key>UIFileSharingEnabled</key>
 	<false/>
 	<key>UILaunchImages~ipad</key>
@@ -249,6 +251,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>UIViewGroupOpacity</key>

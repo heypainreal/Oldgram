@@ -6,7 +6,7 @@
 
 @interface TGModernConversationGenericContextResultsAssociatedPanel : TGModernConversationAssociatedInputPanel
 
-@property (nonatomic) int32_t botId;
+@property (nonatomic) int64_t botId;
 @property (nonatomic, weak) TGViewController *controller;
 @property (nonatomic, copy) void (^resultSelected)(TGBotContextResults *results, TGBotContextResult *result);
 @property (nonatomic, copy) void (^activateSwitchPm)(NSString *startParam);

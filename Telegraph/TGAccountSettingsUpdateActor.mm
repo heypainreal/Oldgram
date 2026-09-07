@@ -79,9 +79,9 @@
     NSMutableArray *array = [[NSMutableArray alloc] init];
     for (NSNumber *nUserId in userIds)
     {
-        TGUser *user = [TGDatabaseInstance() loadUser:[nUserId intValue]];
+        TGUser *user = [TGDatabaseInstance() loadUser:[nUserId longLongValue]];
         TLInputUser$inputUser *inputUser = [[TLInputUser$inputUser alloc] init];
-        inputUser.user_id = [nUserId intValue];
+        inputUser.user_id = [nUserId longLongValue];
         inputUser.access_hash = user.phoneNumberHash;
         [array addObject:inputUser];
     }
@@ -374,7 +374,7 @@
 {
     [TGDatabaseInstance() setLocalUserStatusPrivacyRules:_accountSettings.notificationSettings changedLoadedUsers:^(NSArray *users)
     {
-        std::shared_ptr<std::map<int, TGUserPresence> > pMap(new std::map<int, TGUserPresence>());
+        std::shared_ptr<std::map<int64_t, TGUserPresence> > pMap(new std::map<int64_t, TGUserPresence>());
         for (TGUser *user in users)
         {
             pMap->insert(std::pair<int, TGUserPresence>(user.uid, user.presence));

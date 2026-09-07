@@ -11,4 +11,19 @@
 #import <MTProtoKit/MTLogging.h>
 #import "TGCommon.h"
 
+/// Защита от нулевого размера графического контекста.
+///
+/// Код 2018 года свободно создавал контекст под размер вью, которая ещё не
+/// разложена (нулевой фрейм). Раньше это давало пустую картинку, а с iOS 17
+/// приводит к ассерту внутри UIKit и падению — так вылетал звонок. Подставляем
+/// минимальный допустимый размер вместо нулевого.
+NS_INLINE void TGBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
+{
+    CGSize safeSize = CGSizeMake(MAX(size.width, 1.0), MAX(size.height, 1.0));
+    UIGraphicsBeginImageContextWithOptions(safeSize, opaque, scale);
+}
+
+#define UIGraphicsBeginImageContextWithOptions(size, opaque, scale) \
+    TGBeginImageContextWithOptions((size), (opaque), (scale))
+
 #endif

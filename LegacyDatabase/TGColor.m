@@ -17,14 +17,14 @@
 
 @implementation TGColor
 
-static inline int colorIndexForUid(int32_t uid, int32_t myUserId)
+static inline int colorIndexForUid(int64_t uid, int64_t myUserId)
 {
     static const int numColors = 8;
     
     int colorIndex = 0;
     
     char buf[16];
-    snprintf(buf, 16, "%d%d", (int32_t)uid, (int32_t)myUserId);
+    snprintf(buf, 32, "%lld%lld", (long long)uid, (long long)myUserId);
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
     CC_MD5(buf, (CC_LONG)strlen(buf), digest);
     colorIndex = ABS(digest[ABS(uid % 16)]) % numColors;
@@ -72,7 +72,7 @@ static inline int colorIndexForGroupId(int64_t groupId)
     return colors;
 }
 
-+ (UIColor *)colorForUserId:(int32_t)userId myUserId:(int32_t)myUserId
++ (UIColor *)colorForUserId:(int64_t)userId myUserId:(int64_t)myUserId
 {
     NSArray *colors = [self placeholderColors];
     return colors[colorIndexForUid(userId, myUserId) % colors.count];

@@ -349,11 +349,11 @@ static TGFutureAction *futureActionDeserializer(int type)
     TG_SYNCHRONIZED_DEFINE(_unpinnedGroupStickerPacks);
     TG_SYNCHRONIZED_DEFINE(_unpinnedLiveLocations);
     
-    std::unordered_map<int, TGUser *> _userByUid;
+    std::unordered_map<int64_t, TGUser *> _userByUid;
     std::map<int, TGContactBinding *> _contactsByPhoneId;
-    std::map<int, int> _phoneIdByUid;
+    std::map<int64_t, int> _phoneIdByUid;
     std::map<int, int> _importersByPhoneId;
-    std::set<int> _remoteContactUids;
+    std::set<int64_t> _remoteContactUids;
     
     std::map<int, TGPhonebookContact *> _phonebookContacts;
     std::map<int, int> _phoneIdToNativeId;
@@ -572,7 +572,7 @@ static TGFutureAction *futureActionDeserializer(int type)
 
 @property (nonatomic) int nextLocalMid;
 
-@property (nonatomic) int localUserId;
+@property (nonatomic) int64_t localUserId;
 @property (nonatomic, strong) TGNotificationPrivacyAccountSetting *privacySettings;
 @property (nonatomic) bool contactListPreloaded;
 
@@ -2785,7 +2785,7 @@ inline static void storeUserToDatabase(TGDatabase *instance, FMDatabase *databas
     [coder reset];
     [user encodeWithKeyValueCoder:coder];
     
-    [database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:user.uid], user.realFirstName, user.realLastName, user.phonebookFirstName, user.phonebookLastName, user.phoneNumber, [[NSNumber alloc] initWithLongLong:user.phoneNumberHash], [[NSNumber alloc] initWithInt:user.sex], user.photoUrlSmall, user.photoUrlMedium, user.photoUrlBig, [[NSNumber alloc] initWithInt:((int)user.presence.lastSeen)], user.userName == nil ? @"" : user.userName, coder.data];
+    [database executeUpdate:queryFormat, [[NSNumber alloc] initWithLongLong:user.uid], user.realFirstName, user.realLastName, user.phonebookFirstName, user.phonebookLastName, user.phoneNumber, [[NSNumber alloc] initWithLongLong:user.phoneNumberHash], [[NSNumber alloc] initWithInt:user.sex], user.photoUrlSmall, user.photoUrlMedium, user.photoUrlBig, [[NSNumber alloc] initWithInt:((int)user.presence.lastSeen)], user.userName == nil ? @"" : user.userName, coder.data];
 }
 
 inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecoder *coder)
@@ -2799,7 +2799,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     else
         user = [[TGUser alloc] init];
     
-    user.uid = [result intForColumn:@"uid"];
+    user.uid = [result longLongIntForColumn:@"uid"];   // идентификаторы 64-битные
     user.firstName = [result stringForColumn:@"first_name"];
     user.lastName = [result stringForColumn:@"last_name"];
     user.phonebookFirstName = [result stringForColumn:@"local_first_name"];
@@ -2828,7 +2828,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
         {
             _userByUid[user.uid] = user;
             if (user.contactId != 0)
-                _phoneIdByUid.insert(std::pair<int, int>(user.uid, user.contactId));
+                _phoneIdByUid.insert(std::pair<int64_t, int>(user.uid, user.contactId));
         }
     }
     TG_SYNCHRONIZED_END(_userByUid);
@@ -2849,16 +2849,16 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     } synchronous:false];
 }
 
-- (void)storeUsersPresences:(std::map<int, TGUserPresence> *)presenceMap
+- (void)storeUsersPresences:(std::map<int64_t, TGUserPresence> *)presenceMap
 {
     NSMutableArray *usersToStore = nil;
-    std::shared_ptr<std::map<int, TGUserPresence> > unloadedUsersPresenceMap;
+    std::shared_ptr<std::map<int64_t, TGUserPresence> > unloadedUsersPresenceMap;
     
     TG_SYNCHRONIZED_BEGIN(_userByUid);
     {
-        for (std::map<int, TGUserPresence>::iterator it = presenceMap->begin(); it != presenceMap->end(); it++)
+        for (std::map<int64_t, TGUserPresence>::iterator it = presenceMap->begin(); it != presenceMap->end(); it++)
         {
-            std::unordered_map<int, TGUser *>::iterator userIt = _userByUid.find(it->first);
+            std::unordered_map<int64_t, TGUser *>::iterator userIt = _userByUid.find(it->first);
             if (userIt != _userByUid.end())
             {
                 bool lastSeenChanged = userIt->second.presence.lastSeen != it->second.lastSeen;
@@ -2879,9 +2879,9 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
             else
             {
                 if (unloadedUsersPresenceMap == NULL)
-                    unloadedUsersPresenceMap = std::shared_ptr<std::map<int, TGUserPresence> >(new std::map<int, TGUserPresence>());
+                    unloadedUsersPresenceMap = std::shared_ptr<std::map<int64_t, TGUserPresence> >(new std::map<int64_t, TGUserPresence>());
                 
-                unloadedUsersPresenceMap->insert(std::pair<int, TGUserPresence>(it->first, it->second));
+                unloadedUsersPresenceMap->insert(std::pair<int64_t, TGUserPresence>(it->first, it->second));
             }
         }
     }
@@ -2893,9 +2893,9 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
         {
             NSString *queryFormat = [NSString stringWithFormat:@"UPDATE OR IGNORE %@ SET last_seen=? WHERE uid=? LIMIT 1", _usersTableName];
             
-            for (std::map<int, TGUserPresence>::iterator it = unloadedUsersPresenceMap->begin(); it != unloadedUsersPresenceMap->end(); it++)
+            for (std::map<int64_t, TGUserPresence>::iterator it = unloadedUsersPresenceMap->begin(); it != unloadedUsersPresenceMap->end(); it++)
             {
-                [_database executeQuery:queryFormat, [[NSNumber alloc] initWithInt:it->second.lastSeen], [[NSNumber alloc] initWithInt:it->first]];
+                [_database executeQuery:queryFormat, [[NSNumber alloc] initWithInt:it->second.lastSeen], @(it->first)];
             }
         } synchronous:false];
     }
@@ -2917,7 +2917,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     }
 }
 
-- (void)setLocalUserId:(int)localUserId
+- (void)setLocalUserId:(int64_t)localUserId
 {
     [self dispatchOnDatabaseThread:^
     {
@@ -2949,7 +2949,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
         changedLoadedUsers(users);
 }
 
-- (TGUser *)loadUser:(int)uid
+- (TGUser *)loadUser:(int64_t)uid
 {
     __block TGUser *user = nil;
     
@@ -2957,7 +2957,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     {
         //NSTimeInterval currentTime = (CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970 + _timeDifferenceFromUTC);
         
-        std::unordered_map<int, TGUser *>::iterator it = _userByUid.find(uid);
+        std::unordered_map<int64_t, TGUser *>::iterator it = _userByUid.find(uid);
         if (it != _userByUid.end())
         {
             user = [it->second copy];//[[it->second copy] applyPrivacyRules:_privacySettings currentTime:currentTime];
@@ -2967,12 +2967,12 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     
     if (user == nil)
     {
-        __block int32_t localUserId = 0;
+        __block int64_t localUserId = 0;
         [self dispatchOnDatabaseThread:^
         {
             localUserId = _localUserId;
             PSKeyValueDecoder *decoder = [[PSKeyValueDecoder alloc] init];
-             FMResultSet *result = [_database executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE uid=?", _usersTableName], [[NSNumber alloc] initWithInt:uid]];
+             FMResultSet *result = [_database executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE uid=?", _usersTableName], [[NSNumber alloc] initWithLongLong:uid]];
              if ([result next])
              {
                  user = loadUserFromDatabase(result, decoder);
@@ -2988,7 +2988,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
             {
                 _userByUid[user.uid] = user;
                 if (user.contactId != 0)
-                    _phoneIdByUid.insert(std::pair<int, int>(uid, user.contactId));
+                    _phoneIdByUid.insert(std::pair<int64_t, int>(uid, user.contactId));
             }
             TG_SYNCHRONIZED_END(_userByUid);
             
@@ -3022,13 +3022,13 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     return user;
 }
 
-- (int)loadCachedPhoneIdByUid:(int)uid
+- (int)loadCachedPhoneIdByUid:(int64_t)uid
 {
     int contactId = 0;
     
     TG_SYNCHRONIZED_BEGIN(_userByUid);
     {
-        std::map<int, int>::iterator it = _phoneIdByUid.find(uid);
+        std::map<int64_t, int>::iterator it = _phoneIdByUid.find(uid);
         if (it != _phoneIdByUid.end())
             contactId = it->second;
     }
@@ -3037,18 +3037,18 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     return contactId;
 }
 
-- (void)loadCachedUsersWithContactIds:(std::set<int> const &)contactIds resultMap:(std::map<int, TGUser *> &)resultMap
+- (void)loadCachedUsersWithContactIds:(std::set<int64_t> const &)contactIds resultMap:(std::map<int64_t, TGUser *> &)resultMap
 {   
     TG_SYNCHRONIZED_BEGIN(_userByUid);
     {
-        for (std::unordered_map<int, TGUser *>::iterator it = _userByUid.begin(); it != _userByUid.end(); it++)
+        for (std::unordered_map<int64_t, TGUser *>::iterator it = _userByUid.begin(); it != _userByUid.end(); it++)
         {
             if (it->second.phoneNumber.length != 0)
             {
-                std::set<int>::iterator contactIdIt = contactIds.find(it->second.contactId);
+                std::set<int64_t>::const_iterator contactIdIt = contactIds.find(it->second.contactId);
                 if (contactIdIt != contactIds.end())
                 {
-                    resultMap.insert(std::pair<int, TGUser *>(*contactIdIt, it->second));
+                    resultMap.insert(std::pair<int64_t, TGUser *>(*contactIdIt, it->second));
                 }
             }
         }
@@ -3056,23 +3056,23 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     TG_SYNCHRONIZED_END(_userByUid);
 }
 
-- (int)loadUsersOnlineCount:(NSArray *)uids alwaysOnlineUid:(int)alwaysOnlineUid
+- (int)loadUsersOnlineCount:(NSArray *)uids alwaysOnlineUid:(int64_t)alwaysOnlineUid
 {
     int count = 0;
     
-    std::vector<int> unknownUsers;
+    std::vector<int64_t> unknownUsers;
     
     TG_SYNCHRONIZED_BEGIN(_userByUid);
     for (NSNumber *nUid in uids)
     {
-        int uid = [nUid intValue];
+        int64_t uid = [nUid longLongValue];
         if (uid == alwaysOnlineUid)
         {
             count++;
         }
         else
         {
-            std::unordered_map<int, TGUser *>::iterator userIt = _userByUid.find(uid);
+            std::unordered_map<int64_t, TGUser *>::iterator userIt = _userByUid.find(uid);
             if (userIt != _userByUid.end())
             {
                 if (userIt->second.presence.online)
@@ -3095,9 +3095,9 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
             
             PSKeyValueDecoder *decoder = [[PSKeyValueDecoder alloc] init];
             
-            for (std::vector<int>::const_iterator it = unknownUsers.begin(); it != unknownUsers.end(); it++)
+            for (std::vector<int64_t>::const_iterator it = unknownUsers.begin(); it != unknownUsers.end(); it++)
             {
-                FMResultSet *result = [_database executeQuery:queryFormat, [[NSNumber alloc] initWithInt:*it]];
+                FMResultSet *result = [_database executeQuery:queryFormat, [[NSNumber alloc] initWithLongLong:*it]];
                 if ([result next])
                 {
                     TGUser *user = loadUserFromDatabase(result, decoder);
@@ -3134,7 +3134,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
                 _userByUid[user.uid] = user;
                 
                 if (user.contactId != 0)
-                    _phoneIdByUid.insert(std::pair<int, int>(user.uid, user.contactId));
+                    _phoneIdByUid.insert(std::pair<int64_t, int>(user.uid, user.contactId));
             }
             TG_SYNCHRONIZED_END(_userByUid);
          } synchronous:true];
@@ -3145,19 +3145,19 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     return count;
 }
 
-- (std::shared_ptr<std::map<int, TGUser *> >)loadUsers:(std::vector<int> const &)uidList
+- (std::shared_ptr<std::map<int64_t, TGUser *> >)loadUsers:(std::vector<int64_t> const &)uidList
 {
-    std::shared_ptr<std::map<int, TGUser *> > users(new std::map<int, TGUser *>());
+    std::shared_ptr<std::map<int64_t, TGUser *> > users(new std::map<int64_t, TGUser *>());
     
-    std::vector<int> unknownUsers;
+    std::vector<int64_t> unknownUsers;
     
     TG_SYNCHRONIZED_BEGIN(_userByUid);
-    for (std::vector<int>::const_iterator it = uidList.begin(); it != uidList.end(); it++)
+    for (std::vector<int64_t>::const_iterator it = uidList.begin(); it != uidList.end(); it++)
     {
-        std::unordered_map<int, TGUser *>::iterator userIt = _userByUid.find(*it);
+        std::unordered_map<int64_t, TGUser *>::iterator userIt = _userByUid.find(*it);
         if (userIt != _userByUid.end())
         {
-            users->insert(std::pair<int, TGUser *>(*it, userIt->second));
+            users->insert(std::pair<int64_t, TGUser *>(*it, userIt->second));
         }
         else
             unknownUsers.push_back(*it);
@@ -3174,13 +3174,13 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
             
             PSKeyValueDecoder *decoder = [[PSKeyValueDecoder alloc] init];
             
-            for (std::vector<int>::const_iterator it = unknownUsers.begin(); it != unknownUsers.end(); it++)
+            for (std::vector<int64_t>::const_iterator it = unknownUsers.begin(); it != unknownUsers.end(); it++)
             {
                 if (*it == 0) {
                     continue;
                 }
                 
-                FMResultSet *result = [_database executeQuery:queryFormat, [[NSNumber alloc] initWithInt:*it]];
+                FMResultSet *result = [_database executeQuery:queryFormat, [[NSNumber alloc] initWithLongLong:*it]];
                 if ([result next])
                 {
                     TGUser *user = loadUserFromDatabase(result, decoder);
@@ -3215,7 +3215,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
                 _userByUid[user.uid] = user;
                 
                 if (user.contactId != 0)
-                    _phoneIdByUid.insert(std::pair<int, int>(user.uid, user.contactId));
+                    _phoneIdByUid.insert(std::pair<int64_t, int>(user.uid, user.contactId));
             }
             TG_SYNCHRONIZED_END(_userByUid);
         } synchronous:true];
@@ -3224,7 +3224,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     return users;
 }
 
-- (int)loadUserLink:(int)uid outdated:(bool *)outdated
+- (int)loadUserLink:(int64_t)uid outdated:(bool *)outdated
 {
     int link = 0;
     bool foundCached = false;
@@ -3248,7 +3248,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
         
         [self dispatchOnDatabaseThread:^
         {
-            FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT link FROM %@ WHERE pid=?", _userLinksTableName], [[NSNumber alloc] initWithInt:uid]];
+            FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT link FROM %@ WHERE pid=?", _userLinksTableName], [[NSNumber alloc] initWithLongLong:uid]];
             if ([result next])
             {
                 blockLink = [result intForColumn:@"link"];
@@ -3271,7 +3271,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     return link;
 }
 
-- (void)storeUserLink:(int)uid link:(int)link
+- (void)storeUserLink:(int64_t)uid link:(int)link
 {
     TG_SYNCHRONIZED_BEGIN(_userLinks);
     _userLinks[uid] = std::pair<int, int>(link, _userLinksVersion);
@@ -3279,7 +3279,7 @@ inline static TGUser *loadUserFromDatabase(FMResultSet *result, PSKeyValueDecode
     
     [self dispatchOnDatabaseThread:^
     {
-        [_database executeUpdate:[[NSString alloc] initWithFormat:@"INSERT OR REPLACE INTO %@ (pid, link) VALUES (?, ?)", _userLinksTableName], [[NSNumber alloc] initWithInt:uid], [[NSNumber alloc] initWithInt:link]];
+        [_database executeUpdate:[[NSString alloc] initWithFormat:@"INSERT OR REPLACE INTO %@ (pid, link) VALUES (?, ?)", _userLinksTableName], [[NSNumber alloc] initWithLongLong:uid], [[NSNumber alloc] initWithInt:link]];
     } synchronous:false];
 }
 
@@ -3321,7 +3321,7 @@ static void storeConversationToDatabase(TGDatabase *database, TGConversation *co
     if (conversation.unreadMark)
         flags |= 256;
     
-    [database.database executeUpdate:queryFormat, [[NSNumber alloc] initWithLongLong:conversation.conversationId], [[NSNumber alloc] initWithInt:conversation.date], [[NSNumber alloc] initWithInt:conversation.fromUid], conversation.text, conversation.media == nil ? nil :  [TGMessage serializeMediaAttachments:false attachments:conversation.media], [[NSNumber alloc] initWithInt:conversation.unreadCount], [[NSNumber alloc] initWithInt:flags], conversation.chatTitle, [conversation serializeChatPhoto], !conversation.isChat ? nil : [conversation.chatParticipants serializedData], [[NSNumber alloc] initWithInt:conversation.chatParticipantCount], [[NSNumber alloc] initWithInt:conversation.chatVersion], [[NSNumber alloc] initWithInt:conversation.serviceUnreadCount]];
+    [database.database executeUpdate:queryFormat, [[NSNumber alloc] initWithLongLong:conversation.conversationId], [[NSNumber alloc] initWithInt:conversation.date], [[NSNumber alloc] initWithLongLong:conversation.fromUid], conversation.text, conversation.media == nil ? nil :  [TGMessage serializeMediaAttachments:false attachments:conversation.media], [[NSNumber alloc] initWithInt:conversation.unreadCount], [[NSNumber alloc] initWithInt:flags], conversation.chatTitle, [conversation serializeChatPhoto], !conversation.isChat ? nil : [conversation.chatParticipants serializedData], [[NSNumber alloc] initWithInt:conversation.chatParticipantCount], [[NSNumber alloc] initWithInt:conversation.chatVersion], [[NSNumber alloc] initWithInt:conversation.serviceUnreadCount]];
 }
 
 static inline void storeConversationToDatabaseIfNotExists(TGDatabase *database, TGConversation *conversation)
@@ -3348,7 +3348,7 @@ static inline void storeConversationToDatabaseIfNotExists(TGDatabase *database, 
     if (conversation.unreadMark)
         flags |= 256;
     
-    [database.database executeUpdate:queryFormat, [[NSNumber alloc] initWithLongLong:conversation.conversationId], [[NSNumber alloc] initWithInt:conversation.date], [[NSNumber alloc] initWithInt:conversation.fromUid], conversation.text, conversation.media == nil ? nil :  [TGMessage serializeMediaAttachments:false attachments:conversation.media], [[NSNumber alloc] initWithInt:conversation.unreadCount], [[NSNumber alloc] initWithInt:flags], conversation.chatTitle, [conversation serializeChatPhoto], !conversation.isChat ? nil : [conversation.chatParticipants serializedData], [[NSNumber alloc] initWithInt:conversation.chatParticipantCount], [[NSNumber alloc] initWithInt:conversation.chatVersion]];
+    [database.database executeUpdate:queryFormat, [[NSNumber alloc] initWithLongLong:conversation.conversationId], [[NSNumber alloc] initWithInt:conversation.date], [[NSNumber alloc] initWithLongLong:conversation.fromUid], conversation.text, conversation.media == nil ? nil :  [TGMessage serializeMediaAttachments:false attachments:conversation.media], [[NSNumber alloc] initWithInt:conversation.unreadCount], [[NSNumber alloc] initWithInt:flags], conversation.chatTitle, [conversation serializeChatPhoto], !conversation.isChat ? nil : [conversation.chatParticipants serializedData], [[NSNumber alloc] initWithInt:conversation.chatParticipantCount], [[NSNumber alloc] initWithInt:conversation.chatVersion]];
 }
 
 static inline TGConversation *loadConversationFromDatabase(FMResultSet *result)
@@ -3356,7 +3356,7 @@ static inline TGConversation *loadConversationFromDatabase(FMResultSet *result)
     TGConversation *conversation = [[TGConversation alloc] init];
     
     conversation.conversationId = [result longLongIntForColumn:@"cid"];
-    conversation.fromUid = [result intForColumn:@"from_uid"];
+    conversation.fromUid = [result longLongIntForColumn:@"from_uid"];
     conversation.text = [result stringForColumn:@"message"];
     NSData *media = [result dataForColumn:@"media"];
     if (media != nil)
@@ -3694,7 +3694,7 @@ static inline TGConversation *loadConversationFromDatabase(FMResultSet *result)
         
         while ([result next])
         {
-            int64_t conversationId = [result intForColumnIndex:cidIndex];
+            int64_t conversationId = [result longLongIntForColumnIndex:cidIndex];
             FMResultSet *messageResult = [_database executeQuery:messageQuery, [[NSNumber alloc] initWithLongLong:conversationId]];
             if ([messageResult next])
             {
@@ -3718,7 +3718,7 @@ static inline TGConversation *loadConversationFromDatabase(FMResultSet *result)
         
         while ([result next])
         {
-            //__unused int64_t peerId = [result intForColumnIndex:cidIndex];
+            //__unused int64_t peerId = [result longLongIntForColumnIndex:cidIndex];
             totalUnreadCount += [result intForColumnIndex:unreadCountIndex];
         }
     } synchronous:true];
@@ -4044,7 +4044,7 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
     return obj1.second > obj2.second;
 }
 
-- (void)searchDialogs:(NSString *)query ignoreUid:(int)ignoreUid partial:(bool)partial completion:(void (^)(NSDictionary *, bool))completion isCancelled:(bool (^)())isCancelled
+- (void)searchDialogs:(NSString *)query ignoreUid:(int64_t)ignoreUid partial:(bool)partial completion:(void (^)(NSDictionary *, bool))completion isCancelled:(bool (^)())isCancelled
 {
     [self dispatchOnDatabaseThread:^
     {
@@ -4055,7 +4055,7 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
         
         std::vector<std::pair<id, int> > searchResults;
         
-        std::set<int> foundUids;
+        std::set<int64_t> foundUids;
         
         static NSMutableCharacterSet *characterSet = nil;
         static NSCharacterSet *whitespaceCharacterSet = nil;
@@ -4121,8 +4121,8 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
             int participantsIndex = [listResult columnIndexForName:@"participants"];
             int photoIndex = [listResult columnIndexForName:@"chat_photo"];
             
-            std::map<int, std::vector<std::pair<int, TGConversation *> > > userToDateAndConversations;
-            std::vector<int> usersToLoad;
+            std::map<int64_t, std::vector<std::pair<int, TGConversation *> > > userToDateAndConversations;
+            std::vector<int64_t> usersToLoad;
             
             int counter = 0;
             
@@ -4150,7 +4150,7 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
                     TGConversationParticipantsData *participants = [TGConversationParticipantsData deserializeData:participantsData];
                     if (participants.chatParticipantUids.count != 0)
                     {
-                        int uid = [participants.chatParticipantUids[0] intValue];
+                        int64_t uid = [participants.chatParticipantUids[0] longLongValue];
                         TGConversation *conversation = loadConversationFromDatabase(listResult);
                         
                         userToDateAndConversations[uid].push_back(std::pair<int, TGConversation *>(date, conversation));
@@ -4190,8 +4190,8 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
                 }
                 else
                 {
-                    userToDateAndConversations[(int)cid].push_back(std::pair<int, TGConversation *>(date, nil));
-                    usersToLoad.push_back((int)cid);
+                    userToDateAndConversations[cid].push_back(std::pair<int, TGConversation *>(date, nil));
+                    usersToLoad.push_back(cid);
                 }
             }
             
@@ -4206,7 +4206,7 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
             
             if (latinQueryParts.count != 0)
             {
-                std::shared_ptr<std::map<int, TGUser *> > pUsers = [self loadUsers:usersToLoad];
+                std::shared_ptr<std::map<int64_t, TGUser *> > pUsers = [self loadUsers:usersToLoad];
                 bool useCache = pUsers->size() < 1500;
                 
                 for (auto it : *pUsers)
@@ -4314,7 +4314,7 @@ bool searchDialogsResultComparator(const std::pair<id, int> &obj1, const std::pa
                 completion(@{@"chatList": [[NSArray alloc] initWithArray:chatList]}, false);
         }
         
-        std::set<int> *pFoundUids = &foundUids;
+        std::set<int64_t> *pFoundUids = &foundUids;
         [self searchContacts:query ignoreUid:ignoreUid searchPhonebook:false completion:^(NSDictionary *result)
         {
             if ([result objectForKey:@"users"] != nil)
@@ -4381,7 +4381,7 @@ static NSMutableDictionary *transliterationPartsCache()
     return dict;
 }
 
-- (dispatch_block_t)searchContacts:(NSString *)query ignoreUid:(int)ignoreUid searchPhonebook:(bool)searchPhonebook completion:(void (^)(NSDictionary *))completion
+- (dispatch_block_t)searchContacts:(NSString *)query ignoreUid:(int64_t)ignoreUid searchPhonebook:(bool)searchPhonebook completion:(void (^)(NSDictionary *))completion
 {
     return [self searchContacts:query ignoreUid:ignoreUid searchPhonebook:searchPhonebook completion:completion internalIsCancelled:NULL];
 }
@@ -4494,7 +4494,7 @@ static NSMutableDictionary *transliterationPartsCache()
     return usersArray;
 }
 
-- (dispatch_block_t)searchContacts:(NSString *)query ignoreUid:(int)ignoreUid searchPhonebook:(bool)searchPhonebook completion:(void (^)(NSDictionary *))completion internalIsCancelled:(bool (^)())internalIsCancelled
+- (dispatch_block_t)searchContacts:(NSString *)query ignoreUid:(int64_t)ignoreUid searchPhonebook:(bool)searchPhonebook completion:(void (^)(NSDictionary *))completion internalIsCancelled:(bool (^)())internalIsCancelled
 {
     __block bool isCancelled = false;
     
@@ -4555,7 +4555,7 @@ static NSMutableDictionary *transliterationPartsCache()
             startTime = CFAbsoluteTimeGetCurrent();
             NSArray *contactResults = [TGDatabaseInstance() searchPhonebookContacts:query contacts:[self loadPhonebookContacts:false]];
             
-            std::set<int> remoteContactIds;
+            std::set<int64_t> remoteContactIds;
             
             for (TGUser *user in [TGDatabaseInstance() loadContactUsers])
             {
@@ -5725,11 +5725,11 @@ static NSMutableDictionary *transliterationPartsCache()
     
     [self dispatchOnDatabaseThread:^
     {
-        std::vector<int> uids;
+        std::vector<int64_t> uids;
         [self loadRemoteContactUids:uids];
         
-        std::shared_ptr<std::map<int, TGUser *> > userMap = [self loadUsers:uids];
-        for (std::map<int, TGUser *>::iterator it = userMap->begin(); it != userMap->end(); it++)
+        std::shared_ptr<std::map<int64_t, TGUser *> > userMap = [self loadUsers:uids];
+        for (std::map<int64_t, TGUser *>::iterator it = userMap->begin(); it != userMap->end(); it++)
         {
             [users addObject:it->second];
         }
@@ -5738,17 +5738,17 @@ static NSMutableDictionary *transliterationPartsCache()
     return users;
 }
 
-- (void)loadRemoteContactUids:(std::vector<int> &)contactUids
+- (void)loadRemoteContactUids:(std::vector<int64_t> &)contactUids
 {
     [self dispatchOnDatabaseThread:^
     {
-        std::vector<int> uids;
+        std::vector<int64_t> uids;
         
         FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT uid FROM %@", _contactListTableName]];
         int uidIndex = [result columnIndexForName:@"uid"];
         while ([result next])
         {
-            int uid = [result intForColumnIndex:uidIndex];
+            int64_t uid = [result longLongIntForColumnIndex:uidIndex];
             contactUids.push_back(uid);
             uids.push_back(uid);
         }
@@ -5760,19 +5760,19 @@ static NSMutableDictionary *transliterationPartsCache()
     } synchronous:true];
 }
 
-- (void)loadRemoteContactUidsContactIds:(std::map<int, int> &)contactUidsAndIds
+- (void)loadRemoteContactUidsContactIds:(std::map<int, int64_t> &)contactUidsAndIds
 {
     [self dispatchOnDatabaseThread:^
     {
-        std::vector<int> uids;
+        std::vector<int64_t> uids;
         [self loadRemoteContactUids:uids];
         
-        std::shared_ptr<std::map<int, TGUser *> > userMap = [self loadUsers:uids];
-        for (std::map<int, TGUser *>::iterator it = userMap->begin(); it != userMap->end(); it++)
+        std::shared_ptr<std::map<int64_t, TGUser *> > userMap = [self loadUsers:uids];
+        for (std::map<int64_t, TGUser *>::iterator it = userMap->begin(); it != userMap->end(); it++)
         {
             int contactId = it->second.contactId;
             if (contactId != 0)
-                contactUidsAndIds.insert(std::pair<int, int>(contactId, it->first));
+                contactUidsAndIds.insert(std::pair<int, int64_t>(contactId, it->first));
         }
     } synchronous:true];
 }
@@ -5799,14 +5799,14 @@ static NSMutableDictionary *transliterationPartsCache()
             haveContacts = true;
         }
         
-        std::vector<int> v;
+        std::vector<int64_t> v;
         [self loadRemoteContactUids:v];
     } synchronous:true];
     
     return haveContacts;
 }
 
-- (bool)uidIsRemoteContact:(int)uid
+- (bool)uidIsRemoteContact:(int64_t)uid
 {
     bool haveCachedResults = false;
     bool cachedResult = false;
@@ -5823,13 +5823,13 @@ static NSMutableDictionary *transliterationPartsCache()
     __block bool isRemoteContact = false;
     [self dispatchOnDatabaseThread:^
     {
-        FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT uid FROM %@ WHERE uid=?", _contactListTableName], [[NSNumber alloc] initWithInt:uid]];
+        FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT uid FROM %@ WHERE uid=?", _contactListTableName], [[NSNumber alloc] initWithLongLong:uid]];
         if ([result next])
         {
             isRemoteContact = true;
         }
         
-        std::vector<int> v;
+        std::vector<int64_t> v;
         [self loadRemoteContactUids:v];
     } synchronous:true];
     
@@ -5842,7 +5842,7 @@ static NSMutableDictionary *transliterationPartsCache()
     _remoteContactUids.clear();
     for (NSNumber *nUid in uids)
     {
-        _remoteContactUids.insert([nUid intValue]);
+        _remoteContactUids.insert([nUid longLongValue]);
     }
     TG_SYNCHRONIZED_END(_remoteContactUids);
     
@@ -5864,7 +5864,7 @@ static NSMutableDictionary *transliterationPartsCache()
     TG_SYNCHRONIZED_BEGIN(_remoteContactUids);
     for (NSNumber *nUid in uids)
     {
-        _remoteContactUids.insert([nUid intValue]);
+        _remoteContactUids.insert([nUid longLongValue]);
     }
     TG_SYNCHRONIZED_END(_remoteContactUids);
     
@@ -5886,7 +5886,7 @@ static NSMutableDictionary *transliterationPartsCache()
     _remoteContactUids.clear();
     for (NSNumber *nUid in uids)
     {
-        _remoteContactUids.erase([nUid intValue]);
+        _remoteContactUids.erase([nUid longLongValue]);
     }
     TG_SYNCHRONIZED_END(_remoteContactUids);
     
@@ -7134,7 +7134,7 @@ static inline TGMessage *loadMessageFromQueryResult(FMResultSet *result)
             PSKeyValueDecoder *decoder = [[PSKeyValueDecoder alloc] init];
             PSKeyValueEncoder *encoder = [[PSKeyValueEncoder alloc] init];
             
-            int32_t feedId = [self _peerFeedId:peerId].intValue;
+            int64_t feedId = [self _peerFeedId:peerId].intValue;
             for (NSNumber *nId in messageIdToViews.allKeys) {
                 FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT data FROM %@ WHERE cid=? AND mid=?", _channelMessagesTableName], @(peerId), nId];
                 if ([result next]) {
@@ -7806,7 +7806,7 @@ inline TGMessage *loadMessageMediaFromQueryResult(FMResultSet *result, int const
             
             if (mediaData != nil && mediaData.length != 0)
             {
-                [_database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:message.mid], nConversationId, [[NSNumber alloc] initWithInt:(int)message.date], [[NSNumber alloc] initWithInt:(int)message.fromUid], [[NSNumber alloc] initWithInt:mediaType], mediaData, [message serializeContentProperties], message.caption];
+                [_database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:message.mid], nConversationId, [[NSNumber alloc] initWithInt:(int)message.date], [[NSNumber alloc] initWithLongLong:message.fromUid], [[NSNumber alloc] initWithInt:mediaType], mediaData, [message serializeContentProperties], message.caption];
                 
                 if (mediaType == 1)
                     addVideoMid(self, 0, message.mid, videoId, false);
@@ -7881,7 +7881,7 @@ inline TGMessage *loadMessageMediaFromQueryResult(FMResultSet *result, int const
             TGDatabaseAction action;
             [value getValue:&action];
             //TGLog(@"Enqueue action: %d, %lld, %d, %d", action.type, action.subject, action.arg0, action.arg1);
-            [_database executeUpdate:[NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ (action_type, action_subject, arg0, arg1) VALUES (?, ?, ?, ?)", _actionQueueTableName], [[NSNumber alloc] initWithInt:action.type], [[NSNumber alloc] initWithLongLong:action.subject], [[NSNumber alloc] initWithInt:action.arg0], [[NSNumber alloc] initWithInt:action.arg1]];
+            [_database executeUpdate:[NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ (action_type, action_subject, arg0, arg1) VALUES (?, ?, ?, ?)", _actionQueueTableName], [[NSNumber alloc] initWithInt:action.type], [[NSNumber alloc] initWithLongLong:action.subject], [[NSNumber alloc] initWithLongLong:action.arg0], [[NSNumber alloc] initWithLongLong:action.arg1]];
         }
         if (!wasInTransaction) {
             [_database commit];
@@ -7905,7 +7905,7 @@ inline TGMessage *loadMessageMediaFromQueryResult(FMResultSet *result, int const
             [value getValue:&action];
             
             if (requireFullMatch)
-                [_database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:action.type], [[NSNumber alloc] initWithLongLong:action.subject], [[NSNumber alloc] initWithInt:action.arg0]];
+                [_database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:action.type], [[NSNumber alloc] initWithLongLong:action.subject], [[NSNumber alloc] initWithLongLong:action.arg0]];
             else
                 [_database executeUpdate:queryFormat, [[NSNumber alloc] initWithInt:action.type], [[NSNumber alloc] initWithLongLong:action.subject]];
         }
@@ -7932,8 +7932,8 @@ inline TGMessage *loadMessageMediaFromQueryResult(FMResultSet *result, int const
                 TGDatabaseAction action;
                 action.type = (TGDatabaseActionType)[nActionType intValue];
                 action.subject = [result longLongIntForColumnIndex:actionSubjectIndex];
-                action.arg0 = [result intForColumnIndex:arg0Index];
-                action.arg1 = [result intForColumnIndex:arg1Index];
+                action.arg0 = [result longLongIntForColumnIndex:arg0Index];
+                action.arg1 = [result longLongIntForColumnIndex:arg1Index];
                 NSValue *value = [[NSValue alloc] initWithBytes:&action objCType:@encode(TGDatabaseAction)];
                 if (value != nil)
                     [array addObject:value];
@@ -8423,9 +8423,9 @@ static inline TGFutureAction *loadFutureActionFromQueryResult(FMResultSet *resul
     }
 }
 
-- (std::set<int>)filterPeerPhotoNotificationsEnabled:(std::vector<int> const &)uidList
+- (std::set<int64_t>)filterPeerPhotoNotificationsEnabled:(std::vector<int64_t> const &)uidList
 {
-    std::set<int> result;
+    std::set<int64_t> result;
     
     for (auto it : uidList)
     {
@@ -9040,7 +9040,7 @@ static inline TGFutureAction *loadFutureActionFromQueryResult(FMResultSet *resul
     } synchronous:false];
 }
 
-- (void)_filterPeersAreBlockedSync:(std::set<int> *)pSet
+- (void)_filterPeersAreBlockedSync:(std::set<int64_t> *)pSet
 {
     [self dispatchOnDatabaseThread:^
     {
@@ -9795,9 +9795,9 @@ static inline TGFutureAction *loadFutureActionFromQueryResult(FMResultSet *resul
     }
 }
 
-- (int)encryptedParticipantIdForConversationId:(int64_t)conversationId
+- (int64_t)encryptedParticipantIdForConversationId:(int64_t)conversationId
 {
-    int32_t uid = 0;
+    int64_t uid = 0;
     
     TG_SYNCHRONIZED_BEGIN(_encryptedParticipantIds);
     auto it = _encryptedParticipantIds.find(conversationId);
@@ -9892,7 +9892,7 @@ static inline TGFutureAction *loadFutureActionFromQueryResult(FMResultSet *resul
     } synchronous:true];
 }
 
-- (int64_t)activeEncryptedPeerIdForUserId:(int)userId
+- (int64_t)activeEncryptedPeerIdForUserId:(int64_t)userId
 {
     __block int64_t activePeerId = 0;
     
@@ -10905,12 +10905,12 @@ typedef struct {
         NSMutableSet *activeAvatarUrls = [[NSMutableSet alloc] init];
         
         counter = 0;
-        __block int32_t lastUid = INT_MAX;
+        __block int64_t lastUid = INT64_MAX;
         while (true)
         {
             counter++;
             
-            int currentUid = lastUid;
+            int64_t currentUid = lastUid;
             [self dispatchOnDatabaseThread:^
             {
                 FMResultSet *result = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT uid, photo_small, photo_big FROM %@ WHERE uid < ? ORDER BY uid DESC LIMIT 512", _usersTableName], @(lastUid)];
@@ -10919,7 +10919,7 @@ typedef struct {
                 int photoBigIndex = [result columnIndexForName:@"photo_big"];
                 while ([result next])
                 {
-                    int32_t uid = [result intForColumnIndex:uidIndex];
+                    int64_t uid = [result longLongIntForColumnIndex:uidIndex];
                     NSString *photoSmall = [result stringForColumnIndex:photoSmallIndex];
                     NSString *photoBig = [result stringForColumnIndex:photoBigIndex];
                     
@@ -12410,7 +12410,7 @@ typedef struct {
     } synchronous:false];
 }
 
-- (TGBotInfo *)botInfoForUserId:(int32_t)userId
+- (TGBotInfo *)botInfoForUserId:(int64_t)userId
 {
     __block TGBotInfo *botInfo = nil;
     [self dispatchOnDatabaseThread:^
@@ -12426,7 +12426,7 @@ typedef struct {
     return botInfo;
 }
 
-- (void)storeBotInfo:(TGBotInfo *)botInfo forUserId:(int32_t)userId
+- (void)storeBotInfo:(TGBotInfo *)botInfo forUserId:(int64_t)userId
 {
     [self dispatchOnDatabaseThread:^
     {
@@ -12628,7 +12628,7 @@ typedef struct {
     return channels;
 }
 
-- (void)_updateChannelFeedId:(int64_t)peerId feedId:(int32_t)feedId previousFeedId:(int32_t)previousFeedId {
+- (void)_updateChannelFeedId:(int64_t)peerId feedId:(int64_t)feedId previousFeedId:(int32_t)previousFeedId {
     TGFeed *previousFeed = previousFeedId != 0 ? [self loadFeed:previousFeedId] : nil;
     if (previousFeed != nil) {
         NSMutableSet *updatedChannelIds = [previousFeed.channelIds mutableCopy];
@@ -13146,7 +13146,7 @@ typedef struct {
                         [self updateUnreadChannelsCount:1];
                 }
                 
-                int32_t feedId = [self _peerFeedId:peerId].int32Value;
+                int64_t feedId = [self _peerFeedId:peerId].int32Value;
                 if (feedId != 0) {
                     TGFeed *feed = [self loadFeed:feedId];
                     feed.serviceUnreadCount = -1;
@@ -13617,7 +13617,7 @@ typedef struct {
             [[self _channelList] commitUpdatedChannels];
             
             for (TGMessage *markupMessage in replyMarkupMessages) {
-                [self storeBotReplyMarkup:markupMessage.replyMarkup hideMarkupAuthorId:(int32_t)markupMessage.fromUid forPeerId:peerId messageId:markupMessage.mid];
+                [self storeBotReplyMarkup:markupMessage.replyMarkup hideMarkupAuthorId:markupMessage.fromUid forPeerId:peerId messageId:markupMessage.mid];
             }
             
             [dispatchPeerUnseenMentionCounts enumerateKeysAndObjectsUsingBlock:^(NSNumber *nPeerId, NSNumber *nCount, __unused BOOL *stop) {
@@ -13630,7 +13630,7 @@ typedef struct {
             
             if (readMentionIdsInteractively.count != 0) {
                 int32_t convType = 0;
-                int32_t convPeerId = 0;
+                int64_t convPeerId = 0;
                 if (TGPeerIdIsChannel(peerId)) {
                     convType = 1;
                     convPeerId = TGChannelIdFromPeerId(peerId);
@@ -13644,7 +13644,7 @@ typedef struct {
                 [ActionStageInstance() requestActor:@"/tg/service/synchronizeactionqueue/(global)" options:nil watcher:TGTelegraphInstance];
             }
             
-            int32_t feedId = [self _peerFeedId:conversation.conversationId].intValue;
+            int64_t feedId = [self _peerFeedId:conversation.conversationId].intValue;
             if (!skipFeedUpdate && feedId != 0) {
                 [self updateFeeds:nil replace:false];
                 
@@ -13718,7 +13718,7 @@ typedef struct {
         
         [self updateChannelReadState:peerId maxReadId:maxReadId unreadImportantCount:importantUnreadCount unreadUnimportantCount:unimportantUnreadCount unreadMentionsCount:unreadMentionsCount topMessageId:topMessageId];
         
-        int32_t feedId = [self _peerFeedId:peerId].intValue;
+        int64_t feedId = [self _peerFeedId:peerId].intValue;
         if (feedId != 0) {
             [self updateFeeds:nil replace:false];
             
@@ -13834,7 +13834,7 @@ typedef struct {
     } synchronous:false];
 }
 
-- (SSignal *)deleteMessagesInChannel:(int64_t)peerId fromUserId:(int32_t)userId {
+- (SSignal *)deleteMessagesInChannel:(int64_t)peerId fromUserId:(int64_t)userId {
     return [[self modify:^id{
         TGConversation *conversation = [TGDatabaseInstance() _loadChannelConversation:peerId];
         if (conversation.pinnedMessageId != 0) {
@@ -13845,7 +13845,7 @@ typedef struct {
         }
         
         NSArray *messageIds = [self channelMessageIds:peerId withAuthorId:userId];
-        [self addMessagesToChannel:peerId messages:nil deleteMessages:messageIds unimportantGroups:nil addedHoles:nil removedHoles:nil removedUnimportantHoles:nil updatedMessageSortKeys:nil returnGroups:nil keepUnreadCounters:false skipFeedUpdate:false changedMessages:^(NSArray *addedMessages, NSArray *removedMessages, NSDictionary *updatedMessages, NSArray *addedUnimportantHoles, NSArray *removedUnimportantHoles) {
+        [self addMessagesToChannel:peerId messages:nil deleteMessages:messageIds unimportantGroups:nil addedHoles:nil removedHoles:nil removedUnimportantHoles:nil updatedMessageSortKeys:nil returnGroups:false keepUnreadCounters:false skipFeedUpdate:false changedMessages:^(NSArray *addedMessages, NSArray *removedMessages, NSDictionary *updatedMessages, NSArray *addedUnimportantHoles, NSArray *removedUnimportantHoles) {
             NSMutableArray *addedImportantMessages = [[NSMutableArray alloc] init];
             NSMutableArray *addedUnimportantMessages = [[NSMutableArray alloc] init];
             for (TGMessage *message in addedMessages) {
@@ -14413,7 +14413,7 @@ typedef struct {
     }
 }
 
-- (TGFeed *)loadFeed:(int32_t)feedId
+- (TGFeed *)loadFeed:(int64_t)feedId
 {
     __block TGFeed *result = nil;
     [self dispatchOnDatabaseThread:^{
@@ -14446,7 +14446,7 @@ typedef struct {
     return result;
 }
 
-- (void)addMessagesToFeed:(int32_t)feedId messages:(NSArray *)initialMessages deleteMessages:(NSArray *)deleteMessages addedHoles:(NSArray *)addedHoles removedHoles:(NSArray *)removedHoles keepUnreadCounters:(bool)__unused keepUnreadCounters changedMessages:(void (^)(NSArray *addedMessages, NSArray *removedMessages, NSDictionary *updatedMessages))changedMessages
+- (void)addMessagesToFeed:(int64_t)feedId messages:(NSArray *)initialMessages deleteMessages:(NSArray *)deleteMessages addedHoles:(NSArray *)addedHoles removedHoles:(NSArray *)removedHoles keepUnreadCounters:(bool)__unused keepUnreadCounters changedMessages:(void (^)(NSArray *addedMessages, NSArray *removedMessages, NSDictionary *updatedMessages))changedMessages
 {
     int64_t peerId = TGPeerIdFromAdminLogId(feedId);
     [self dispatchOnDatabaseThread:^{
@@ -14946,7 +14946,7 @@ typedef struct {
     }
 }
 
-- (void)updateFeedRead:(int32_t)feedId maxReadPosition:(TGFeedPosition *)maxReadPosition
+- (void)updateFeedRead:(int64_t)feedId maxReadPosition:(TGFeedPosition *)maxReadPosition
 {
     [self dispatchOnDatabaseThread:^{
         TGFeed *feed = [self loadFeed:feedId];
@@ -15112,7 +15112,7 @@ typedef struct {
 }
 
 - (TGMessageSortKey)_knownFeedEarlierMessageSortKey:(int64_t)peerId {
-    int32_t feedId = TGAdminLogIdFromPeerId(peerId);
+    int64_t feedId = TGAdminLogIdFromPeerId(peerId);
     TGMessageSortKey sortKey = TGMessageSortKeyLowerBound(peerId, TGMessageSpaceImportant);
     
     FMResultSet *messageResult = [_database executeQuery:[[NSString alloc] initWithFormat:@"SELECT sort_key FROM %@ WHERE fid=? ORDER BY sort_key DESC LIMIT 1", _feedMessagesTableName], @(feedId)];
@@ -15844,7 +15844,7 @@ static bool checkMember(TGCachedConversationData *data) {
                 } else if (TGPeerIdIsGroup(conversation.conversationId)) {
                     [indexPeers addObject:conversation];
                 } else {
-                    TGUser *user = [TGDatabaseInstance() loadUser:(int32_t)conversation.conversationId];
+                    TGUser *user = [TGDatabaseInstance() loadUser:conversation.conversationId];
                     if (user != nil) {
                         [indexPeers addObject:user];
                     }
@@ -16878,7 +16878,7 @@ static bool checkMember(TGCachedConversationData *data) {
             if (rating > FLT_EPSILON && peer.rating < rating)
                 continue;
             
-            TGUser *user = [self loadUser:(int)peer.peerId];
+            TGUser *user = [self loadUser:peer.peerId];
             if (user != nil) {
                 [result addObject:user];
             }
@@ -16983,7 +16983,7 @@ static bool checkMember(TGCachedConversationData *data) {
             int64_t peerId = [nPeerId longLongValue];
             TGPeerRatingCategory category = TGPeerRatingCategoryNone;
             if (TGPeerIdIsUser(peerId)) {
-                TGUser *user = [self loadUser:(int)peerId];
+                TGUser *user = [self loadUser:(int64_t)peerId];
                 if (user != nil) {
                     if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot) {
                         category = TGPeerRatingCategoryBots;
@@ -17259,7 +17259,7 @@ static bool checkMember(TGCachedConversationData *data) {
             isBot = IsBotNever;
             scheduleSelfDestructionForMessagesEarlierThanDate = conversation.maxReadDate;
         } else if (TGPeerIdIsUser([nPeerId longLongValue])) {
-            TGUser *user = [self loadUser:(int)[nPeerId longLongValue]];
+            TGUser *user = [self loadUser:[nPeerId longLongValue]];
             if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot) {
                 isBot = IsBotAlways;
             } else {
@@ -17293,7 +17293,7 @@ static bool checkMember(TGCachedConversationData *data) {
                     case IsBotUnknown:
                         NSNumber *cachedIsBot = userIsBot[@(message.fromUid)];
                         if (cachedIsBot == nil) {
-                            TGUser *user = [self loadUser:(int)message.fromUid];
+                            TGUser *user = [self loadUser:message.fromUid];
                             if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot) {
                                 currentIsBot = true;
                             } else {
@@ -17313,12 +17313,12 @@ static bool checkMember(TGCachedConversationData *data) {
             }
             
             if (message.actionInfo.actionType == TGMessageActionChatDeleteMember) {
-                int32_t deletedUserId = [message.actionInfo.actionData[@"uid"] intValue];
+                int64_t deletedUserId = [message.actionInfo.actionData[@"uid"] longLongValue];
                 
                 bool currentIsBot = false;
                 NSNumber *cachedIsBot = userIsBot[@(deletedUserId)];
                 if (cachedIsBot == nil) {
-                    TGUser *user = [self loadUser:(int)deletedUserId];
+                    TGUser *user = [self loadUser:deletedUserId];
                     if (user.kind == TGUserKindBot || user.kind == TGUserKindSmartBot) {
                         currentIsBot = true;
                     } else {
@@ -17415,7 +17415,7 @@ static bool checkMember(TGCachedConversationData *data) {
             [_database executeUpdate:insertQuery, @(message.mid), @(message.cid), @(currentLifetime), message.text, [message serializeMediaAttachments:false], @(message.fromUid), @(message.toUid), @(message.outgoing ? 1 : 0), nil, @((int)message.deliveryState), @((int)message.date), @(message.flags), @(message.seqIn), @(message.seqOut), [message serializeContentProperties]];
             
             if (mediaData != nil && mediaData.length != 0 && !hasSecretMedia && message.date != INT32_MAX) {
-                [_database executeUpdate:mediaInsertQuery, @(message.mid), @(message.cid), @((int)message.date), @((int)message.fromUid), @(mediaType), mediaData, [message serializeContentProperties], message.caption];
+                [_database executeUpdate:mediaInsertQuery, @(message.mid), @(message.cid), @((int)message.date), @(message.fromUid), @(mediaType), mediaData, [message serializeContentProperties], message.caption];
             }
             
             if (message.local && message.deliveryState == TGMessageDeliveryStatePending) {
@@ -17449,7 +17449,7 @@ static bool checkMember(TGCachedConversationData *data) {
         [self cacheMediaForPeerId:[nPeerId longLongValue] messages:messages];
         
         if (lastIncomingMessageWithMarkup != nil) {
-            if ([self _storeBotReplyMarkup:lastIncomingMessageWithMarkup.replyMarkup hideMarkupAuthorId:(int32_t)lastIncomingMessageWithMarkup.fromUid forPeerId:[nPeerId longLongValue] messageId:lastIncomingMessageWithMarkup.mid]) {
+            if ([self _storeBotReplyMarkup:lastIncomingMessageWithMarkup.replyMarkup hideMarkupAuthorId:lastIncomingMessageWithMarkup.fromUid forPeerId:[nPeerId longLongValue] messageId:lastIncomingMessageWithMarkup.mid]) {
                 updatedBotReplyMarkups[nPeerId] = (id)(lastIncomingMessageWithMarkup.replyMarkup == nil ? [NSNull null] : lastIncomingMessageWithMarkup.replyMarkup);
             }
         }
@@ -18272,7 +18272,7 @@ static bool checkMember(TGCachedConversationData *data) {
     for (TGReadPeerMessagesRequest *request in requests) {
         int64_t peerId = request.peerId;
         if (TGPeerIdIsAdminLog(peerId)) {
-            int32_t feedId = TGAdminLogIdFromPeerId(peerId);
+            int64_t feedId = TGAdminLogIdFromPeerId(peerId);
             TGFeed *feed = feeds[@(feedId)];
             if (feed != nil) {
                 int unreadCount = feed.serviceUnreadCount != -1 ? feed.serviceUnreadCount : feed.unreadCount;
@@ -18481,15 +18481,15 @@ static bool checkMember(TGCachedConversationData *data) {
 }
 
 - (void)transactionReadMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> *)readMessageContentsInteractive {
-    [self transactionAddMessages:nil notifyAddedMessages:false removeMessages:nil updateMessages:nil updatePeerDrafts:nil removeMessagesInteractive:nil keepDates:false removeMessagesInteractiveForEveryone:false updateConversationDatas:nil applyMaxIncomingReadIds:nil applyMaxOutgoingReadIds:nil applyMaxOutgoingReadDates:nil applyUnreadMarks:nil readHistoryForPeerIds:nil resetPeerReadStates:nil resetPeerUnseenMentionsStates:nil clearConversationsWithPeerIds:nil clearConversationsInteractive:false removeConversationsWithPeerIds:nil updatePinnedConversations:nil synchronizePinnedConversations:nil forceReplacePinnedConversations:nil readMessageContentsInteractive:readMessageContentsInteractive deleteEarlierHistory:nil updateFeededChannels:nil newlyJoinedFeedId:nil synchronizeFeededChannels:false calculateUnreadChats:false];
+    [self transactionAddMessages:nil notifyAddedMessages:false removeMessages:nil updateMessages:nil updatePeerDrafts:nil removeMessagesInteractive:nil keepDates:false removeMessagesInteractiveForEveryone:false updateConversationDatas:nil applyMaxIncomingReadIds:nil applyMaxOutgoingReadIds:nil applyMaxOutgoingReadDates:nil applyUnreadMarks:nil readHistoryForPeerIds:nil resetPeerReadStates:nil resetPeerUnseenMentionsStates:nil clearConversationsWithPeerIds:nil clearConversationsInteractive:false removeConversationsWithPeerIds:nil updatePinnedConversations:nil synchronizePinnedConversations:false forceReplacePinnedConversations:false readMessageContentsInteractive:readMessageContentsInteractive deleteEarlierHistory:nil updateFeededChannels:nil newlyJoinedFeedId:nil synchronizeFeededChannels:false calculateUnreadChats:false];
 }
 
 - (void)transactionUpdateFeededChannels:(NSDictionary<NSNumber *,NSSet<NSNumber *> *> *)feededChannels newlyJoinedFeedId:(int32_t)newlyJoinedFeedId synchronizeFeededChannels:(bool)synchronizeFeededChannels {
-    [self transactionAddMessages:nil notifyAddedMessages:false removeMessages:nil updateMessages:nil updatePeerDrafts:nil removeMessagesInteractive:nil keepDates:false removeMessagesInteractiveForEveryone:false updateConversationDatas:nil applyMaxIncomingReadIds:nil applyMaxOutgoingReadIds:nil applyMaxOutgoingReadDates:nil applyUnreadMarks:nil readHistoryForPeerIds:nil resetPeerReadStates:nil resetPeerUnseenMentionsStates:nil clearConversationsWithPeerIds:nil clearConversationsInteractive:false removeConversationsWithPeerIds:nil updatePinnedConversations:nil synchronizePinnedConversations:nil forceReplacePinnedConversations:nil readMessageContentsInteractive:nil deleteEarlierHistory:nil updateFeededChannels:feededChannels newlyJoinedFeedId:@(newlyJoinedFeedId) synchronizeFeededChannels:synchronizeFeededChannels calculateUnreadChats:false];
+    [self transactionAddMessages:nil notifyAddedMessages:false removeMessages:nil updateMessages:nil updatePeerDrafts:nil removeMessagesInteractive:nil keepDates:false removeMessagesInteractiveForEveryone:false updateConversationDatas:nil applyMaxIncomingReadIds:nil applyMaxOutgoingReadIds:nil applyMaxOutgoingReadDates:nil applyUnreadMarks:nil readHistoryForPeerIds:nil resetPeerReadStates:nil resetPeerUnseenMentionsStates:nil clearConversationsWithPeerIds:nil clearConversationsInteractive:false removeConversationsWithPeerIds:nil updatePinnedConversations:nil synchronizePinnedConversations:false forceReplacePinnedConversations:false readMessageContentsInteractive:nil deleteEarlierHistory:nil updateFeededChannels:feededChannels newlyJoinedFeedId:@(newlyJoinedFeedId) synchronizeFeededChannels:synchronizeFeededChannels calculateUnreadChats:false];
 }
 
 - (void)transactionCalculateUnreadChats {
-    [self transactionAddMessages:nil notifyAddedMessages:false removeMessages:nil updateMessages:nil updatePeerDrafts:nil removeMessagesInteractive:nil keepDates:false removeMessagesInteractiveForEveryone:false updateConversationDatas:nil applyMaxIncomingReadIds:nil applyMaxOutgoingReadIds:nil applyMaxOutgoingReadDates:nil applyUnreadMarks:nil readHistoryForPeerIds:nil resetPeerReadStates:nil resetPeerUnseenMentionsStates:nil clearConversationsWithPeerIds:nil clearConversationsInteractive:false removeConversationsWithPeerIds:nil updatePinnedConversations:nil synchronizePinnedConversations:nil forceReplacePinnedConversations:nil readMessageContentsInteractive:nil deleteEarlierHistory:nil updateFeededChannels:nil newlyJoinedFeedId:nil synchronizeFeededChannels:false calculateUnreadChats:true];
+    [self transactionAddMessages:nil notifyAddedMessages:false removeMessages:nil updateMessages:nil updatePeerDrafts:nil removeMessagesInteractive:nil keepDates:false removeMessagesInteractiveForEveryone:false updateConversationDatas:nil applyMaxIncomingReadIds:nil applyMaxOutgoingReadIds:nil applyMaxOutgoingReadDates:nil applyUnreadMarks:nil readHistoryForPeerIds:nil resetPeerReadStates:nil resetPeerUnseenMentionsStates:nil clearConversationsWithPeerIds:nil clearConversationsInteractive:false removeConversationsWithPeerIds:nil updatePinnedConversations:nil synchronizePinnedConversations:false forceReplacePinnedConversations:false readMessageContentsInteractive:nil deleteEarlierHistory:nil updateFeededChannels:nil newlyJoinedFeedId:nil synchronizeFeededChannels:false calculateUnreadChats:true];
 }
 
 - (void)_resetPeerReadStates:(NSDictionary<NSNumber *, TGPeerReadState *> *)peerReadStates peers:(NSMutableDictionary<NSNumber *, TGConversation *> *)peers modifiedPeerIds:(NSMutableSet<NSNumber *> *)modifiedPeerIds  {
@@ -18989,7 +18989,7 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
         
         [readMessageContentsInteractive enumerateKeysAndObjectsUsingBlock:^(NSNumber *nPeerId, NSArray<NSNumber *> *messageIds, __unused BOOL *stop) {
             int32_t convType = 0;
-            int32_t convPeerId = 0;
+            int64_t convPeerId = 0;
             if (TGPeerIdIsChannel([nPeerId longLongValue])) {
                 convType = 1;
                 convPeerId = TGChannelIdFromPeerId([nPeerId longLongValue]);
@@ -19149,7 +19149,7 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
         
         for (NSNumber *nPeerId in modifiedPeerIds) {
             if (TGPeerIdIsAdminLog([nPeerId longLongValue])) {
-                int32_t feedId = TGAdminLogIdFromPeerId([nPeerId longLongValue]);
+                int64_t feedId = TGAdminLogIdFromPeerId([nPeerId longLongValue]);
                 TGFeed *feed = feeds[@(feedId)] ?: [self loadFeed:feedId];
                 if (feed != nil) {
                     [self _renderFeeds:@[feed]];
@@ -19385,7 +19385,7 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
         bool playNotification = false;
         bool needsSound = false;
         
-        std::shared_ptr<std::map<int64_t, std::set<int> > > pProcessedUsersStoppedTyping(new std::map<int64_t, std::set<int> >());
+        std::shared_ptr<std::map<int64_t, std::set<int64_t> > > pProcessedUsersStoppedTyping(new std::map<int64_t, std::set<int64_t> >());
         
         NSMutableDictionary *messagesByConversation = [[NSMutableDictionary alloc] init];
         std::set<int64_t> conversationsWithNotification;
@@ -19444,16 +19444,16 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
                 {
                     if (message.date > currentTime - 20)
                     {
-                        std::map<int64_t, std::set<int> >::iterator it = pProcessedUsersStoppedTyping->find(message.cid);
+                        std::map<int64_t, std::set<int64_t> >::iterator it = pProcessedUsersStoppedTyping->find(message.cid);
                         if (it == pProcessedUsersStoppedTyping->end())
                         {
-                            std::set<int> usersStoppedTypingInConversation;
-                            usersStoppedTypingInConversation.insert((int)message.fromUid);
+                            std::set<int64_t> usersStoppedTypingInConversation;
+                            usersStoppedTypingInConversation.insert(message.fromUid);
                             pProcessedUsersStoppedTyping->insert(std::make_pair(message.cid, usersStoppedTypingInConversation));
                         }
                         else
                         {
-                            it->second.insert((int)message.fromUid);
+                            it->second.insert(message.fromUid);
                         }
                     }
                     
@@ -19491,16 +19491,16 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
             
             if (message.date > currentTime - 20)
             {
-                std::map<int64_t, std::set<int> >::iterator it = pProcessedUsersStoppedTyping->find(conversationId);
+                std::map<int64_t, std::set<int64_t> >::iterator it = pProcessedUsersStoppedTyping->find(conversationId);
                 if (it == pProcessedUsersStoppedTyping->end())
                 {
-                    std::set<int> usersStoppedTypingInConversation;
-                    usersStoppedTypingInConversation.insert((int)message.fromUid);
+                    std::set<int64_t> usersStoppedTypingInConversation;
+                    usersStoppedTypingInConversation.insert(message.fromUid);
                     pProcessedUsersStoppedTyping->insert(std::make_pair(conversationId, usersStoppedTypingInConversation));
                 }
                 else
                 {
-                    it->second.insert((int)message.fromUid);
+                    it->second.insert(message.fromUid);
                 }
             }
             
@@ -19648,8 +19648,8 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
         
         dispatch_async([ActionStageInstance() globalStageDispatchQueue], ^{
             if (!pProcessedUsersStoppedTyping->empty()) {
-                for (std::map<int64_t, std::set<int> >::iterator it = pProcessedUsersStoppedTyping->begin(); it != pProcessedUsersStoppedTyping->end(); it++) {
-                    for (std::set<int>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++) {
+                for (std::map<int64_t, std::set<int64_t> >::iterator it = pProcessedUsersStoppedTyping->begin(); it != pProcessedUsersStoppedTyping->end(); it++) {
+                    for (std::set<int64_t>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++) {
                         [TGTelegraphInstance dispatchUserActivity:*it2 inConversation:it->first type:nil];
                     }
                 }
@@ -20019,7 +20019,7 @@ readMessageContentsInteractive:(NSDictionary<NSNumber *, NSArray<NSNumber *> *> 
     
     FMResultSet *result = [_database executeQuery:[NSString stringWithFormat:@"SELECT uid, first_name, last_name, local_first_name, local_last_name, phone_number, access_hash FROM %@ WHERE uid IN (SELECT uid FROM %@)", _usersTableName, _contactListTableName]];
     while ([result next]) {
-        int32_t uid = [result intForColumnIndex:0];
+        int64_t uid = [result intForColumnIndex:0];
         NSString *firstName = [result stringForColumnIndex:1];
         NSString *lastName = [result stringForColumnIndex:2];
         NSString *phonebookFirstName = [result stringForColumnIndex:3];

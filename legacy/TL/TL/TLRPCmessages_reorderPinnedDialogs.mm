@@ -1,5 +1,7 @@
 #import "TLRPCmessages_reorderPinnedDialogs.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -53,12 +55,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x5b51d63f;
+    return (int32_t)0x3b1adf37;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x216dd31f;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -85,6 +87,18 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // Биты, которые выставляет приложение, в схеме 228 значат то же самое.
+    [os writeInt32:self.flags];
+    [os writeInt32:0];
+    [os writeInt32:TL_UNIVERSAL_VECTOR_CONSTRUCTOR];
+    [os writeInt32:(int32_t)self.order.count];
+    for (id item in self.order) {
+        TLMetaClassStore::serializeObject(os, item, true);
+    }
+}
 
 @end
 

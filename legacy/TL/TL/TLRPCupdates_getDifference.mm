@@ -54,12 +54,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x25939651;
+    return (int32_t)0x19c2f763;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0xc0db98ef;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -100,6 +100,15 @@
     }
 }
 
+// updates.getDifference#19c2f763
+- (void)TLserialize:(NSOutputStream *)os
+{
+    // layer 228: flags pts pts_limit? pts_total_limit? date qts qts_limit?
+    [os writeInt32:0];
+    [os writeInt32:self.pts];
+    [os writeInt32:self.date];
+    [os writeInt32:self.qts];
+}
 
 @end
 

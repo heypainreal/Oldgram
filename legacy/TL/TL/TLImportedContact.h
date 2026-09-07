@@ -6,7 +6,7 @@
 
 @interface TLImportedContact : NSObject <TLObject>
 
-@property (nonatomic) int32_t user_id;
+@property (nonatomic) int64_t user_id;
 @property (nonatomic) int64_t client_id;
 
 @end

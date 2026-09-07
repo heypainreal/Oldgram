@@ -1,5 +1,7 @@
 #import "TLRPCchannels_getParticipants.h"
 
+#import "TLMetaClassStore.h"
+
 #import "../NSInputStream+TL.h"
 #import "../NSOutputStream+TL.h"
 
@@ -56,12 +58,12 @@
 
 - (int32_t)TLconstructorSignature
 {
-    return (int32_t)0x123e05e9;
+    return (int32_t)0x77ced9d0;
 }
 
 - (int32_t)TLconstructorName
 {
-    return (int32_t)0x69f0e6a7;
+    return -1;
 }
 
 - (id<TLObject>)TLbuildFromMetaObject:(std::shared_ptr<TLMetaObject>)metaObject
@@ -71,7 +73,7 @@
     object.filter = metaObject->getObject((int32_t)0x834de586);
     object.offset = metaObject->getInt32((int32_t)0xfc56269);
     object.limit = metaObject->getInt32((int32_t)0xb8433fca);
-    object.n_hash = metaObject->getInt32((int32_t)0xc152e470);
+    object.n_hash = metaObject->getInt64((int32_t)0xc152e470);
     return object;
 }
 
@@ -109,6 +111,15 @@
     }
 }
 
+// layer 228
+- (void)TLserialize:(NSOutputStream *)os
+{
+    TLMetaClassStore::serializeObject(os, self.channel, true);
+    TLMetaClassStore::serializeObject(os, self.filter, true);
+    [os writeInt32:(int32_t)self.offset];
+    [os writeInt32:(int32_t)self.limit];
+    [os writeInt64:(int64_t)self.n_hash];
+}
 
 @end
 
